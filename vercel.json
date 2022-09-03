@@ -1,8 +1,0 @@
-{
-  "rewrite": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api"
-    }
-  ]
-}
