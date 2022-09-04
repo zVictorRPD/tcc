@@ -6,7 +6,7 @@ import Footer from "../components/Homepage/Footer";
 import Functionalities from "../components/Homepage/Functionalities/Index";
 import Header from "../components/Homepage/Header";
 import SignupShortcut from "../components/Homepage/SignupShortcut";
-
+import VLibras from "@djpfs/react-vlibras";
 const Home: NextPage = () => {
     return (
         <>
@@ -24,6 +24,7 @@ const Home: NextPage = () => {
                 <SignupShortcut />
                 <Footer />
             </Container>
+            <VLibras forceOnload={true} />
         </>
     );
 };
