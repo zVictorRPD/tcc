@@ -28,6 +28,7 @@ export default function Header() {
                     size={"md"}
                     variant="blue-800-outline"
                     rightIcon={<AiOutlineLogin />}
+                    onClick={() => router.push("/auth?tab=login")}
                 >
                     Login
                 </Button>

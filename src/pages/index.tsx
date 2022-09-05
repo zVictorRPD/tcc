@@ -12,10 +12,6 @@ const Home: NextPage = () => {
         <>
             <Head>
                 <title>Página inicial</title>
-                <meta
-                    name="viewport"
-                    content="initial-scale=1.0, width=device-width"
-                />
             </Head>
             <Header />
             <Container maxW={"container.xl"}>
@@ -24,7 +20,7 @@ const Home: NextPage = () => {
                 <SignupShortcut />
                 <Footer />
             </Container>
-            <VLibras forceOnload={true} />
+            {/* <VLibras forceOnload={true} /> */}
         </>
     );
 };

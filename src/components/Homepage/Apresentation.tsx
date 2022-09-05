@@ -42,7 +42,7 @@ export default function Apresentation() {
                                 size={["xl", "xl", "3xl"]}
                                 mb={".5rem"}
                             >
-                                <Text color={"green.400"}>Xereca xereca,</Text>
+                                <Text color={"green.400"}>Apresentação legal,</Text>
                                 Muito legal mesmo
                             </Heading>
                             <Text fontSize={"lg"} mb={"2rem"}>
