@@ -46,6 +46,16 @@ const theme = extendTheme({
                         bg: "yellow.600",
                     }
                 },
+                "blue-800": {
+                    color: "white",
+                    bg: "blue.800",
+                    _hover: {
+                        bg: "blue.900",
+                    },
+                    _active: {
+                        bg: "blue.900",
+                    }
+                },
                 "blue-800-outline": {
                     bg: "white",
                     color: "gray.800",

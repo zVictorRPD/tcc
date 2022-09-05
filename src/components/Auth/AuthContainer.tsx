@@ -42,6 +42,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                     alignItems={"center"}
                     bg={"gray.100"}
                     px={"2rem"}
+                    pt={"100px"}
                 >
                     <Stack
                         maxW={"600px"}
