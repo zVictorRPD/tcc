@@ -21,30 +21,23 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { api } from "../../src/services/api";
-import { sign } from "crypto";
-
-interface ILoginCamps {
-    email: boolean;
-    password: boolean;
-}
+import { ILoginCampsValidation } from "../../src/interfaces/auth/auth.interface";
 
 const Login: NextPage = () => {
     const toast = useToast();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [remember, setRemember] = useState(false);
-    const [loginCamps, setLoginCamps] = useState<ILoginCamps>({
+    const [loginCampsValidation, setLoginCampsValidation] = useState<ILoginCampsValidation>({
         email: true,
         password: true,
-    } as ILoginCamps);
+    } as ILoginCampsValidation);
     const router = useRouter();
 
     const handleLogin = async () => {
         const emailValidation = validateEmail(email);
         const passwordValidation = validatePassword(password);
-        setLoginCamps({
+        setLoginCampsValidation({
             email: emailValidation,
             password: passwordValidation,
         });
@@ -54,7 +47,6 @@ const Login: NextPage = () => {
                 email,
                 password,
                 redirect: false,
-                // remember,
             });
 
             if (response && response.status === 200) {
@@ -90,7 +82,7 @@ const Login: NextPage = () => {
                     >
                         Faça login
                     </Text>
-                    <FormControl mb={"1rem"} isInvalid={!loginCamps.email}>
+                    <FormControl mb={"1rem"} isInvalid={!loginCampsValidation.email}>
                         <FormLabel fontWeight={500}>Email</FormLabel>
                         <Input
                             type="email"
@@ -98,7 +90,7 @@ const Login: NextPage = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        {!loginCamps.email && (
+                        {!loginCampsValidation.email && (
                             <FormErrorMessage>
                                 Insira um email valido.
                             </FormErrorMessage>
@@ -106,7 +98,7 @@ const Login: NextPage = () => {
                     </FormControl>
                     <FormControl
                         mb={["1rem", "1rem", "1.5rem"]}
-                        isInvalid={!loginCamps.password}
+                        isInvalid={!loginCampsValidation.password}
                     >
                         <FormLabel fontWeight={500}>Senha</FormLabel>
                         <InputGroup size="md">
@@ -133,23 +125,17 @@ const Login: NextPage = () => {
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
-                        {!loginCamps.password && (
+                        {!loginCampsValidation.password && (
                             <FormErrorMessage>
                                 Insira uma senha com 8 ou mais caracteres.
                             </FormErrorMessage>
                         )}
                     </FormControl>
                     <HStack
-                        justifyContent={"space-between"}
+                        justifyContent={"flex-end"}
                         flexWrap={"wrap"}
                         mb={["1rem", "1rem", "1.5rem"]}
                     >
-                        <Checkbox
-                            isChecked={remember}
-                            onChange={(e) => setRemember(e.target.checked)}
-                        >
-                            <Text fontWeight={500}> Me mantenha conectado</Text>
-                        </Checkbox>
                         <Text
                             color={"blue.400"}
                             cursor={"pointer"}

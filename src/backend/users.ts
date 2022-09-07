@@ -76,12 +76,19 @@ export async function loginUser(email: string, password: string) {
 }
 
 //check user email
-export async function checkUserEmail(email: string) { 
-    const checkEmail = await prisma.user.findUnique({
-        where: {
-            email,
-        },
-    });
+export async function checkUserEmail(email: string) {
+    const checkEmail = await prisma.user
+        .findUnique({
+            where: {
+                email,
+            },
+        })
+        .catch((err) => {
+            return {
+                code: 404,
+                message: "Email não cadastrado",
+            };
+        });
 
     if (checkEmail) {
         return {
@@ -92,6 +99,58 @@ export async function checkUserEmail(email: string) {
         return {
             code: 404,
             message: "Email não cadastrado",
+        };
+    }
+}
+
+//save token in database
+export async function saveToken(email: string, token: string) {
+    const tokenExist = await prisma.recoverPassword
+        .findMany({
+            where: {
+                user: {
+                    email,
+                },
+            },
+        })
+        .catch((err) => {
+            return err;
+        });
+
+    if (tokenExist.length > 0) {
+        //deletar token antigo
+        const deleteUsers = await prisma.recoverPassword
+        .deleteMany({
+            where: {
+                user: {
+                    email,
+                },
+            },
+        }).catch((err) => {
+            return err;
+        });
+    }
+
+    const newToken = await prisma.recoverPassword
+        .create({
+            data: {
+                token,
+                userEmail: email,
+            },
+        })
+        .catch((err) => {
+            return err;
+        });
+
+    if (newToken) {
+        return {
+            code: 200,
+            message: "Token salvo com sucesso",
+        };
+    } else {
+        return {
+            code: 500,
+            message: "Token não foi salvo",
         };
     }
 }

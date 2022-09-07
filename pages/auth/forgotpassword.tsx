@@ -4,22 +4,80 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import VLibras from "@djpfs/react-vlibras";
 import AuthContainer from "../../src/components/Auth/AuthContainer";
-import { Box, Button, HStack, Text } from "@chakra-ui/react";
+import { Box, Button, HStack, Text, useToast } from "@chakra-ui/react";
 import FirstStep from "../../src/components/Auth/ForgotPassword/FirstStep";
 import SecondStep from "../../src/components/Auth/ForgotPassword/SecondStep";
 import ThirdStep from "../../src/components/Auth/ForgotPassword/ThirdStep";
+import { api } from "../../src/services/api";
+import {
+    validateEmail,
+    validateConfirmationPassword,
+    validatePassword,
+} from "../../src/functions/validation";
+import {
+    IForgotCamps,
+    IForgotCampsValidation,
+} from "../../src/interfaces/auth/auth.interface";
 
 const Login: NextPage = () => {
     const router = useRouter();
+    const toast = useToast();
     const [step, setStep] = useState(1);
-    const [email, setEmail] = useState<string>('');
     const [token, setToken] = useState<number>(0);
-    const [password, setPassword] = useState<string>('false');
-    const [confirmationPassword, setConfirmationPassword] = useState<string>('false');
-    
-    const handleNextStep = () => {
+    const [password, setPassword] = useState<string>("false");
+    const [confirmationPassword, setConfirmationPassword] =
+        useState<string>("false");
+
+    const [forgotCampsValidation, setForgotCampsValidation] =
+        useState<IForgotCampsValidation>({
+            email: true,
+            token: true,
+            password: true,
+            confirmationPassword: true,
+        } as IForgotCampsValidation);
+
+    const [formCamps, setFormCamps] = useState<IForgotCamps>({
+        email: "",
+        token: "",
+        password: "",
+        confirmationPassword: "",
+    });
+
+    const handleNextStep = async () => {
+        
         if (step === 1) {
-            setStep(2);
+            if (validateEmail(formCamps.email)) {
+                const emailExist = await api.post('/forgotPassword/generateToken', {email: formCamps.email});
+                if (emailExist.data.code === 200) {
+                    toast({
+                        position: "top-right",
+                        title: "Um token foi gerado e enviado para seu email!",
+                        status: "success",
+                        isClosable: true,
+                    });
+                    console.log(step);
+                    setStep(2);
+                } else if(emailExist.data.code === 404) {
+                    toast({
+                        position: "top-right",
+                        title: "Esse email não está cadastrado!",
+                        status: "error",
+                        isClosable: true,
+                    });
+                }else if(emailExist.data.code === 500) {
+                    toast({
+                        position: "top-right",
+                        title: "Erro ao gerar o token!",
+                        status: "error",
+                        isClosable: true,
+                    });
+                }
+            }else{
+                setForgotCampsValidation({
+                    ...forgotCampsValidation,
+                    email: false,
+                });
+            }
         } else if (step === 2) {
             setStep(3);
         }
@@ -40,9 +98,22 @@ const Login: NextPage = () => {
                         Esqueci a senha
                     </Text>
 
-                    {step === 1 && <FirstStep  setEmail={setEmail} />}
+                    {step === 1 && (
+                        <FirstStep
+                            firstStepProps={{
+                                formCamps,
+                                setFormCamps,
+                                forgotCampsValidation,
+                            }}
+                        />
+                    )}
                     {step === 2 && <SecondStep setToken={setToken} />}
-                    {step === 3 && <ThirdStep setPassword={setPassword} setConfirmationPassword={setConfirmationPassword}/>}
+                    {step === 3 && (
+                        <ThirdStep
+                            setPassword={setPassword}
+                            setConfirmationPassword={setConfirmationPassword}
+                        />
+                    )}
 
                     <Button
                         mb={["1rem", "1rem", "1.5rem"]}
