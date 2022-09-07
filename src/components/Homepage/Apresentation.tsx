@@ -13,7 +13,9 @@ import {
 } from "@chakra-ui/react";
 
 import { AiOutlineLogin } from "react-icons/ai";
+import { useRouter } from "next/router";
 export default function Apresentation() {
+    const router = useRouter();
     const bgImage = {
         backgroundImage: "url(/assets/images/homepage/svgs/bg-purple.svg)",
         backgroundRepeat: "no-repeat",
@@ -56,6 +58,7 @@ export default function Apresentation() {
                                     size={"lg"}
                                     w={["100%", "100%", "auto"]}
                                     variant={"green-400"}
+                                    onClick={() => router.push("/auth/signup")}
                                     rightIcon={<AiOutlineLogin />}
                                 >
                                     Comece já

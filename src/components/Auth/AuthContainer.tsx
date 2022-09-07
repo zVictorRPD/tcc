@@ -16,7 +16,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                     py={[".5rem", "1rem", "1.5rem"]}
                     w={"100%"}
                 >
-                    <a onClick={() => router.push("/#")}>
+                    <a onClick={() => router.push("/#")} style={{cursor:"pointer"}}>
                         <img
                             src="/assets/images/homepage/logo.png"
                             alt="Logo"

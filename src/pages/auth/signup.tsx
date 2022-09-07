@@ -16,6 +16,7 @@ import {
     InputRightElement,
     Stack,
     Text,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { FiEdit2 } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
@@ -25,14 +26,22 @@ import {
     AiOutlineEye,
     AiOutlineEyeInvisible,
 } from "react-icons/ai";
+import ConfirmationModal from "../../components/Auth/Signup/ConfirmationModal";
 const SignUp: NextPage = () => {
     const router = useRouter();
     const [email, setEmail] = useState<string | string[]>("");
     const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
     const { email_home } = router.query;
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmationPassword, setShowConfirmationPassword] = useState(false);
+    const [showConfirmationPassword, setShowConfirmationPassword] =
+        useState(false);
     const [userImage, setUserImage] = useState<string>("");
+    const [clockTimer, setClockTimer] = useState<NodeJS.Timer>();
+
+    /*modal */
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [timeout, setTimeout] = React.useState(30);
+
     const pencilPosition = {
         top: "0",
         right: "0.5rem",
@@ -45,7 +54,6 @@ const SignUp: NextPage = () => {
     };
     const handleFileClick = () => {
         if (inputRef.current) inputRef.current.click();
-
     };
     const handleFileChange = (event: any) => {
         const fileObj = event.target.files && event.target.files[0];
@@ -53,7 +61,7 @@ const SignUp: NextPage = () => {
             var reader = new FileReader();
             reader.onload = function (e: any) {
                 setUserImage(e.target.result);
-            }
+            };
             reader.readAsDataURL(fileObj);
         }
     };
@@ -62,6 +70,32 @@ const SignUp: NextPage = () => {
             setEmail(email_home);
         }
     }, [email_home]);
+
+    const handleSubmit = () => {
+        
+        modalTimeout();
+        onOpen();
+    };
+
+    const modalTimeout = () => {
+        setTimeout(30);
+        let seconds = 30;
+        if(clockTimer) clearInterval(clockTimer);
+
+        setClockTimer(setInterval(() => {
+            setTimeout((prev) => prev - 1);
+            seconds--;
+            if (seconds == 0) {
+                clearInterval(clockTimer);
+            }
+        }, 1000));
+        
+        
+    };
+
+    const resendEmail = () => {
+        modalTimeout();
+    };
 
     return (
         <>
@@ -79,8 +113,13 @@ const SignUp: NextPage = () => {
                     </Text>
                     <HStack justifyContent={"center"}>
                         <Box position={"relative"}>
-                            <Avatar size={"xl"} onClick={handleFileClick} src={userImage} cursor={'pointer'} />
-                            
+                            <Avatar
+                                size={"xl"}
+                                onClick={handleFileClick}
+                                src={userImage}
+                                cursor={"pointer"}
+                            />
+
                             <Stack
                                 bg={"blue.800"}
                                 w={"1.5rem"}
@@ -163,7 +202,7 @@ const SignUp: NextPage = () => {
                     </FormControl>
                     <FormControl mb={["1rem", "1rem", "1.5rem"]}>
                         <FormLabel fontWeight={500}>
-                            Confirmar sua senha
+                            Confirme sua senha
                         </FormLabel>
                         <InputGroup size="md">
                             <Input
@@ -198,6 +237,7 @@ const SignUp: NextPage = () => {
                         mb={["1rem", "1rem", "1.5rem"]}
                         w={"100%"}
                         variant={"blue-800"}
+                        onClick={handleSubmit}
                     >
                         Criar conta
                     </Button>
@@ -217,13 +257,16 @@ const SignUp: NextPage = () => {
                             cursor={"pointer"}
                             fontSize={["sm", "sm", "md"]}
                             _hover={{ textDecoration: "underline" }}
-                            onClick={() => router.push("/auth/signup")}
+                            onClick={() => router.push("/auth/login")}
                         >
                             Entre aqui
                         </Text>
                     </HStack>
                 </Box>
             </AuthContainer>
+            <ConfirmationModal
+                modalProps={{ isOpen, onClose, timeout, resendEmail }}
+            />
             {/* <VLibras forceOnload={true} /> */}
         </>
     );

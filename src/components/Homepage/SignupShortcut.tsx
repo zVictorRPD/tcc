@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Box,
     Button,
@@ -13,7 +13,10 @@ import {
 } from "@chakra-ui/react";
 
 import { AiOutlineLogin } from "react-icons/ai";
+import { useRouter } from "next/router";
 export default function SignupShortcut() {
+    const [email, setEmail] = useState("");
+    const router = useRouter();
     const bgImage = {
         backgroundImage: "url(/assets/images/homepage/svgs/bg-yellow.svg)",
         backgroundRepeat: "no-repeat",
@@ -63,11 +66,14 @@ export default function SignupShortcut() {
                                     size="md"
                                     mr={["0", "0", ".5em"]}
                                     mb={["1rem", "1rem", "0"]}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <Button
                                     size={"md"}
                                     rightIcon={<AiOutlineLogin />}
                                     variant={"yellow-400"}
+                                    onClick={() => router.push(`/auth/signup/?email_home=${email}`)}
                                 >
                                     Criar conta
                                 </Button>
