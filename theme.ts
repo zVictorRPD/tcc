@@ -50,11 +50,11 @@ const theme = extendTheme({
                     color: "white",
                     bg: "blue.800",
                     _hover: {
-                        bg: "blue.900",
+                        bg: "blue.900 !important",
                     },
                     _active: {
                         bg: "blue.900",
-                    }
+                    },
                 },
                 "blue-800-outline": {
                     bg: "white",
