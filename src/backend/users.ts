@@ -17,14 +17,23 @@ export async function createUser(
             data: {
                 name,
                 email,
-                password,
+                password: bcrypt.hashSync(password, 9),
                 avatar,
             },
         })
         .catch((err) => {
-            return err;
+            return {
+                code: 409,
+                message: "Esse email já está cadastrado",
+            };
         });
-    return newUser.name;
+    if (newUser) {
+        return {
+            code: 200,
+            message: "Cadastro realizado com sucesso",
+            newUser,
+        };
+    }
 }
 
 export async function loginUser(email: string, password: string) {
@@ -62,6 +71,27 @@ export async function loginUser(email: string, password: string) {
         return {
             code: 401,
             message: "Senha incorreta",
+        };
+    }
+}
+
+//check user email
+export async function checkUserEmail(email: string) { 
+    const checkEmail = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+    });
+
+    if (checkEmail) {
+        return {
+            code: 200,
+            message: "Email já cadastrado",
+        };
+    } else {
+        return {
+            code: 404,
+            message: "Email não cadastrado",
         };
     }
 }

@@ -15,7 +15,7 @@ const authOptions: NextAuthOptions = {
                     email: string;
                     password: string;
                 };
-
+                console.log(email, password);
                 const apiResponse = await loginUser(email, password);
 
                 if (apiResponse.code === 401) {

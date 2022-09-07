@@ -9,6 +9,7 @@ import {
     Button,
     Checkbox,
     FormControl,
+    FormErrorMessage,
     FormLabel,
     HStack,
     Input,
@@ -17,6 +18,7 @@ import {
     Stack,
     Text,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import { FiEdit2 } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
@@ -27,9 +29,21 @@ import {
     AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import ConfirmationModal from "../../src/components/Auth/Signup/ConfirmationModal";
+import {
+    ISignupCampsValidation,
+    ISignupCamps,
+} from "../../src/interfaces/auth/auth.interface";
+import {
+    validateConfirmationPassword,
+    validateEmail,
+    validateName,
+    validatePassword,
+} from "../../src/functions/validation";
+import { api } from "../../src/services/api";
+
 const SignUp: NextPage = () => {
     const router = useRouter();
-    const [email, setEmail] = useState<string | string[]>("");
+    const toast = useToast();
     const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
     const { email_home } = router.query;
     const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +51,21 @@ const SignUp: NextPage = () => {
         useState(false);
     const [userImage, setUserImage] = useState<string>("");
     const [clockTimer, setClockTimer] = useState<NodeJS.Timer>();
+    const [signupCampsValidation, setSignupCampsValidation] =
+        useState<ISignupCampsValidation>({
+            name: true,
+            email: true,
+            password: true,
+            confirmationPassword: true,
+        } as ISignupCampsValidation);
+
+    const [formCamps, setFormCamps] = useState<ISignupCamps>({
+        name: "",
+        email: "",
+        password: "",
+        confirmationPassword: "",
+        avatar: null
+    });
 
     /*modal */
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,6 +86,7 @@ const SignUp: NextPage = () => {
     };
     const handleFileChange = (event: any) => {
         const fileObj = event.target.files && event.target.files[0];
+        setFormCamps({ ...formCamps, avatar: fileObj });
         if (fileObj) {
             var reader = new FileReader();
             reader.onload = function (e: any) {
@@ -67,30 +97,60 @@ const SignUp: NextPage = () => {
     };
     useEffect(() => {
         if (email_home) {
-            setEmail(email_home);
+            setFormCamps({ ...formCamps, email: email_home });
         }
     }, [email_home]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        const formCampsValidation = {
+            email: validateEmail(formCamps.email as string),
+            password: validatePassword(formCamps.password),
+            confirmationPassword: validateConfirmationPassword(
+                formCamps.password,
+                formCamps.confirmationPassword
+            ),
+            name: validateName(formCamps.name),
+        };
+        setSignupCampsValidation(formCampsValidation);
+        if (!Object.values(formCampsValidation).includes(false)) {
+            const response = await api.post("/signup", {...formCamps, avatar: 'avatar'});
+            if (response && response.status === 200) {
+                toast({
+                    position: "top-right",
+                    title: "Usuário criado com sucesso!",
+                    status: "success",
+                    isClosable: true,
+                });
+                router.push("/auth/login");
+            } else {
+                toast({
+                    position: "top-right",
+                    title: "Já existe um usuário com esse email!",
+                    status: "error",
+                    isClosable: true,
+                });
+            }
+        }
         
-        modalTimeout();
-        onOpen();
+        
+        // modalTimeout();
+        // onOpen();
     };
 
     const modalTimeout = () => {
         setTimeout(30);
         let seconds = 30;
-        if(clockTimer) clearInterval(clockTimer);
+        if (clockTimer) clearInterval(clockTimer);
 
-        setClockTimer(setInterval(() => {
-            setTimeout((prev) => prev - 1);
-            seconds--;
-            if (seconds == 0) {
-                clearInterval(clockTimer);
-            }
-        }, 1000));
-        
-        
+        setClockTimer(
+            setInterval(() => {
+                setTimeout((prev) => prev - 1);
+                seconds--;
+                if (seconds == 0) {
+                    clearInterval(clockTimer);
+                }
+            }, 1000)
+        );
     };
 
     const resendEmail = () => {
@@ -162,25 +222,66 @@ const SignUp: NextPage = () => {
                             hidden
                         />
                     </HStack>
-                    <FormControl mb={"1rem"}>
+                    <FormControl
+                        mb={"1rem"}
+                        isInvalid={!signupCampsValidation.name}
+                    >
                         <FormLabel fontWeight={500}>Nome</FormLabel>
-                        <Input type="text" placeholder="Victor Martins" />
+                        <Input
+                            type="text"
+                            placeholder="Victor Martins"
+                            value={formCamps.name}
+                            onChange={(e) =>
+                                setFormCamps({
+                                    ...formCamps,
+                                    name: e.target.value,
+                                })
+                            }
+                        />
+                        {!signupCampsValidation.name && (
+                            <FormErrorMessage>
+                                Insira um nome valido.
+                            </FormErrorMessage>
+                        )}
                     </FormControl>
-                    <FormControl mb={"1rem"}>
+                    <FormControl
+                        mb={"1rem"}
+                        isInvalid={!signupCampsValidation.email}
+                    >
                         <FormLabel fontWeight={500}>Email</FormLabel>
                         <Input
                             type="email"
                             placeholder="examplemail@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={formCamps.email}
+                            onChange={(e) =>
+                                setFormCamps({
+                                    ...formCamps,
+                                    email: e.target.value,
+                                })
+                            }
                         />
+                        {!signupCampsValidation.email && (
+                            <FormErrorMessage>
+                                Insira um email valido.
+                            </FormErrorMessage>
+                        )}
                     </FormControl>
-                    <FormControl mb={["1rem", "1rem", "1.5rem"]}>
+                    <FormControl
+                        mb={["1rem", "1rem", "1.5rem"]}
+                        isInvalid={!signupCampsValidation.password}
+                    >
                         <FormLabel fontWeight={500}>Senha</FormLabel>
                         <InputGroup size="md">
                             <Input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="********"
+                                value={formCamps.password}
+                                onChange={(e) =>
+                                    setFormCamps({
+                                        ...formCamps,
+                                        password: e.target.value,
+                                    })
+                                }
                             />
                             <InputRightElement width="3rem">
                                 <Button
@@ -199,8 +300,16 @@ const SignUp: NextPage = () => {
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
+                        {!signupCampsValidation.password && (
+                            <FormErrorMessage>
+                                Insira uma senha valida.
+                            </FormErrorMessage>
+                        )}
                     </FormControl>
-                    <FormControl mb={["1rem", "1rem", "1.5rem"]}>
+                    <FormControl
+                        mb={["1rem", "1rem", "1.5rem"]}
+                        isInvalid={!signupCampsValidation.confirmationPassword}
+                    >
                         <FormLabel fontWeight={500}>
                             Confirme sua senha
                         </FormLabel>
@@ -212,6 +321,13 @@ const SignUp: NextPage = () => {
                                         : "password"
                                 }
                                 placeholder="********"
+                                value={formCamps.confirmationPassword}
+                                onChange={(e) =>
+                                    setFormCamps({
+                                        ...formCamps,
+                                        confirmationPassword: e.target.value,
+                                    })
+                                }
                             />
                             <InputRightElement width="3rem">
                                 <Button
@@ -232,6 +348,11 @@ const SignUp: NextPage = () => {
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
+                        {!signupCampsValidation.confirmationPassword && (
+                            <FormErrorMessage>
+                                A senha de confirmação está diferente da senha.
+                            </FormErrorMessage>
+                        )}
                     </FormControl>
                     <Button
                         mb={["1rem", "1rem", "1.5rem"]}
