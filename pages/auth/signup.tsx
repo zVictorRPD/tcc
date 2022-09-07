@@ -20,13 +20,13 @@ import {
 } from "@chakra-ui/react";
 import { FiEdit2 } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
-import AuthContainer from "../../components/Auth/AuthContainer";
+import AuthContainer from "../../src/components/Auth/AuthContainer";
 import {
     AiOutlineClose,
     AiOutlineEye,
     AiOutlineEyeInvisible,
 } from "react-icons/ai";
-import ConfirmationModal from "../../components/Auth/Signup/ConfirmationModal";
+import ConfirmationModal from "../../src/components/Auth/Signup/ConfirmationModal";
 const SignUp: NextPage = () => {
     const router = useRouter();
     const [email, setEmail] = useState<string | string[]>("");

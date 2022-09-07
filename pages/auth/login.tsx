@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import VLibras from "@djpfs/react-vlibras";
-import AuthContainer from "../../components/Auth/AuthContainer";
-import { validateEmail, validatePassword } from "../../functions/validation";
+import AuthContainer from "../../src/components/Auth/AuthContainer";
+import { validateEmail, validatePassword } from "../../src/functions/validation";
 import {
     Box,
     Button,
@@ -20,7 +21,8 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { api } from "../../services/api";
+import { api } from "../../src/services/api";
+import { sign } from "crypto";
 
 interface ILoginCamps {
     email: boolean;
@@ -39,7 +41,7 @@ const Login: NextPage = () => {
     } as ILoginCamps);
     const router = useRouter();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const emailValidation = validateEmail(email);
         const passwordValidation = validatePassword(password);
         setLoginCamps({
@@ -48,30 +50,29 @@ const Login: NextPage = () => {
         });
 
         if (emailValidation && passwordValidation) {
-            api.post("/login", {
+            const response = await signIn("credentials", {
                 email,
                 password,
-                remember,
-            })
-                .then((response) => {
-                    if (response.status === 200) {
-                        toast({
-                            position: "top-right",
-                            title: response.data.message,
-                            status: "success",
-                            isClosable: true,
-                        });
-                        router.push("/dashboard");
-                    }
-                })
-                .catch((error) => {
-                    toast({
-                        position: "top-right",
-                        title: error.response.data.message,
-                        status: "error",
-                        isClosable: true,
-                    });
+                redirect: false,
+                // remember,
+            });
+
+            if (response && response.status === 200) {
+                toast({
+                    position: "top-right",
+                    title: "Usuário logado com sucesso!",
+                    status: "success",
+                    isClosable: true,
                 });
+                router.push("/ambiente-logado/dashboard");
+            } else {
+                toast({
+                    position: "top-right",
+                    title: "Email ou senha incorretos!",
+                    status: "error",
+                    isClosable: true,
+                });
+            }
         }
     };
 

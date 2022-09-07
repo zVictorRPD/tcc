@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import Head from "next/head";
 import VLibras from "@djpfs/react-vlibras";
-import AuthContainer from "../../components/Auth/AuthContainer";
+import AuthContainer from "../../src/components/Auth/AuthContainer";
 import { Box, Button, HStack, Text } from "@chakra-ui/react";
-import FirstStep from "../../components/Auth/ForgotPassword/FirstStep";
-import SecondStep from "../../components/Auth/ForgotPassword/SecondStep";
-import ThirdStep from "../../components/Auth/ForgotPassword/ThirdStep";
+import FirstStep from "../../src/components/Auth/ForgotPassword/FirstStep";
+import SecondStep from "../../src/components/Auth/ForgotPassword/SecondStep";
+import ThirdStep from "../../src/components/Auth/ForgotPassword/ThirdStep";
 
 const Login: NextPage = () => {
     const router = useRouter();

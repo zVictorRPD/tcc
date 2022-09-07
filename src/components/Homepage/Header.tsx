@@ -20,7 +20,10 @@ export default function Header() {
             borderColor={"gray.200"}
         >
             <HStack justifyContent={"space-between"} alignItems={"center"}>
-                <a onClick={() => router.push("/#")} style={{cursor:"pointer"}}>
+                <a
+                    onClick={() => router.push("/#")}
+                    style={{ cursor: "pointer" }}
+                >
                     <img src="/assets/images/homepage/logo.png" alt="Logo" />
                 </a>
 

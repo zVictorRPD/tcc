@@ -1,11 +1,11 @@
 import { Container } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Apresentation from "../components/Homepage/Apresentation";
-import Footer from "../components/Homepage/Footer";
-import Functionalities from "../components/Homepage/Functionalities/Index";
-import Header from "../components/Homepage/Header";
-import SignupShortcut from "../components/Homepage/SignupShortcut";
+import Apresentation from "../src/components/Homepage/Apresentation";
+import Footer from "../src/components/Homepage/Footer";
+import Functionalities from "../src/components/Homepage/Functionalities/Index";
+import Header from "../src/components/Homepage/Header";
+import SignupShortcut from "../src/components/Homepage/SignupShortcut";
 import VLibras from "@djpfs/react-vlibras";
 const Home: NextPage = () => {
     return (
