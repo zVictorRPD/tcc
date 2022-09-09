@@ -119,16 +119,17 @@ export async function saveToken(email: string, token: string) {
 
     if (tokenExist.length > 0) {
         //deletar token antigo
-        const deleteUsers = await prisma.recoverPassword
-        .deleteMany({
-            where: {
-                user: {
-                    email,
+        await prisma.recoverPassword
+            .deleteMany({
+                where: {
+                    user: {
+                        email,
+                    },
                 },
-            },
-        }).catch((err) => {
-            return err;
-        });
+            })
+            .catch((err) => {
+                return err;
+            });
     }
 
     const newToken = await prisma.recoverPassword
