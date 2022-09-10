@@ -1,5 +1,5 @@
 import { prisma } from "../config/prisma.config";
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 interface IUser {
     id: number;
     name: string;
@@ -17,7 +17,7 @@ export async function createUser(
             data: {
                 name,
                 email,
-                password: bcrypt.hashSync(password, 9),
+                password: bcrypt.hashSync(password, 9) as string,
                 avatar,
             },
         })
@@ -152,6 +152,63 @@ export async function saveToken(email: string, token: string) {
         return {
             code: 500,
             message: "Token não foi salvo",
+        };
+    }
+}
+
+//get token from database
+export async function getToken(email: string) {
+    const token = await prisma.recoverPassword
+        .findMany({
+            where: {
+                userEmail: email,
+            },
+        })
+        .catch((err) => {
+            return err;
+        });
+
+    if (token.length > 0) {
+        return {
+            code: 200,
+            message: "Token recuperado com sucesso",
+            data: {
+                token: token[0]?.token as string,
+                createdAt: token[0]?.createdAt as Date,
+            },
+        };
+    } else {
+        return {
+            code: 404,
+            message: "Token não encontrado",
+        };
+    }
+}
+
+//update password
+export async function updatePassword(email: string, password: string) {
+    const result = await prisma.user
+        .update({
+            where: {
+                email,
+            },
+            data: {
+                password: bcrypt.hashSync(password, 9) as string,
+            },
+        })
+        .catch((err) => {
+            return err;
+        });
+
+    if (result) {
+        return {
+            code: 200,
+            message: "Senha atualizada com sucesso",
+        };
+    } else {
+        return {
+            code: 500,
+            message: "Senha não foi atualizada",
         };
     }
 }

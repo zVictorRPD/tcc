@@ -25,6 +25,7 @@ import { ILoginCampsValidation } from "../../src/interfaces/auth/auth.interface"
 
 const Login: NextPage = () => {
     const toast = useToast();
+    const [onLoading, setOnLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -35,6 +36,7 @@ const Login: NextPage = () => {
     const router = useRouter();
 
     const handleLogin = async () => {
+        setOnLoading(true);
         const emailValidation = validateEmail(email);
         const passwordValidation = validatePassword(password);
         setLoginCampsValidation({
@@ -66,6 +68,7 @@ const Login: NextPage = () => {
                 });
             }
         }
+        setOnLoading(false);
     };
 
     return (
@@ -151,6 +154,8 @@ const Login: NextPage = () => {
                         w={"100%"}
                         variant={"blue-800"}
                         onClick={handleLogin}
+                        isLoading={onLoading}
+                        loadingText="Enviando"
                     >
                         Entrar
                     </Button>

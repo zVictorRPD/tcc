@@ -7,14 +7,14 @@ import {
 
 interface IFirstStepProps {
     firstStepProps: {
-        formCamps: IForgotCamps;
-        setFormCamps: React.Dispatch<React.SetStateAction<IForgotCamps>>;
+        formFields: IForgotCamps;
+        setFormFields: React.Dispatch<React.SetStateAction<IForgotCamps>>;
         forgotCampsValidation: IForgotCampsValidation;
     }
 }
 
 export default function FirstStep(props: IFirstStepProps) {
-    const { formCamps, setFormCamps, forgotCampsValidation } = props.firstStepProps;
+    const { formFields, setFormFields, forgotCampsValidation } = props.firstStepProps;
 
     return (
         <>
@@ -23,10 +23,10 @@ export default function FirstStep(props: IFirstStepProps) {
                 <Input
                     type="email"
                     placeholder="examplemail@example.com"
-                    value={formCamps.email}
+                    value={formFields.email}
                     onChange={(e) =>
-                        setFormCamps({
-                            ...formCamps,
+                        setFormFields({
+                            ...formFields,
                             email: e.target.value,
                         })
                     }

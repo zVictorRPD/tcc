@@ -22,12 +22,8 @@ import {
 const Login: NextPage = () => {
     const router = useRouter();
     const toast = useToast();
+    const [onLoading, setOnLoading] = useState(false);
     const [step, setStep] = useState(1);
-    const [token, setToken] = useState<number>(0);
-    const [password, setPassword] = useState<string>("false");
-    const [confirmationPassword, setConfirmationPassword] =
-        useState<string>("false");
-
     const [forgotCampsValidation, setForgotCampsValidation] =
         useState<IForgotCampsValidation>({
             email: true,
@@ -36,7 +32,7 @@ const Login: NextPage = () => {
             confirmationPassword: true,
         } as IForgotCampsValidation);
 
-    const [formCamps, setFormCamps] = useState<IForgotCamps>({
+    const [formFields, setFormFields] = useState<IForgotCamps>({
         email: "",
         token: "",
         password: "",
@@ -44,10 +40,13 @@ const Login: NextPage = () => {
     });
 
     const handleNextStep = async () => {
-        
+        setOnLoading(true);
         if (step === 1) {
-            if (validateEmail(formCamps.email)) {
-                const emailExist = await api.post('/forgotPassword/generateToken', {email: formCamps.email});
+            if (validateEmail(formFields.email)) {
+                const emailExist = await api.post(
+                    "/forgotPassword/generateToken",
+                    { email: formFields.email }
+                );
                 if (emailExist.data.code === 200) {
                     toast({
                         position: "top-right",
@@ -55,16 +54,15 @@ const Login: NextPage = () => {
                         status: "success",
                         isClosable: true,
                     });
-                    console.log(step);
                     setStep(2);
-                } else if(emailExist.data.code === 404) {
+                } else if (emailExist.data.code === 404) {
                     toast({
                         position: "top-right",
                         title: "Esse email não está cadastrado!",
                         status: "error",
                         isClosable: true,
                     });
-                }else if(emailExist.data.code === 500) {
+                } else if (emailExist.data.code === 500) {
                     toast({
                         position: "top-right",
                         title: "Erro ao gerar o token!",
@@ -72,15 +70,85 @@ const Login: NextPage = () => {
                         isClosable: true,
                     });
                 }
-            }else{
+            } else {
                 setForgotCampsValidation({
                     ...forgotCampsValidation,
                     email: false,
                 });
             }
         } else if (step === 2) {
-            setStep(3);
+            if (formFields.token.toString().length === 8) {
+                const tokenExist = await api.post(
+                    "/forgotPassword/validateToken",
+                    { email: formFields.email, token: formFields.token.toString() }
+                );
+                if (tokenExist.data.code === 200) {
+                    toast({
+                        position: "top-right",
+                        title: "Token validado com sucesso!",
+                        status: "success",
+                        isClosable: true,
+                    });
+                    setStep(3);
+                } else if (tokenExist.data.code === 403) {
+                    toast({
+                        position: "top-right",
+                        title: "Token expirado!",
+                        status: "error",
+                        isClosable: true,
+                    });
+                } else if (tokenExist.data.code === 404) {
+                    toast({
+                        position: "top-right",
+                        title: "Token inválido!",
+                        status: "error",
+                        isClosable: true,
+                    });
+                }
+            } else {
+                setForgotCampsValidation({
+                    ...forgotCampsValidation,
+                    token: false,
+                });
+            }
+        } else {
+            if (
+                validatePassword(formFields.password) &&
+                validateConfirmationPassword(formFields.password, formFields.confirmationPassword)
+            ) {
+                const newPassword = await api.post(
+                    "/forgotPassword/changePassword",
+                    {
+                        email: formFields.email,
+                        password: formFields.password,
+                        token: formFields.token.toString(),
+                    }
+                );
+                if (newPassword.data.code === 200) {
+                    toast({
+                        position: "top-right",
+                        title: "Senha alterada com sucesso!",
+                        status: "success",
+                        isClosable: true,
+                    });
+                    router.push("/auth/login");
+                } else if (newPassword.data.code === 500) {
+                    toast({
+                        position: "top-right",
+                        title: "Erro ao alterar a senha!",
+                        status: "error",
+                        isClosable: true,
+                    });
+                }
+            } else {
+                setForgotCampsValidation({
+                    ...forgotCampsValidation,
+                    password: false,
+                    confirmationPassword: false,
+                });
+            }
         }
+        setOnLoading(false);
     };
 
     return (
@@ -101,17 +169,28 @@ const Login: NextPage = () => {
                     {step === 1 && (
                         <FirstStep
                             firstStepProps={{
-                                formCamps,
-                                setFormCamps,
+                                formFields,
+                                setFormFields,
                                 forgotCampsValidation,
                             }}
                         />
                     )}
-                    {step === 2 && <SecondStep setToken={setToken} />}
+                    {step === 2 && (
+                        <SecondStep
+                            secondStepProps={{
+                                formFields,
+                                setFormFields,
+                                forgotCampsValidation,
+                            }}
+                        />
+                    )}
                     {step === 3 && (
                         <ThirdStep
-                            setPassword={setPassword}
-                            setConfirmationPassword={setConfirmationPassword}
+                            thirdStepProps={{
+                                formFields,
+                                setFormFields,
+                                forgotCampsValidation,
+                            }}
                         />
                     )}
 
@@ -120,6 +199,8 @@ const Login: NextPage = () => {
                         w={"100%"}
                         variant={"blue-800"}
                         onClick={handleNextStep}
+                        isLoading={onLoading}
+                        loadingText="Enviando"
                     >
                         Enviar
                     </Button>

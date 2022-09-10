@@ -10,7 +10,7 @@ async function main() {
         create: {
             name: "Alice",
             email: "admin@admin",
-            password: bcrypt.hashSync('12345678', 9),
+            password: bcrypt.hashSync('12345678', 9) as string,
             avatar: "https://avatars.githubusercontent.com/u/746482?v=4",
         },
     });
@@ -21,7 +21,6 @@ main()
         await prisma.$disconnect();
     })
     .catch(async (e) => {
-        console.error(e);
         await prisma.$disconnect();
         process.exit(1);
     });

@@ -46,6 +46,7 @@ const SignUp: NextPage = () => {
     const toast = useToast();
     const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
     const { email_home } = router.query;
+    const [onLoading, setOnLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmationPassword, setShowConfirmationPassword] =
         useState(false);
@@ -102,6 +103,7 @@ const SignUp: NextPage = () => {
     }, [email_home]);
 
     const handleSubmit = async () => {
+        setOnLoading(true);
         const formCampsValidation = {
             email: validateEmail(formCamps.email as string),
             password: validatePassword(formCamps.password),
@@ -131,6 +133,7 @@ const SignUp: NextPage = () => {
                 });
             }
         }
+        setOnLoading(false);
         
         
         // modalTimeout();

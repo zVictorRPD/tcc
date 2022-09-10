@@ -5,8 +5,6 @@ import { signOut } from "next-auth/react";
 
 const Dashboard: NextPage = () => {
     const { status, data } = useSession();
-    console.log(status, data);
-
     return (
         <div>
             dashboard

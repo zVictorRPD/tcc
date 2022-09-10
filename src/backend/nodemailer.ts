@@ -8,8 +8,9 @@ export async function sendEmailFunction(
     title: string,
     message: string
 ) {
+    
     return await transporter.sendMail({
-        from: "ufrrj.tcc.smtp@gmail.com",
+        from: process.env.SMTP_USER,
         to: receiver,
         subject: title,
         text: message,
