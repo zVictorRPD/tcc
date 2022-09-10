@@ -36,6 +36,8 @@ import {
 import {
     validateConfirmationPassword,
     validateEmail,
+    validateFile,
+    validateFileSize,
     validateName,
     validatePassword,
 } from "../../src/functions/validation";
@@ -65,7 +67,7 @@ const SignUp: NextPage = () => {
         email: "",
         password: "",
         confirmationPassword: "",
-        avatar: null
+        avatar: null,
     });
 
     /*modal */
@@ -87,6 +89,27 @@ const SignUp: NextPage = () => {
     };
     const handleFileChange = (event: any) => {
         const fileObj = event.target.files && event.target.files[0];
+        const isValidFile = validateFile(fileObj);
+        if (!isValidFile) {
+            toast({
+                position: "top-right",
+                title: "Tipo de arquivo não suportado!",
+                status: "error",
+                isClosable: true,
+            });
+            return;
+        }
+        const isValidSize = validateFileSize(fileObj);
+        if (!isValidSize) {
+            toast({
+                position: "top-right",
+                title: "Arquivo muito extenso! (máximo 2MB)",
+                status: "error",
+                isClosable: true,
+            });
+            return;
+        }
+
         setFormCamps({ ...formCamps, avatar: fileObj });
         if (fileObj) {
             var reader = new FileReader();
@@ -115,11 +138,14 @@ const SignUp: NextPage = () => {
         };
         setSignupCampsValidation(formCampsValidation);
         if (!Object.values(formCampsValidation).includes(false)) {
-            const response = await api.post("/signup", {...formCamps, avatar: 'avatar'});
-            if (response && response.status === 200) {
+            const response = await api.post("/signup", {
+                ...formCamps,
+                avatar: userImage,
+            });
+            if (response && response.data.code === 200) {
                 toast({
                     position: "top-right",
-                    title: "Usuário criado com sucesso!",
+                    title: response.data.message,
                     status: "success",
                     isClosable: true,
                 });
@@ -127,15 +153,14 @@ const SignUp: NextPage = () => {
             } else {
                 toast({
                     position: "top-right",
-                    title: "Já existe um usuário com esse email!",
+                    title: 'Erro ao cadastrar usuário!',
                     status: "error",
                     isClosable: true,
                 });
             }
         }
         setOnLoading(false);
-        
-        
+
         // modalTimeout();
         // onOpen();
     };

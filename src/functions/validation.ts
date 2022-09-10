@@ -13,6 +13,16 @@ export const validateConfirmationPassword = (password: string, confirmationPassw
 
 export const validateName = (name: string) => {
     //regex to validate name
-    const re = /^[a-zA-Z ]{2,30}$/;
+    const re = /^[a-zA-ZÀ-ÿ\s]{2,40}$/;
     return re.test(name);
 };
+
+export const validateFile = (file: File) => {
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+    return allowedTypes.includes(file.type);
+}
+
+//check if the file is less than 2MB
+export const validateFileSize = (file: File) => {
+    return file.size <= 2097152;
+}

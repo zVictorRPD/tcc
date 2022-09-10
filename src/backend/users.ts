@@ -1,4 +1,5 @@
 import { prisma } from "../config/prisma.config";
+import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 interface IUser {
     id: number;
@@ -24,16 +25,13 @@ export async function createUser(
         .catch((err) => {
             return {
                 code: 409,
-                message: "Esse email já está cadastrado",
+                message: "Houve um erro ao criar o usuário",
             };
         });
-    if (newUser) {
-        return {
-            code: 200,
-            message: "Cadastro realizado com sucesso",
-            newUser,
-        };
-    }
+    return {
+        code: 200,
+        message: "Usuário criado com sucesso",
+    };
 }
 
 export async function loginUser(email: string, password: string) {
@@ -211,4 +209,30 @@ export async function updatePassword(email: string, password: string) {
             message: "Senha não foi atualizada",
         };
     }
+}
+
+//get user image
+export async function getUserImage(id: number) {
+    const user: unknown = await prisma.user
+        .findUnique({
+            where: {
+                id,
+            },
+        })
+        .catch((err) => {
+            return {
+                code: 404,
+                message: "Usuário não encontrado",
+            };
+        });
+
+    const newUser = user as User;
+
+    return {
+        code: 200,
+        message: "Imagem recuperada com sucesso",
+        data: {
+            avatar: newUser.avatar,
+        },
+    };
 }

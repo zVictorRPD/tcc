@@ -36,11 +36,8 @@ export default async function handler(
         }
 
         const response = await createUser(name, email, password, avatar);
-
-        if (response?.code === 200) {
+        if(typeof response === "object" ) {
             return res.status(200).json(response);
-        } else {
-            return res.status(401).json({ message: response?.message });
         }
     }
 }

@@ -40,7 +40,6 @@ const authOptions: NextAuthOptions = {
                 token.id = user.id;
                 token.name = user.name;
                 token.email = user.email;
-                token.avatar = user.avatar;
             }
             return token;
         },
@@ -49,7 +48,6 @@ const authOptions: NextAuthOptions = {
                 session.id = token.id;
                 session.name = token.name;
                 session.email = token.email;
-                session.avatar = token.avatar;
             }
             return session;
         },
