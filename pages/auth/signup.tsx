@@ -138,31 +138,31 @@ const SignUp: NextPage = () => {
         };
         setSignupCampsValidation(formCampsValidation);
         if (!Object.values(formCampsValidation).includes(false)) {
-            const response = await api.post("/signup", {
+            const response = await api.post("/user/signup", {
                 ...formCamps,
                 avatar: userImage,
             });
-            if (response && response.data.code === 200) {
+
+            if (response.data.code === "200") {
                 toast({
                     position: "top-right",
                     title: response.data.message,
                     status: "success",
                     isClosable: true,
                 });
-                router.push("/auth/login");
+                // router.push("/auth/login");
+                modalTimeout();
+                onOpen();
             } else {
                 toast({
                     position: "top-right",
-                    title: 'Erro ao cadastrar usuário!',
+                    title: response.data.message,
                     status: "error",
                     isClosable: true,
                 });
             }
         }
         setOnLoading(false);
-
-        // modalTimeout();
-        // onOpen();
     };
 
     const modalTimeout = () => {
@@ -181,8 +181,28 @@ const SignUp: NextPage = () => {
         );
     };
 
-    const resendEmail = () => {
+    const resendEmail = async () => {
         modalTimeout();
+        const response = await api.post("/user/resendVerification", {
+            email: formCamps.email,
+        });
+        if (response.data.code === "200") {
+            toast({
+                position: "top-right",
+                title: response.data.message,
+                status: "success",
+                isClosable: true,
+            });
+        } else {
+            toast({
+                position: "top-right",
+                title: response.data.message,
+                status: "error",
+                isClosable: true,
+            });
+            if(response.data.code === "401") router.push("/auth/login");
+            
+        }
     };
 
     return (
@@ -387,6 +407,8 @@ const SignUp: NextPage = () => {
                         w={"100%"}
                         variant={"blue-800"}
                         onClick={handleSubmit}
+                        isLoading={onLoading}
+                        loadingText={"Criando conta..."}
                     >
                         Criar conta
                     </Button>
@@ -415,6 +437,7 @@ const SignUp: NextPage = () => {
             </AuthContainer>
             <ConfirmationModal
                 modalProps={{ isOpen, onClose, timeout, resendEmail }}
+                email={formCamps.email.toString()}
             />
             {/* <VLibras forceOnload={true} /> */}
         </>

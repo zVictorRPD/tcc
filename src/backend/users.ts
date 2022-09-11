@@ -23,11 +23,14 @@ export async function createUser(
             },
         })
         .catch((err) => {
-            return {
+            const error = {
                 code: 409,
                 message: "Houve um erro ao criar o usuário",
             };
         });
+
+        if(newUser?.id === undefined) return { code: 409, message: "Esse email já está cadastrado" }
+
     return {
         code: 200,
         message: "Usuário criado com sucesso",
@@ -48,11 +51,28 @@ export async function loginUser(email: string, password: string) {
     if (user === null) {
         return {
             code: 401,
+            type: "email",
             message: "Esse email não está cadastrado",
         };
     }
 
     const result = bcrypt.compareSync(password, user.password);
+
+    if (!result) {
+        return {
+            code: 401,
+            type: "password",
+            message: "Senha incorreta",
+        };
+    }
+
+    if (user.emailVerified === false) {
+        return {
+            code: 401,
+            type: "emailVerified",
+            message: "Email não verificado",
+        };
+    }
 
     if (result) {
         return {
@@ -66,10 +86,6 @@ export async function loginUser(email: string, password: string) {
             } as IUser,
         };
     } else {
-        return {
-            code: 401,
-            message: "Senha incorreta",
-        };
     }
 }
 
@@ -211,6 +227,30 @@ export async function updatePassword(email: string, password: string) {
     }
 }
 
+//verify user email
+export async function verifyUserEmail(email: string) {
+    const result = await prisma.user
+        .update({
+            where: {
+                email,
+            },
+            data: {
+                emailVerified: true,
+            },
+        })
+        .catch((err) => {
+            return {
+                code: 404,
+                message: "Usuário não encontrado",
+            };
+        });
+
+    return {
+        code: 200,
+        message: "Email verificado com sucesso",
+    };
+}
+
 //get user image
 export async function getUserImage(id: number) {
     const user: unknown = await prisma.user
@@ -233,6 +273,41 @@ export async function getUserImage(id: number) {
         message: "Imagem recuperada com sucesso",
         data: {
             avatar: newUser.avatar,
+        },
+    };
+}
+
+//get user info
+export async function getUserInfo(email: string) {
+    const user = await prisma.user
+        .findUnique({
+            where: {
+                email,
+            },
+        })
+        .catch((err) => {
+            return {
+                code: 404,
+                message: "Usuário não encontrado",
+            };
+        });
+
+    const queryUser = user as User;
+    if (queryUser.id === undefined) {
+        return {
+            code: 404,
+            message: "Usuário não encontrado",
+        };
+    }
+
+    return {
+        code: 200,
+        message: "Usuário encontrado",
+        data: {
+            id: queryUser.id,
+            name: queryUser.name,
+            email: queryUser.email,
+            emailVerified: queryUser.emailVerified,
         },
     };
 }

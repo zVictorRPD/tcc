@@ -20,7 +20,7 @@ export default async function handler(
             const encryptedToken = bcrypt.hashSync(token, 9);
             const tokenResponse = await saveToken(email, encryptedToken);
             if(tokenResponse?.code === 200){
-                await sendEmailFunction([email], "Recuperação de senha", `Seu token de recuperação de senha é: ${token}`);               
+                await sendEmailFunction([email], "Recuperação de senha", `<p>Seu token de recuperação de senha é: <strong>${token}</strong></p>`);               
                 return res.status(200).json(tokenResponse);
             }
             return res.status(500).json({

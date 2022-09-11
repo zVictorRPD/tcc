@@ -2,6 +2,8 @@ import { Box, Button, HStack } from "@chakra-ui/react";
 import React from "react";
 import { useRouter } from "next/router";
 import { AiOutlineLogin } from "react-icons/ai";
+import { Image } from "@chakra-ui/react";
+
 export default function Header() {
     const router = useRouter();
     const styckTopStyle = {
@@ -24,7 +26,7 @@ export default function Header() {
                     onClick={() => router.push("/#")}
                     style={{ cursor: "pointer" }}
                 >
-                    <img src="/assets/images/homepage/logo.png" alt="Logo" />
+                    <Image src="/assets/images/homepage/logo.png" alt="Logo" />
                 </a>
 
                 <Button

@@ -17,9 +17,18 @@ const authOptions: NextAuthOptions = {
                 };
                 const apiResponse = await loginUser(email, password);
 
-                if (apiResponse.code === 401) {
-                    throw new Error("invalid credentials");
+                if (apiResponse?.code === 401 && apiResponse?.type === "email") {
+                    throw new Error("Esse email não está cadastrado");
                 }
+
+                if (apiResponse?.code === 401 && apiResponse?.type === "password") {
+                    throw new Error("Senha incorreta");
+                }
+
+                if (apiResponse?.code === 401 && apiResponse?.type === "emailVerified") {
+                    throw new Error("Email não verificado");
+                }
+
                 return {
                     id: apiResponse?.user?.id,
                     name: apiResponse?.user?.name,

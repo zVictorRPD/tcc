@@ -6,13 +6,13 @@ const transporter = nodemailer.createTransport(smtp_config);
 export async function sendEmailFunction(
     receiver: string[],
     title: string,
-    message: string
+    html: string
 ) {
     
     return await transporter.sendMail({
         from: process.env.SMTP_USER,
         to: receiver,
         subject: title,
-        text: message,
+        html: html,
     });
 }

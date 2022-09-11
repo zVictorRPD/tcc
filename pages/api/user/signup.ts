@@ -1,11 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createUser } from "../../src/backend/users";
+import { createUser } from "../../../src/backend/users";
 import {
     validateName,
     validateEmail,
     validatePassword,
-} from "../../src/functions/validation";
+} from "../../../src/functions/validation";
+import bcrypt from "bcrypt";
+import { sendEmailFunction } from "../../../src/backend/nodemailer";
 
 export default async function handler(
     req: NextApiRequest,
@@ -36,8 +38,21 @@ export default async function handler(
         }
 
         const response = await createUser(name, email, password, avatar);
-        if(typeof response === "object" ) {
-            return res.status(200).json(response);
-        }
+
+        if (response.code === 409) return res.status(200).json(response);
+        
+        const msgToToken = email + name.toLocaleLowerCase().replaceAll(" ", "");
+
+        const token = bcrypt.hashSync(msgToToken, 9);
+
+        const link = `${
+            process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
+        }/api/user/verifyAccount?token=${token}&email=${email}`;
+        
+        await sendEmailFunction([email], "Verificação de Email", `<p>Clique no link para validar seu email: <a href="${link}">${link}</a></p>`);  
+
+        return res
+            .status(200)
+            .json({ code: "200", message: "Link de verificação enviado" });
     }
 }

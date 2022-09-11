@@ -22,7 +22,7 @@ export const validateFile = (file: File) => {
     return allowedTypes.includes(file.type);
 }
 
-//check if the file is less than 2MB
+//check if the file is less than 1MB
 export const validateFileSize = (file: File) => {
-    return file.size <= 2097152;
+    return file.size <= 1048576;
 }
