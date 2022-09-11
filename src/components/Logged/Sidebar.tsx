@@ -50,7 +50,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 h="20"
                 alignItems="center"
                 mx="8"
-                justifyContent="center"
+                justifyContent={{ base: "space-between", md: "center" }}
             >
                 <a
                     onClick={() => router.push("/ambiente-logado/dashboard")}
