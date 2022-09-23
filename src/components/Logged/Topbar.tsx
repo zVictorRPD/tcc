@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     IconButton,
     Avatar,
@@ -26,21 +26,36 @@ import {
 } from "@chakra-ui/react";
 import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { FaInbox } from "react-icons/fa";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { getUserData } from "../../functions/userData";
 
 interface TopBarProps extends FlexProps {
     topBarProps: {
         onOpen: () => void;
-        userAvatar: string;
     };
-    name: string;
 }
 
-export const TopBar = ({ topBarProps, name, ...rest }: TopBarProps) => {
-    const { onOpen, userAvatar } = topBarProps;
+export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
+    const { onOpen } = topBarProps;
     const [notifications, setNotifications] = useState([]);
+    const [name, setName] = useState("");
+    const [avatar, setAvatar] = useState("");
     const router = useRouter();
+    const { status, data } = useSession();
+
+    const getData = async (id: string) => {
+        const { name, avatar } = await getUserData(id);
+        setName(name);
+        setAvatar(avatar);
+    }
+
+    useEffect(() => {
+        if (data?.id !== undefined && data?.id) {
+            getData(data?.id.toString());
+        }
+    }, [data]);
+
     return (
         <Flex
             ml={{ base: 0, md: 60 }}
@@ -87,11 +102,11 @@ export const TopBar = ({ topBarProps, name, ...rest }: TopBarProps) => {
                             {
                                 notifications.length > 0 ? notifications.map((notification, index) => (
                                     <Text key={index}>{notification}</Text>
-                                )) : 
-                                <Stack p={4} justifyContent={'center'} alignItems={'center'}>
-                                    <FaInbox size={48} opacity={'.5'} />
-                                    <Text color={'gray.800'}>Nenhuma notificação encontrada</Text>
-                                </Stack>
+                                )) :
+                                    <Stack p={4} justifyContent={'center'} alignItems={'center'}>
+                                        <FaInbox size={48} opacity={'.5'} />
+                                        <Text color={'gray.800'}>Nenhuma notificação encontrada</Text>
+                                    </Stack>
                             }
                         </PopoverBody>
                     </PopoverContent>
@@ -105,7 +120,7 @@ export const TopBar = ({ topBarProps, name, ...rest }: TopBarProps) => {
                             _focus={{ boxShadow: "none" }}
                         >
                             <HStack gap={"8px"}>
-                                <Avatar size={"sm"} src={userAvatar} />
+                                <Avatar size={"sm"} src={avatar} />
                                 <VStack
                                     display={{ base: "none", md: "flex" }}
                                     alignItems="flex-start"

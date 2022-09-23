@@ -28,7 +28,7 @@ const authOptions: NextAuthOptions = {
                 if (apiResponse?.code === 401 && apiResponse?.type === "emailVerified") {
                     throw new Error("Email não verificado");
                 }
-
+                
                 return {
                     id: apiResponse?.user?.id,
                     name: apiResponse?.user?.name,

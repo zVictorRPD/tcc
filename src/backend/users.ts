@@ -299,7 +299,7 @@ export async function verifyUserEmail(email: string) {
 }
 
 //get user image
-export async function getUserImage(id: number) {
+export async function getUserData(id: number) {
     const user: unknown = await prisma.user
         .findUnique({
             where: {
@@ -320,6 +320,7 @@ export async function getUserImage(id: number) {
         message: "Imagem recuperada com sucesso",
         data: {
             avatar: newUser.avatar,
+            name: newUser.name,
         },
     };
 }

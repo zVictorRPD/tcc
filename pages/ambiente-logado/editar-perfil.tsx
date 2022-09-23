@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import type { NextPage } from "next";
 import { Avatar, Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react";
 import { FiEdit2 } from "react-icons/fi";
-import { useRouter } from "next/router";
 import {
     validateFile,
     validateFileSize,
@@ -14,12 +13,11 @@ import { api } from "../../src/services/api";
 import { IEditProfile, IEditProfileValidation } from "../../src/interfaces/logged/editProfile.interface";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { useSession } from "next-auth/react";
-import { getUserImage } from "../../src/functions/userImage";
+import { signIn, useSession } from "next-auth/react";
+import { getUserData } from "../../src/functions/userData";
 
 const EditProfile: NextPage = () => {
     const { status, data } = useSession();
-    const router = useRouter();
     const toast = useToast();
     const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
     const [onLoading, setOnLoading] = useState(false);
@@ -43,6 +41,7 @@ const EditProfile: NextPage = () => {
         avatar: null,
     });
 
+    console.log(data)
     const pencilPosition = {
         top: "0",
         right: "0.5rem",
@@ -132,7 +131,7 @@ const EditProfile: NextPage = () => {
             id: data?.id,
             avatar: userImage,
         });
-        console.log(response);
+        
         
         if (response.data.code == "200") {
             toast({
@@ -141,6 +140,9 @@ const EditProfile: NextPage = () => {
                 status: "success",
                 isClosable: true,
             });
+            signIn('session', {
+                name: formCamps.name,
+            }); 
         } else {
             toast({
                 position: "top-right",
@@ -152,8 +154,13 @@ const EditProfile: NextPage = () => {
         setOnLoading(false);
     };
 
-    const getImage = async (id: string) => {
-        setUserImage(await getUserImage(id));
+    const getData = async (id: string) => {
+        const {name, avatar} = await getUserData(id);
+        setUserImage(avatar);
+        setFormCamps({
+            ...formCamps,
+            name: name,
+        })
     }
 
     useEffect(() => {
@@ -167,7 +174,7 @@ const EditProfile: NextPage = () => {
                 ...formCamps,
                 name: data.user.name,
             });
-            getImage(data?.id.toString());
+            getData(data?.id.toString());
         }
     }, [data]);
 
