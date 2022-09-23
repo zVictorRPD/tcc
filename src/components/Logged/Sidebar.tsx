@@ -13,20 +13,26 @@ import {
 } from "@chakra-ui/react";
 import {
     FiHome,
-    FiTrendingUp,
-    FiCompass,
-    FiStar,
-    FiSettings,
 } from "react-icons/fi";
+
 import { IconType } from "react-icons";
+import { FaGraduationCap, FaClock, FaChalkboardTeacher, FaBook, FaCalendarAlt, FaMapMarkedAlt } from "react-icons/fa";
+
 import { useRouter } from "next/router";
 
 interface LinkItemProps {
     name: string;
     icon: IconType;
+    href: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-    { name: "Dashboard", icon: FiHome },
+    { name: "Dashboard", icon: FiHome, href: "/ambiente-logado/dashboard" },
+    { name: "Grade curricular", icon: FaGraduationCap, href: "/ambiente-logado/grade-curricular" },
+    { name: "Grade horária", icon: FaClock, href: "/ambiente-logado/grade-horaria" },
+    { name: "Matérias", icon: FaBook, href: "/ambiente-logado/materias" },
+    { name: "Professores", icon: FaChalkboardTeacher, href: "/ambiente-logado/professores" },
+    { name: "Calendário", icon: FaCalendarAlt, href: "/ambiente-logado/calendario" },
+    { name: "Mapa", icon: FaMapMarkedAlt, href: "/ambiente-logado/mapa" },
 ];
 
 interface SidebarProps extends BoxProps {
@@ -68,7 +74,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 />
             </Flex>
             {LinkItems.map((link) => (
-                <NavItem key={link.name} icon={link.icon}>
+                <NavItem key={link.name} onClick={() => router.push(link.href)} icon={link.icon}>
                     {link.name}
                 </NavItem>
             ))}

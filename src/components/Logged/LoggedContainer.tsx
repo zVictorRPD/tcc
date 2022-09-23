@@ -11,40 +11,34 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import { Session } from "next-auth";
+import { getUserImage } from "../../functions/userImage";
 
 // const { status, data } = useSession();
 
 export default function LoggedContainer({
-    children,
-    sessionData,
+    children
 }: {
     children: ReactNode;
-    sessionData: Session | null;
 }) {
+    const { status, data } = useSession();
     const [userAvatar, setUserAvatar] = useState("");
     const [userName, setUserName] = useState("");
 
-    async function getUserImage() {
-        const response = await api.post("/user/getUserAvatar", {
-            id: sessionData?.id,
-        });
-        if (response.data.code === 200) {
-            setUserAvatar(response.data.data.avatar);
-        }
-        return false;
+    const getAvatar = async (id:string) => {
+        setUserAvatar(await getUserImage(id));
     }
+    
     useEffect(() => {
-        console.log(sessionData);
-
         if (
-            sessionData?.id !== undefined &&
-            sessionData?.user?.name !== undefined &&
-            sessionData?.user?.name
+            data?.id !== undefined &&
+            data?.id &&
+            data?.user?.name &&
+            data?.user?.name !== undefined
         ) {
-            setUserName(sessionData?.user?.name);
-            getUserImage();
+            setUserName(data?.user?.name);
+            getAvatar(data?.id.toString());
         }
-    }, [sessionData]);
+    }, [data]);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
@@ -71,7 +65,7 @@ export default function LoggedContainer({
                 topBarProps={{ onOpen, userAvatar }}
                 name={userName}
             />
-            <Box ml={{ base: 0, md: 60 }} p="4">
+            <Box ml={{ base: 0, md: 60 }} p="4" h={'calc(100vh - 80px)'}>
                 {children}
             </Box>
         </Box>

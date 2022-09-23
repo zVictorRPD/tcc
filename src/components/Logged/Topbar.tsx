@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     IconButton,
     Avatar,
@@ -15,8 +15,17 @@ import {
     MenuItem,
     MenuList,
     Image,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverCloseButton,
+    PopoverArrow,
+    PopoverBody,
+    Stack,
 } from "@chakra-ui/react";
 import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
+import { FaInbox } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -30,6 +39,7 @@ interface TopBarProps extends FlexProps {
 
 export const TopBar = ({ topBarProps, name, ...rest }: TopBarProps) => {
     const { onOpen, userAvatar } = topBarProps;
+    const [notifications, setNotifications] = useState([]);
     const router = useRouter();
     return (
         <Flex
@@ -60,12 +70,33 @@ export const TopBar = ({ topBarProps, name, ...rest }: TopBarProps) => {
             </Box>
 
             <HStack spacing={{ base: "0", md: "6" }}>
-                <IconButton
-                    size="lg"
-                    variant="ghost"
-                    aria-label="open menu"
-                    icon={<FiBell />}
-                />
+                <Popover placement='bottom-start'>
+                    <PopoverTrigger>
+                        <IconButton
+                            size="lg"
+                            variant="ghost"
+                            aria-label="open menu"
+                            icon={<FiBell />}
+                        />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <PopoverHeader fontWeight='semibold'>Notificações</PopoverHeader>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <PopoverBody>
+                            {
+                                notifications.length > 0 ? notifications.map((notification, index) => (
+                                    <Text key={index}>{notification}</Text>
+                                )) : 
+                                <Stack p={4} justifyContent={'center'} alignItems={'center'}>
+                                    <FaInbox size={48} opacity={'.5'} />
+                                    <Text color={'gray.800'}>Nenhuma notificação encontrada</Text>
+                                </Stack>
+                            }
+                        </PopoverBody>
+                    </PopoverContent>
+                </Popover>
+
                 <Flex alignItems={"center"}>
                     <Menu>
                         <MenuButton
@@ -101,7 +132,7 @@ export const TopBar = ({ topBarProps, name, ...rest }: TopBarProps) => {
                                 "gray.700"
                             )}
                         >
-                            <MenuItem>Editar perfil</MenuItem>
+                            <MenuItem onClick={() => router.push("/ambiente-logado/editar-perfil")}>Editar perfil</MenuItem>
                             <MenuDivider />
                             <MenuItem onClick={() => signOut()}>
                                 <Text color="red.500">Sair</Text>

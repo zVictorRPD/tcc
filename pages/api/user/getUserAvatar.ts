@@ -8,7 +8,7 @@ export default async function handler(
 ) {
     if (req.method === "POST") {
         const { id } = req.body;
-        const response = await getUserImage(id);
+        const response = await getUserImage(parseInt(id));
 
         if(response.code === 404) {
             return res.status(200).json(response);

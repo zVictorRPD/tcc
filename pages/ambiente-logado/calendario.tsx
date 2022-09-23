@@ -1,10 +1,10 @@
 import React from "react";
 import type { NextPage } from "next";
 
-const Dashboard: NextPage = () => {
+const Calendar: NextPage = () => {
     return (
-        <h1>Dashboard</h1>
+        <h1>Calendário</h1>
     );
 };
 
-export default Dashboard;
+export default Calendar;
