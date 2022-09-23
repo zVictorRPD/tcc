@@ -1,78 +1,47 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import type { NextPage } from "next";
-import VLibras from "@djpfs/react-vlibras";
-import Head from "next/head";
-import {
-    Avatar,
-    Box,
-    Button,
-    Checkbox,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    HStack,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Stack,
-    Text,
-    useDisclosure,
-    useToast,
-} from "@chakra-ui/react";
+import { Avatar, Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react";
 import { FiEdit2 } from "react-icons/fi";
-import { IoMdClose } from "react-icons/io";
-import AuthContainer from "../../src/components/Auth/AuthContainer";
+import { useRouter } from "next/router";
 import {
-    AiOutlineClose,
-    AiOutlineEye,
-    AiOutlineEyeInvisible,
-} from "react-icons/ai";
-import ConfirmationModal from "../../src/components/Auth/Signup/ConfirmationModal";
-import {
-    ISignupCampsValidation,
-    ISignupCamps,
-} from "../../src/interfaces/auth/auth.interface";
-import {
-    validateConfirmationPassword,
-    validateEmail,
     validateFile,
     validateFileSize,
     validateName,
     validatePassword,
+    validateConfirmationPassword,
 } from "../../src/functions/validation";
 import { api } from "../../src/services/api";
+import { IEditProfile, IEditProfileValidation } from "../../src/interfaces/logged/editProfile.interface";
+import { IoMdClose } from "react-icons/io";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useSession } from "next-auth/react";
+import { getUserImage } from "../../src/functions/userImage";
 
-const SignUp: NextPage = () => {
+const EditProfile: NextPage = () => {
+    const { status, data } = useSession();
     const router = useRouter();
     const toast = useToast();
     const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-    const { email_home } = router.query;
     const [onLoading, setOnLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmationPassword, setShowConfirmationPassword] =
         useState(false);
     const [userImage, setUserImage] = useState<string>("");
-    const [clockTimer, setClockTimer] = useState<NodeJS.Timer>();
-    const [signupCampsValidation, setSignupCampsValidation] =
-        useState<ISignupCampsValidation>({
+    const [changeImage, setChangeImage] = useState(false);
+    const [editCampsValidation, setEditCampsValidation] =
+        useState<IEditProfileValidation>({
+            avatar: true,
             name: true,
-            email: true,
             password: true,
             confirmationPassword: true,
-        } as ISignupCampsValidation);
+        } as IEditProfileValidation);
 
-    const [formCamps, setFormCamps] = useState<ISignupCamps>({
+    const [formCamps, setFormCamps] = useState<IEditProfile>({
         name: "",
-        email: "",
         password: "",
         confirmationPassword: "",
         avatar: null,
     });
-
-    /*modal */
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [timeout, setTimeout] = React.useState(30);
 
     const pencilPosition = {
         top: "0",
@@ -111,6 +80,7 @@ const SignUp: NextPage = () => {
         }
 
         setFormCamps({ ...formCamps, avatar: fileObj });
+        setChangeImage(true);
         if (fileObj) {
             var reader = new FileReader();
             reader.onload = function (e: any) {
@@ -119,74 +89,52 @@ const SignUp: NextPage = () => {
             reader.readAsDataURL(fileObj);
         }
     };
-    useEffect(() => {
-        if (email_home) {
-            setFormCamps({ ...formCamps, email: email_home });
-        }
-    }, [email_home]);
 
     const handleSubmit = async () => {
         setOnLoading(true);
-        const formCampsValidation = {
-            email: validateEmail(formCamps.email as string),
-            password: validatePassword(formCamps.password),
-            confirmationPassword: validateConfirmationPassword(
-                formCamps.password,
-                formCamps.confirmationPassword
-            ),
-            name: validateName(formCamps.name),
-        };
-        setSignupCampsValidation(formCampsValidation);
-        if (!Object.values(formCampsValidation).includes(false)) {
-            const response = await api.post("/user/signup", {
-                ...formCamps,
-                avatar: userImage,
+        if (formCamps.name !== data?.user?.name) {
+            const isValidName = validateName(formCamps.name);
+            setEditCampsValidation({
+                ...editCampsValidation,
+                name: isValidName,
             });
-
-            if (response.data.code == "200") {
-                toast({
-                    position: "top-right",
-                    title: response.data.message,
-                    status: "success",
-                    isClosable: true,
-                });
-                // router.push("/auth/login");
-                modalTimeout();
-                onOpen();
-            } else {
-                toast({
-                    position: "top-right",
-                    title: response.data.message,
-                    status: "error",
-                    isClosable: true,
-                });
+            if (!isValidName) {
+                setOnLoading(false);
+                return;
             }
         }
-        setOnLoading(false);
-    };
-
-    const modalTimeout = () => {
-        setTimeout(30);
-        let seconds = 30;
-        if (clockTimer) clearInterval(clockTimer);
-
-        setClockTimer(
-            setInterval(() => {
-                setTimeout((prev) => prev - 1);
-                seconds--;
-                if (seconds == 0) {
-                    clearInterval(clockTimer);
-                }
-            }, 1000)
-        );
-    };
-
-    const resendEmail = async () => {
-        modalTimeout();
-        const response = await api.post("/user/resendVerification", {
-            email: formCamps.email,
+        if (formCamps.password !== "") {
+            const isValidPassword = validatePassword(formCamps.password);
+            const isValidConfirmationPassword = validateConfirmationPassword(formCamps.password, formCamps.confirmationPassword);
+            setEditCampsValidation({
+                ...editCampsValidation,
+                password: isValidPassword,
+                confirmationPassword: isValidConfirmationPassword,
+            });
+            if (!isValidPassword || !isValidConfirmationPassword) {
+                setOnLoading(false);
+                return;
+            }
+        }
+        if (formCamps.name === data?.user?.name && formCamps.password === "" && changeImage === false) {
+            toast({
+                position: "top-right",
+                title: "Nenhum campo foi alterado!",
+                status: "error",
+                isClosable: true,
+            });
+            setOnLoading(false);
+            return;
+        }
+        
+        const response = await api.post("/user/editUser", {
+            ...formCamps,
+            id: data?.id,
+            avatar: userImage,
         });
-        if (response.data.code === "200") {
+        console.log(response);
+        
+        if (response.data.code == "200") {
             toast({
                 position: "top-right",
                 title: response.data.message,
@@ -200,24 +148,51 @@ const SignUp: NextPage = () => {
                 status: "error",
                 isClosable: true,
             });
-            if(response.data.code === "401") router.push("/auth/login");
-            
         }
+        setOnLoading(false);
     };
+
+    const getImage = async (id: string) => {
+        setUserImage(await getUserImage(id));
+    }
+
+    useEffect(() => {
+        if (
+            data?.id !== undefined &&
+            data?.id &&
+            data?.user?.name !== undefined &&
+            data?.user?.name
+        ) {
+            setFormCamps({
+                ...formCamps,
+                name: data.user.name,
+            });
+            getImage(data?.id.toString());
+        }
+    }, [data]);
 
     return (
         <>
-            <Head>
-                <title>Cadastro</title>
-            </Head>
-            <AuthContainer>
-                <Box p={[".5rem", ".5rem", "1rem"]}>
+            <Stack
+                h={'100%'}
+                w={'100%'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                flexDirection={'column'}
+            >
+                <Box
+                    bg={'#fff'}
+                    w={'100%'}
+                    maxW={'500px'}
+                    p={["1rem", "1rem", "1.5rem"]}
+                    borderRadius={'lg'}
+                >
                     <Text
                         textAlign={"center"}
-                        fontSize={["3xl", "4xl", "5xl"]}
+                        fontSize={["xl", "2xl", "3xl"]}
                         mb={["1rem", "1rem", "1.5rem"]}
                     >
-                        Crie sua conta
+                        Edite sua conta
                     </Text>
                     <HStack justifyContent={"center"}>
                         <Box position={"relative"}>
@@ -272,7 +247,7 @@ const SignUp: NextPage = () => {
                     </HStack>
                     <FormControl
                         mb={"1rem"}
-                        isInvalid={!signupCampsValidation.name}
+                        isInvalid={!editCampsValidation.name}
                     >
                         <FormLabel fontWeight={500}>Nome</FormLabel>
                         <Input
@@ -286,39 +261,27 @@ const SignUp: NextPage = () => {
                                 })
                             }
                         />
-                        {!signupCampsValidation.name && (
+                        {!editCampsValidation.name && (
                             <FormErrorMessage>
                                 Insira um nome valido.
                             </FormErrorMessage>
                         )}
                     </FormControl>
-                    <FormControl
-                        mb={"1rem"}
-                        isInvalid={!signupCampsValidation.email}
-                    >
+
+                    <FormControl mb={"1rem"}>
                         <FormLabel fontWeight={500}>Email</FormLabel>
                         <Input
                             type="email"
                             placeholder="examplemail@example.com"
-                            value={formCamps.email}
-                            onChange={(e) =>
-                                setFormCamps({
-                                    ...formCamps,
-                                    email: e.target.value,
-                                })
-                            }
+                            value={data?.user?.email || ''}
+                            disabled
                         />
-                        {!signupCampsValidation.email && (
-                            <FormErrorMessage>
-                                Insira um email valido.
-                            </FormErrorMessage>
-                        )}
                     </FormControl>
                     <FormControl
                         mb={["1rem", "1rem", "1.5rem"]}
-                        isInvalid={!signupCampsValidation.password}
+                        isInvalid={!editCampsValidation.password}
                     >
-                        <FormLabel fontWeight={500}>Senha</FormLabel>
+                        <FormLabel fontWeight={500}>Nova senha</FormLabel>
                         <InputGroup size="md">
                             <Input
                                 type={showPassword ? "text" : "password"}
@@ -348,7 +311,7 @@ const SignUp: NextPage = () => {
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
-                        {!signupCampsValidation.password && (
+                        {!editCampsValidation.password && (
                             <FormErrorMessage>
                                 Insira uma senha valida.
                             </FormErrorMessage>
@@ -356,10 +319,10 @@ const SignUp: NextPage = () => {
                     </FormControl>
                     <FormControl
                         mb={["1rem", "1rem", "1.5rem"]}
-                        isInvalid={!signupCampsValidation.confirmationPassword}
+                        isInvalid={!editCampsValidation.confirmationPassword}
                     >
                         <FormLabel fontWeight={500}>
-                            Confirme sua senha
+                            Confirme sua nova senha
                         </FormLabel>
                         <InputGroup size="md">
                             <Input
@@ -396,52 +359,25 @@ const SignUp: NextPage = () => {
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
-                        {!signupCampsValidation.confirmationPassword && (
+                        {!editCampsValidation.confirmationPassword && (
                             <FormErrorMessage>
                                 A senha de confirmação está diferente da senha.
                             </FormErrorMessage>
                         )}
                     </FormControl>
                     <Button
-                        mb={["1rem", "1rem", "1.5rem"]}
                         w={"100%"}
                         variant={"blue-800"}
                         onClick={handleSubmit}
                         isLoading={onLoading}
-                        loadingText={"Criando conta..."}
+                        loadingText={"Editando conta..."}
                     >
-                        Criar conta
+                        Editar conta
                     </Button>
-                    <HStack
-                        justifyContent={"center"}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
-                        <Text
-                            textAlign={"center"}
-                            fontWeight={500}
-                            fontSize={["sm", "sm", "md"]}
-                        >
-                            Já possui conta?
-                        </Text>
-                        <Text
-                            color={"blue.400"}
-                            cursor={"pointer"}
-                            fontSize={["sm", "sm", "md"]}
-                            _hover={{ textDecoration: "underline" }}
-                            onClick={() => router.push("/auth/login")}
-                        >
-                            Entre aqui
-                        </Text>
-                    </HStack>
                 </Box>
-            </AuthContainer>
-            <ConfirmationModal
-                modalProps={{ isOpen, onClose, timeout, resendEmail }}
-                email={formCamps.email.toString()}
-            />
-            {/* <VLibras forceOnload={true} /> */}
+            </Stack>
         </>
     );
 };
 
-export default SignUp;
+export default EditProfile;

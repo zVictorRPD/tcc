@@ -37,6 +37,53 @@ export async function createUser(
     };
 }
 
+export async function updateUser(name:string, avatar:string, id:number) {
+    const user = await prisma.user.update({
+        where: { id },
+        data: {
+            name,
+            avatar
+        }
+    }).catch((err) => {
+        return err;
+    });
+
+    if (user) {
+        return {
+            code: 200,
+            message: "Usuário atualizado com sucesso",
+        };
+    } else {
+        return {
+            code: 500,
+            message: "Erro ao atualizar usuário",
+        };
+    }
+}
+
+export async function updatePasswordId(id: number, password: string) {
+    const user = await prisma.user.update({
+        where: { id },
+        data: {
+            password: bcrypt.hashSync(password, 9) as string,
+        },
+    }).catch((err) => {
+        return err;
+    });
+
+    if (user) {
+        return {
+            code: 200,
+            message: "Usuário atualizado com sucesso",
+        };
+    } else {
+        return {
+            code: 500,
+            message: "Erro ao atualizar senha",
+        };
+    }
+}
+
 export async function loginUser(email: string, password: string) {
     const user = await prisma.user
         .findUnique({
