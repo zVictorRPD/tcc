@@ -1,4 +1,4 @@
-import { Box, Container, Hide, HStack, Stack, VStack } from "@chakra-ui/react";
+import { Box, Container, Hide, HStack, Image, Stack, VStack } from "@chakra-ui/react";
 import React, { ReactNode, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -31,7 +31,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                             onClick={() => router.push("/#")}
                             style={{ cursor: "pointer" }}
                         >
-                            <img
+                            <Image
                                 src="/assets/images/homepage/logo.png"
                                 alt="Logo"
                             />
@@ -66,7 +66,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                             justifyContent={"center"}
                             alignItems={"center"}
                         >
-                            <img
+                            <Image
                                 style={imgStyle}
                                 src="/assets/images/auth/login.svg"
                                 alt="Login image"

@@ -38,7 +38,7 @@ export default function LoggedContainer({
             <TopBar
                 topBarProps={{ onOpen }}
             />
-            <Box ml={{ base: 0, md: 60 }} p="4" h={'calc(100vh - 80px)'}>
+            <Box ml={{ base: 0, md: 60 }} minH={'calc(100vh - 80px)'}>
                 {children}
             </Box>
         </Box>

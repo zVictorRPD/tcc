@@ -140,9 +140,7 @@ const EditProfile: NextPage = () => {
                 status: "success",
                 isClosable: true,
             });
-            signIn('session', {
-                name: formCamps.name,
-            }); 
+            signIn(); 
         } else {
             toast({
                 position: "top-right",
