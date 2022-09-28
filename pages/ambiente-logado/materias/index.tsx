@@ -36,19 +36,8 @@ const Subject: NextPage = () => {
 
     return (
         <>
-            <Text
-                fontSize={'4xl'}
-                px={{ base: '.5rem', md: '2rem' }}
-                py={{ base: '.5rem', md: '1rem' }}
-                bg={'white'}
-                borderBottomWidth="1px"
-                borderBottomColor={'gray.300'}
-            >
-                Matérias
-            </Text>
             <Box p={{ base: '.5rem', md: '2rem' }}>
                 <Box
-
                     p={{ base: '.5rem', md: '1rem' }}
                     bg="white"
                     borderRadius={'12px'}

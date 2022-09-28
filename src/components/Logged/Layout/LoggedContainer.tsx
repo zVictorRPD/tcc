@@ -10,8 +10,10 @@ import {
 } from "@chakra-ui/react";
 
 export default function LoggedContainer({
+    pageName,
     children
 }: {
+    pageName: string;
     children: ReactNode;
 }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,7 +38,7 @@ export default function LoggedContainer({
             </Drawer>
             {/* mobilenav */}
             <TopBar
-                topBarProps={{ onOpen }}
+                topBarProps={{ onOpen, pageName }}
             />
             <Box ml={{ base: 0, md: 60 }} minH={'calc(100vh - 80px)'}>
                 {children}

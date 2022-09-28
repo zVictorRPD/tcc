@@ -28,16 +28,18 @@ import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { FaInbox } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { getUserData } from "../../functions/userData";
+import { getUserData } from "../../../functions/userData";
+import { pageNameObject } from "../../../functions/pageName";
 
 interface TopBarProps extends FlexProps {
     topBarProps: {
         onOpen: () => void;
+        pageName: string;
     };
 }
 
 export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
-    const { onOpen } = topBarProps;
+    const { onOpen, pageName } = topBarProps;
     const [notifications, setNotifications] = useState([]);
     const [name, setName] = useState("");
     const [avatar, setAvatar] = useState("");
@@ -56,6 +58,7 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
         }
     }, [data]);
 
+
     return (
         <Flex
             ml={{ base: 0, md: 60 }}
@@ -65,25 +68,35 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
             bg={useColorModeValue("white", "gray.900")}
             borderBottomWidth="1px"
             borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-            justifyContent={{ base: "space-between", md: "flex-end" }}
+            justifyContent={"space-between"}
             {...rest}
         >
-            <IconButton
-                display={{ base: "flex", md: "none" }}
-                onClick={onOpen}
-                variant="outline"
-                aria-label="open menu"
-                icon={<FiMenu />}
-            />
-            <Box display={{ base: "flex", md: "none" }}>
-                <a
-                    onClick={() => router.push("/ambiente-logado/dashboard")}
-                    style={{ cursor: "pointer" }}
-                >
-                    <Image src="/assets/images/homepage/logo.png" height={'36px'} alt="Logo" />
-                </a>
+            {/* Mobile */}
+            <Box w={'80px'} display={{ base: "flex", md: "none" }}>
+                <IconButton
+                    onClick={onOpen}
+                    variant="outline"
+                    aria-label="open menu"
+                    icon={<FiMenu />}
+                />
             </Box>
 
+            <Box display={{ base: "flex", md: "none" }}>
+                <Text
+                    fontSize={'xl'}
+                >
+                    {pageNameObject[pageName]}
+                </Text>
+            </Box>
+
+            {/* Desktop */}
+            <Box ml={'1rem'} display={{ base: "none", md: "block" }}>
+                <Text
+                    fontSize={'3xl'}
+                >
+                    {pageNameObject[pageName]}
+                </Text>
+            </Box>
             <HStack spacing={{ base: "0", md: "6" }}>
                 <Popover placement='bottom-start'>
                     <PopoverTrigger>
