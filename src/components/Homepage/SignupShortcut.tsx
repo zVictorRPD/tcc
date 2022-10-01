@@ -7,6 +7,7 @@ import {
     Heading,
     Hide,
     HStack,
+    Image,
     Input,
     Stack,
     Text,
@@ -37,7 +38,7 @@ export default function SignupShortcut() {
             >
                 <Hide below="md">
                     <GridItem>
-                        <img src="/assets/images/homepage/svgs/mail.svg" />
+                        <Image src="/assets/images/homepage/svgs/mail.svg" alt="email svg"/>
                     </GridItem>
                 </Hide>
                 <GridItem>

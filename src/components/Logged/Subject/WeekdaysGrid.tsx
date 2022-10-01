@@ -5,7 +5,7 @@ import { weekDays } from '../../../../pages/ambiente-logado/grade-horaria/timeTa
 
 function WeekdaysGrid() {
     return (
-        <Grid templateColumns='62px repeat(5, 1fr)' gap={3}>
+        <Grid templateColumns='62px repeat(6, 1fr)' gap={3}>
             <GridItem w='100%'>
                 <VStack justifyContent={'center'} h={'100%'}>
                     <Text fontWeight={600}></Text>

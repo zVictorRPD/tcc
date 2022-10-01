@@ -17,7 +17,7 @@ function SubjectCard(props: SubjectCardProps) {
                 borderRadius={'12px'}
                 borderWidth="1px"
                 borderColor={'gray.300'}
-                h={'100px'}
+                h={'50px'}
                 display={'flex'}
                 justifyContent={'center'}
                 alignItems={'center'}

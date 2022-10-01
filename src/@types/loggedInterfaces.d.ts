@@ -26,3 +26,10 @@ interface ITimetableContext {
     addSubjectModalOnOpen: () => void;
     addSubjectModalOnClose: () => void;
 }
+
+interface IAddSubjectModalTimetable {
+    period: string;
+    subject: string;
+    defaultTimeType: boolean;
+    times: string[];
+}
