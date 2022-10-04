@@ -10,11 +10,8 @@ import {
     FormControl,
     FormLabel,
     HStack,
+    Image,
     Input,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -24,15 +21,14 @@ import {
     PopoverTrigger,
     Select
 } from "@chakra-ui/react";
-import { FaChevronLeft, FaChevronRight, FaChevronDown, FaFilter } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaEnvelope, FaFilter } from "react-icons/fa";
 
-const Subject: NextPage = () => {
+const Teachers: NextPage = () => {
     const [page, setPage] = React.useState(1);
     const [onLoad, setOnLoad] = React.useState(false);
     const [filterCamps, setFilterCamps] = React.useState({
-        code: "",
         name: "",
-        time: "",
+        departament: "",
     });
     const changePage = (page: number) => {
         if (Number(page) > 0 && Number(page) < 100) {
@@ -44,9 +40,8 @@ const Subject: NextPage = () => {
     }
     const clearFilter = () => {
         setFilterCamps({
-            code: "",
             name: "",
-            time: "",
+            departament: "",
         });
     }
 
@@ -79,31 +74,25 @@ const Subject: NextPage = () => {
                                 <PopoverCloseButton />
                                 <PopoverBody p={'1rem'}>
                                     <FormControl mb={"1rem"}>
-                                        <FormLabel fontWeight={500}>Código</FormLabel>
-                                        <Input
-                                            type="text"
-                                            placeholder="IC856"
-                                            value={filterCamps.code}
-                                            onChange={(e) => setFilterCamps({ ...filterCamps, code: e.target.value })}
-                                        />
-                                    </FormControl>
-                                    <FormControl mb={"1rem"}>
                                         <FormLabel fontWeight={500}>Nome</FormLabel>
                                         <Input
                                             type="text"
-                                            placeholder="Cálculo"
+                                            placeholder="Victor"
                                             value={filterCamps.name}
                                             onChange={(e) => setFilterCamps({ ...filterCamps, name: e.target.value })}
                                         />
                                     </FormControl>
                                     <FormControl mb={"1.5rem"}>
-                                        <FormLabel fontWeight={500}>Carga horária</FormLabel>
-                                        <Input
-                                            type="text"
-                                            placeholder="60"
-                                            value={filterCamps.time}
-                                            onChange={(e) => setFilterCamps({ ...filterCamps, time: e.target.value })}
-                                        />
+                                        <FormLabel fontWeight={500}>Departamento</FormLabel>
+                                        <Select
+                                            value={filterCamps.departament}
+                                            onChange={(e) => setFilterCamps({ ...filterCamps, departament: e.target.value })}
+                                        >
+                                            <option value=''>Selecione um departamento</option>
+                                            <option value='option1'>Option 1</option>
+                                            <option value='option2'>Option 2</option>
+                                            <option value='option3'>Option 3</option>
+                                        </Select>
                                     </FormControl>
                                     <HStack justifyContent={'flex-end'} columnGap={'8px'}>
                                         <Button variant={'outline'} onClick={clearFilter}>Limpar</Button>
@@ -117,33 +106,46 @@ const Subject: NextPage = () => {
                         <table className={styles.custom_table}>
                             <thead>
                                 <tr>
-                                    <th>Código</th>
+                                    <th>Foto</th>
                                     <th>Nome</th>
-                                    <th>Carga horaria</th>
-                                    <th>Ações</th>
+                                    <th>Departamento</th>
+                                    <th>Links</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+                                    [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
                                         return (
                                             <tr key={index}>
-                                                <td>IM147</td>
-                                                <td>FILOSOFIA E ETICA NAS ORGANIZACOES</td>
-                                                <td>60 Horas</td>
                                                 <td>
-                                                    <Menu>
-                                                        <MenuButton size={'sm'} as={Button} rightIcon={<FaChevronDown />}>
-                                                            Ações
-                                                        </MenuButton>
-                                                        <MenuList>
-                                                            <MenuItem>Download</MenuItem>
-                                                            <MenuItem>Create a Copy</MenuItem>
-                                                            <MenuItem>Mark as Draft</MenuItem>
-                                                            <MenuItem>Delete</MenuItem>
-                                                            <MenuItem>Attend a Workshop</MenuItem>
-                                                        </MenuList>
-                                                    </Menu>
+                                                    <Image src="/assets/images/logged/user-default-image.webp" alt="Foto do professor" boxSize="57px" />
+                                                </td>
+                                                <td>Victor de Oliveira Martins Azevedo</td>
+                                                <td>DCOMP - DEPARTAMENTO DE COMPUTAÇÃO</td>
+                                                <td>
+                                                    <HStack columnGap={'8px'}>
+                                                        <Button
+                                                            variant={'outline'}
+                                                            leftIcon={<FaEnvelope />}
+                                                        >
+                                                            <a href="mailto:victor2007azevedo@hotmail.com">
+                                                                Email
+                                                            </a>
+                                                        </Button>
+                                                        <Button
+                                                            variant={'outline'}
+                                                            leftIcon={
+                                                                <Image src="/assets/images/logged/lattes.svg"
+                                                                    alt="Lattes"
+                                                                    w={'15px'}
+                                                                    h={'18px'}
+                                                                />}
+                                                        >
+                                                            <a href="https://lattes.com" target={'_blank'} rel="noreferrer">
+                                                                Lattes
+                                                            </a>
+                                                        </Button>
+                                                    </HStack>
                                                 </td>
                                             </tr>
                                         )
@@ -192,4 +194,4 @@ const Subject: NextPage = () => {
     );
 };
 
-export default Subject;
+export default Teachers;
