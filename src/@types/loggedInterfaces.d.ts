@@ -33,3 +33,13 @@ interface IAddSubjectModalTimetable {
     defaultTimeType: boolean;
     times: string[];
 }
+
+
+
+/* CALENDAR */
+interface IEvent {
+    title: string;
+    start: Date;
+    end: Date;
+    allDay?: boolean;
+}
