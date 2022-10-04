@@ -43,3 +43,12 @@ interface IEvent {
     end: Date;
     allDay?: boolean;
 }
+
+interface ISelectedDate {
+    start: Date,
+    end: Date,
+}
+
+interface IToastStatus{
+    type: 'success' | 'error' | 'info' | 'warning' | undefined;
+}

@@ -8,6 +8,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'moment/locale/pt-br';
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
+
 const lang = {
     'pt-br': {
         week: 'Semana',
@@ -45,6 +46,10 @@ const eventsDefault: IEvent[] = [
 
 const Calendar: NextPage = () => {
     const [events, setEvents] = useState<IEvent[]>(eventsDefault);
+    const [selectedDate, setSelectedDate] = useState<ISelectedDate>({
+        start: new Date(),
+        end: new Date()
+    } as ISelectedDate);
     const {
         isOpen: addEventModalIsOpen,
         onOpen: addEventModalOnOpen,
@@ -53,12 +58,8 @@ const Calendar: NextPage = () => {
 
     const handleSelectSlot = useCallback(
         ({ start, end }: { start: Date, end: Date }) => {
+            setSelectedDate({ start, end });
             addEventModalOnOpen();
-            // const title = 'ha'
-            // if (title) {
-            //     setEvents((prev: IEvent[]) => [...prev, { title, start, end }])
-            // }
-
         },
         [setEvents]
     )
@@ -102,7 +103,9 @@ const Calendar: NextPage = () => {
                 events,
                 setEvents,
                 addEventModalIsOpen,
-                addEventModalOnClose
+                addEventModalOnClose,
+                selectedDate,
+                setSelectedDate
             }} />
         </>
 
