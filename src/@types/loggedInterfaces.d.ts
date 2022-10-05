@@ -38,15 +38,12 @@ interface IAddSubjectModalTimetable {
 
 /* CALENDAR */
 interface IEvent {
+    id: number;
     title: string;
     start: Date;
     end: Date;
     allDay?: boolean;
-}
-
-interface ISelectedDate {
-    start: Date,
-    end: Date,
+    description?: string;
 }
 
 interface IToastStatus{

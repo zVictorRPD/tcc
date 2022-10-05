@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from "react";
 import type { NextPage } from "next";
-import { Calendar as ReactCalendar, momentLocalizer } from 'react-big-calendar'
-import AddEventModal from "../../src/components/Logged/Calendar/AddEventModal";
-import moment from 'moment'
+import { Calendar as ReactCalendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
 import { Box, useDisclosure } from "@chakra-ui/react";
-import 'react-big-calendar/lib/css/react-big-calendar.css'
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/pt-br';
+import EventModal from "../../src/components/Logged/Calendar/EventModal";
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
 
@@ -29,43 +29,48 @@ const lang = {
     },
 }
 
-const eventsDefault: IEvent[] = [
-    {
-        title: 'All Day Event very long title',
-        allDay: false,
-        start: new Date(2022, 10, 3, 10, 0, 0),
-        end: new Date(2022, 10, 3, 14, 0, 0),
-    },
-    {
-        title: 'Long Event',
-        allDay: false,
-        start: new Date(2022, 10, 3),
-        end: new Date(2022, 10, 3),
-    },
-]
-
 const Calendar: NextPage = () => {
-    const [events, setEvents] = useState<IEvent[]>(eventsDefault);
-    const [selectedDate, setSelectedDate] = useState<ISelectedDate>({
+    const [events, setEvents] = useState<IEvent[]>([]);
+    const [isEdit, setIsEdit] = useState(false);
+    const [eventData, setEventData] = useState<IEvent>({
+        id: 0,
+        title: '',
         start: new Date(),
-        end: new Date()
-    } as ISelectedDate);
+        end: new Date(),
+    } as IEvent);
     const {
-        isOpen: addEventModalIsOpen,
-        onOpen: addEventModalOnOpen,
-        onClose: addEventModalOnClose
+        isOpen: eventModalIsOpen,
+        onOpen: eventModalOnOpen,
+        onClose: eventModalOnClose
     } = useDisclosure();
 
     const handleSelectSlot = useCallback(
         ({ start, end }: { start: Date, end: Date }) => {
-            setSelectedDate({ start, end });
-            addEventModalOnOpen();
+            setEventData({
+                id: events.length + 1,
+                title: '',
+                start,
+                end,
+            } as IEvent);
+
+            setIsEdit(false);
+            eventModalOnOpen();
         },
         [setEvents]
     )
 
     const handleSelectEvent = useCallback(
-        (event: IEvent) => window.alert(event.title),
+        (event: IEvent) => {
+            setIsEdit(true);
+            setEventData({
+                id: event.id,
+                title: event.title,
+                start: event.start,
+                end: event.end,
+                description: event.description || '',
+            } as IEvent);
+            eventModalOnOpen();
+        },
         []
     )
 
@@ -99,13 +104,14 @@ const Calendar: NextPage = () => {
                     />
                 </Box>
             </Box>
-            <AddEventModal addEventModal={{
+            <EventModal eventModal={{
                 events,
                 setEvents,
-                addEventModalIsOpen,
-                addEventModalOnClose,
-                selectedDate,
-                setSelectedDate
+                eventModalIsOpen,
+                eventModalOnClose,
+                eventData,
+                setEventData,
+                isEdit,
             }} />
         </>
 
