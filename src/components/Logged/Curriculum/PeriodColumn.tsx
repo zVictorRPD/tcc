@@ -11,7 +11,6 @@ interface IPeriodColumnProps {
 
 function PeriodColumn(props: IPeriodColumnProps) {
     const { period, subjects } = props;
-    console.log(period.id);
 
     return (
         <Stack
@@ -47,6 +46,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                     <Stack
                         px={'1rem'}
                         rowGap={'1rem'}
+                        h={'100%'}
                         py={'1rem'}
                         style={{ margin: 0 }}
                         {...provided.droppableProps}

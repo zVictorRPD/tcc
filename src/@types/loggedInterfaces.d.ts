@@ -74,3 +74,19 @@ interface IEvent {
 interface IToastStatus {
     type: 'success' | 'error' | 'info' | 'warning' | undefined;
 }
+
+
+/* EDITAR PERFIL */
+interface IEditProfile {
+    avatar: File | null;
+    name: string;
+    password: string;
+    confirmationPassword: string;
+}
+
+interface IEditProfileValidation {
+    avatar: boolean;
+    name: boolean;
+    password: boolean;
+    confirmationPassword: boolean;
+}

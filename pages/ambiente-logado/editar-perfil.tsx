@@ -10,7 +10,6 @@ import {
     validateConfirmationPassword,
 } from "../../src/functions/validation";
 import { api } from "../../src/services/api";
-import { IEditProfile, IEditProfileValidation } from "../../src/interfaces/logged/editProfile.interface";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { signIn, useSession } from "next-auth/react";
@@ -41,7 +40,6 @@ const EditProfile: NextPage = () => {
         avatar: null,
     });
 
-    console.log(data)
     const pencilPosition = {
         top: "0",
         right: "0.5rem",

@@ -1,5 +1,5 @@
 import { HStack } from '@chakra-ui/react';
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { renderToString } from 'react-dom/server';
 import { CurriculumContext } from './curriculumContext';
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd';
@@ -7,12 +7,10 @@ import PeriodColumn from './PeriodColumn';
 
 function DragDropMainContainer() {
     resetServerContext();
-    renderToString
     const { periods, subjects, periodOrder, setPeriods } = useContext(CurriculumContext);
     const onDragEnd = (result: any) => {
-        const { destination, source, draggableId } = result;
-        console.log(destination, source, draggableId);
         
+        const { destination, source, draggableId } = result;
 
         if (!destination) return;
         if (destination.droppableId === source.droppableId && destination.index === source.index) return;
@@ -27,12 +25,12 @@ function DragDropMainContainer() {
             ...period,
             subjectIds: newSubjectIds,
         };
-        console.log(source.droppableId);
-        
-        setPeriods({
+
+        const newPeriods = {
             ...periods,
-            [source.droppableId]: newPeriod,
-        })
+            [newPeriod.id]: newPeriod,
+        };
+        setPeriods(newPeriods);
     }
 
     return (
@@ -43,7 +41,7 @@ function DragDropMainContainer() {
                 {
                     periodOrder.map((order, index) => {
                         const period = periods[order];
-                        const periodSubjects = period.subjectIds.map(subjectId => subjects[subjectId]);                       
+                        const periodSubjects = period.subjectIds.map(subjectId => subjects[subjectId]);
                         return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
                     })
                 }

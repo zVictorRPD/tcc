@@ -14,6 +14,7 @@ function Subject(props: ISubjectProps) {
         <Draggable
             draggableId={subjectData.id}
             index={index}
+            key={subjectData.id}
         >
             {provided => (
                 <Box
@@ -21,7 +22,7 @@ function Subject(props: ISubjectProps) {
                     bg={'white'}
                     borderRadius={'1rem'}
                     minH={'100px'}
-                    style={{ margin: 0 }}
+                    mt={'0 !important'}
                     borderWidth={'1px'}
                     borderColor={'gray.300'}
                     {...provided.draggableProps}
