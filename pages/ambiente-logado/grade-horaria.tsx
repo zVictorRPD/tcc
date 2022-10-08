@@ -1,11 +1,11 @@
 import React from "react";
 import type { NextPage } from "next";
 import { Stack } from "@chakra-ui/react";
-import { timeTableSchedule } from "./timeTableObject";
-import SubjectGrid from "../../../src/components/Logged/Subject/SubjectGrid";
-import WeekdaysGrid from "../../../src/components/Logged/Subject/WeekdaysGrid";
-import { TimetableProvider } from "./timetableContext";
-import AddSubjectModal from "../../../src/components/Logged/Subject/AddSubjectModal";
+import { timeTableSchedule } from "../../src/components/Logged/Timetable/timeTableObject";
+import SubjectGrid from "../../src/components/Logged/Timetable/SubjectGrid";
+import WeekdaysGrid from "../../src/components/Logged/Timetable/WeekdaysGrid";
+import { TimetableProvider } from "../../src/components/Logged/Timetable/TimetableContext";
+import AddSubjectModal from "../../src/components/Logged/Timetable/AddSubjectModal";
 
 const Timetable: NextPage = () => {
     return (

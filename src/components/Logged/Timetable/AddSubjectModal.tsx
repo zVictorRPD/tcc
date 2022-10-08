@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React, { useContext } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa';
 import { TagsInput } from 'react-tag-input-component';
-import { TimetableContext } from '../../../../pages/ambiente-logado/grade-horaria/timetableContext';
+import { TimetableContext } from './TimetableContext';
 import styles from './style.module.scss';
 
 function AddSubjectModal() {

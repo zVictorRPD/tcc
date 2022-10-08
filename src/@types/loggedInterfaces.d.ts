@@ -7,7 +7,7 @@ interface ITimeTable {
 }
 
 interface ISubject {
-    id: number;
+    id: string;
     code: string;
     name: string;
     period: string;
@@ -36,6 +36,31 @@ interface IAddSubjectModalTimetable {
 
 
 
+/* GRADE CURRICULAR */
+
+interface IPeriods {
+    [key: string]: {
+        id: string;
+        name: string;
+        subjectIds: string[];
+    }
+}
+
+interface ISubjects {
+    [key: string]: ISubject;
+}
+
+interface ICurriculumContext {
+    periods: IPeriods;
+    subjects: ISubjects;
+    periodOrder: string[];
+    setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
+    setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
+    setPeriodOrder: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+
+
 /* CALENDAR */
 interface IEvent {
     id: number;
@@ -46,6 +71,6 @@ interface IEvent {
     description?: string;
 }
 
-interface IToastStatus{
+interface IToastStatus {
     type: 'success' | 'error' | 'info' | 'warning' | undefined;
 }

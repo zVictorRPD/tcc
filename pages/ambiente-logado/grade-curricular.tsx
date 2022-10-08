@@ -1,9 +1,12 @@
-import React from "react";
-import type { NextPage } from "next";
+import { NextPage } from "next";
+import DragDropMainContainer from "../../src/components/Logged/Curriculum/DragDropMainContainer";
+import { CurriculumProvider } from "../../src/components/Logged/Curriculum/curriculumContext";
 
 const Curriculum: NextPage = () => {
     return (
-        <h1>Grade curricular</h1>
+        <CurriculumProvider>
+            <DragDropMainContainer />
+        </CurriculumProvider>
     );
 };
 

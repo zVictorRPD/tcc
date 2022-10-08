@@ -1,6 +1,6 @@
 import { Box, GridItem } from '@chakra-ui/react'
 import React, { useContext } from 'react'
-import { TimetableContext } from '../../../../pages/ambiente-logado/grade-horaria/timetableContext';
+import { TimetableContext } from './TimetableContext';
 
 interface SubjectCardProps {
     subject: ISubject | '',

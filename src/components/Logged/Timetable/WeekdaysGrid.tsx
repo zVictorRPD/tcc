@@ -1,6 +1,6 @@
 import { Grid, GridItem, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { weekDays } from '../../../../pages/ambiente-logado/grade-horaria/timeTableObject'
+import { weekDays } from './timeTableObject'
 
 
 function WeekdaysGrid() {

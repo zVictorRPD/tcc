@@ -1,8 +1,8 @@
 import { Grid, GridItem, Text, VStack } from '@chakra-ui/react';
 import React, { useContext } from 'react'
 import SubjectCard from './SubjectCard';
-import { timeTableTranslation } from "../../../../pages/ambiente-logado/grade-horaria/timeTableObject";
-import { TimetableContext } from '../../../../pages/ambiente-logado/grade-horaria/timetableContext';
+import { timeTableTranslation } from "./timeTableObject";
+import { TimetableContext } from './TimetableContext';
 
 interface ISubjectGridProps {
     type: string,

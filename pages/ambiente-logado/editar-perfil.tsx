@@ -125,14 +125,14 @@ const EditProfile: NextPage = () => {
             setOnLoading(false);
             return;
         }
-        
+
         const response = await api.post("/user/editUser", {
             ...formCamps,
             id: data?.id,
             avatar: userImage,
         });
-        
-        
+
+
         if (response.data.code == "200") {
             toast({
                 position: "top-right",
@@ -140,7 +140,7 @@ const EditProfile: NextPage = () => {
                 status: "success",
                 isClosable: true,
             });
-            signIn(); 
+            signIn();
         } else {
             toast({
                 position: "top-right",
@@ -153,7 +153,7 @@ const EditProfile: NextPage = () => {
     };
 
     const getData = async (id: string) => {
-        const {name, avatar} = await getUserData(id);
+        const { name, avatar } = await getUserData(id);
         setUserImage(avatar);
         setFormCamps({
             ...formCamps,
@@ -186,6 +186,7 @@ const EditProfile: NextPage = () => {
                 flexDirection={'column'}
             >
                 <Box
+                    mt={'2rem'}
                     bg={'#fff'}
                     w={'100%'}
                     maxW={'500px'}
