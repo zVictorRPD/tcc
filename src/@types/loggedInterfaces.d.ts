@@ -13,6 +13,7 @@ interface ISubject {
     period: string;
     time: string;
     type: string;
+    status?: string;
 }
 
 interface ITimeTableTranslation {
@@ -57,6 +58,9 @@ interface ICurriculumContext {
     setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
     setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
     setPeriodOrder: React.Dispatch<React.SetStateAction<string[]>>;
+    addSubjectModalIsOpen: boolean;
+    addSubjectModalOnOpen: () => void;
+    addSubjectModalOnClose: () => void;
 }
 
 

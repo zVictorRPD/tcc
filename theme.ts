@@ -68,6 +68,46 @@ const theme = extendTheme({
                         color: "white",
                     }
                 },
+                "gray-500": {
+                    color: "white",
+                    bg: "gray.500",
+                    _hover: {
+                        bg: "gray.600 !important",
+                    },
+                    _active: {
+                        bg: "gray.600",
+                    },
+                },
+                "blue-500": {
+                    color: "white",
+                    bg: "blue.500",
+                    _hover: {
+                        bg: "blue.600 !important",
+                    },
+                    _active: {
+                        bg: "blue.600",
+                    },
+                },
+                "green-500": {
+                    color: "white",
+                    bg: "green.500",
+                    _hover: {
+                        bg: "green.600 !important",
+                    },
+                    _active: {
+                        bg: "green.600",
+                    },
+                },
+                "red-500": {
+                    color: "white",
+                    bg: "red.500",
+                    _hover: {
+                        bg: "red.600 !important",
+                    },
+                    _active: {
+                        bg: "red.600",
+                    },
+                },
             },
         },
     },

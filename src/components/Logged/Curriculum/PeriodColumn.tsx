@@ -1,8 +1,10 @@
-import { Box, Button, HStack, Stack, Text } from '@chakra-ui/react';
-import React from 'react'
-import { FaPlus } from 'react-icons/fa'
+import { Box, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from '@chakra-ui/react';
+import React, { useContext } from 'react'
+import { FaEdit, FaEllipsisV, FaTrash } from 'react-icons/fa';
 import Subject from './Subject';
 import { Droppable } from 'react-beautiful-dnd';
+import styles from './style.module.scss';
+import { CurriculumContext } from './curriculumContext';
 
 interface IPeriodColumnProps {
     period: IPeriods[number];
@@ -17,9 +19,9 @@ function PeriodColumn(props: IPeriodColumnProps) {
             bg={'gray.300'}
             borderWidth='1px'
             borderColor='gray.400'
-            h={'85vh'}
+            maxH={'83.2vh'}
             minW={'300px'}
-            borderRadius={'1rem'}
+            borderRadius={'1rem 1rem 0 0'}
         >
             {/* Header */}
             <Box
@@ -30,6 +32,10 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 px={4}
                 bg={'white'}
                 borderRadius={'1rem 1rem 0 0'}
+                display={'flex'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+
             >
                 <Text
                     fontWeight={600}
@@ -39,18 +45,40 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 >
                     {period.name}
                 </Text>
+                <Menu>
+                    <MenuButton
+                        as={IconButton}
+                        size={'sm'}
+                        aria-label='Options'
+                        icon={<FaEllipsisV />}
+                        variant='outline'
+                    />
+                    <MenuList>
+                        <MenuItem icon={<FaEdit />}>
+                            Editar nome
+                        </MenuItem>
+                        <MenuItem icon={<FaTrash />}>
+                            Excluir
+                        </MenuItem>
+                    </MenuList>
+                </Menu>
             </Box>
             {/* Body */}
             <Droppable droppableId={period.id}>
-                {provided => (
+                {(provided, snapshot) => (
                     <Stack
-                        px={'1rem'}
-                        rowGap={'1rem'}
-                        h={'100%'}
-                        py={'1rem'}
-                        style={{ margin: 0 }}
                         {...provided.droppableProps}
+                        px={'1rem'}
+                        pb={'1rem'}
+                        h={'100%'}
+                        minH={'100px'}
+                        overflowY={'auto'}
+                        style={{ margin: 0 }}
                         ref={provided.innerRef}
+                        bg={snapshot.isDraggingOver ? 'gray.400' : 'gray.300'}
+                        transition={'background-color .3s ease'}
+                        className={styles.period_scrollbar}
+
                     >
                         {Object.keys(subjects).map((key: any, index) => {
                             return <Subject key={index} index={index} subjectData={subjects[key]} />
@@ -60,35 +88,6 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 )}
 
             </Droppable>
-
-
-            {/* Footer */}
-            <HStack
-                borderTopWidth={'1px'}
-                borderTopColor={'gray.400'}
-                bg={'white'}
-                w={'100%'}
-                py={2}
-                px={4}
-                cursor={'pointer'}
-                borderRadius={'0 0 1rem 1rem'}
-                justifyContent={'center'}
-                style={{ marginTop: 'auto' }}
-                _hover={{
-                    bg: 'gray.50'
-                }}
-
-            >
-                <Text
-                    fontWeight={400}
-                    color='gray.800'
-                    fontSize={'xl'}
-                    textAlign={'center'}
-                >
-                    Adicionar matéria
-                </Text>
-                <FaPlus style={{ marginTop: '3px' }} />
-            </HStack>
         </Stack>
 
     )

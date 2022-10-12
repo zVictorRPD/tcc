@@ -8,6 +8,11 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     const [periods, setPeriods] = useState<IPeriods>(periodsData);
     const [subjects, setSubjects] = useState<ISubjects>(subjectsData);
     const [periodOrder, setPeriodOrder] = useState<string[]>(periodOrderData);
+    const {
+        isOpen: addSubjectModalIsOpen,
+        onOpen: addSubjectModalOnOpen,
+        onClose: addSubjectModalOnClose
+    } = useDisclosure();
 
     const curriculumContextData = {
         periods,
@@ -16,6 +21,9 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         setSubjects,
         periodOrder,
         setPeriodOrder,
+        addSubjectModalIsOpen,
+        addSubjectModalOnOpen,
+        addSubjectModalOnClose,
     }
 
     return (
