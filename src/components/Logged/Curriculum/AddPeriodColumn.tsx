@@ -95,7 +95,6 @@ function AddPeriodColumn() {
                     <HStack
                         mt={2}
                         w={'100%'}
-                    // justifyContent='flex-start'
                     >
                         <Button
                             size={'sm'}
