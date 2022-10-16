@@ -94,3 +94,12 @@ interface IEditProfileValidation {
     password: boolean;
     confirmationPassword: boolean;
 }
+
+/* MAPA */
+interface ILocal {
+    id: number;
+    name: string;
+    label: string;
+    lat: number;
+    lng: number;
+}

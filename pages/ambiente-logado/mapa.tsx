@@ -7,7 +7,7 @@ const Map: NextPage = () => {
     return (
         <>
             <Box
-                p={'2rem'}
+                p={{ base: '.5rem', md: '2rem' }} h={'100%'}
             >
                 <MapContainer />
             </Box>
