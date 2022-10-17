@@ -7,6 +7,10 @@ interface IGoogleMapMarkersProps {
     locales: ILocal[];
 }
 
+const handleMarkerClick = (locale: ILocal) => {
+    window.open(`https://www.google.com/maps/dir//${locale.lat},${locale.lng}/@${locale.lat},${locale.lng},18z`, '_blank');
+}
+
 function GoogleMapMarkers(props: IGoogleMapMarkersProps) {
     const { locales } = props;
     return (
@@ -27,6 +31,7 @@ function GoogleMapMarkers(props: IGoogleMapMarkersProps) {
                         lng: locale.lng
                     }}
                     visible={true}
+                    onClick={() => handleMarkerClick(locale)}
                 />)
             )}
         </>

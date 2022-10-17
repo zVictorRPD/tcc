@@ -4,8 +4,9 @@
 
 .mapList {
     list-style: none;
-    height: 85vh;
+    height: calc(85vh - 59px);
     overflow-y: scroll;
+
 
     li {
         padding: 10px;
