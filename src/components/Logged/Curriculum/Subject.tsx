@@ -31,7 +31,7 @@ const buttonStatus: any = {
 }
 
 function Subject(props: ISubjectProps) {
-    const { subjects, setSubjects } = useContext(CurriculumContext);
+    const { subjects, setSubjects, setSelectedSubject, subjectModalOnOpen } = useContext(CurriculumContext);
     const { subjectData, index } = props;
 
     const changeStatus = () => {
@@ -99,7 +99,11 @@ function Subject(props: ISubjectProps) {
                         <Text fontSize={'1.25rem'} fontWeight={'bold'}>{subjectData.name}</Text>
                     </Box>
                     {/* Footer */}
-                    <Box mb={'.5rem'}>
+                    <Box 
+                    mb={'.5rem'} 
+                    display={'flex'}
+                    columnGap={'.5rem'}
+                    >
                         <Button
                             variant={subjectData.status ? buttonStatus[subjectData.status] : buttonStatus['todo']}
                             size={'xs'}
@@ -107,6 +111,17 @@ function Subject(props: ISubjectProps) {
                             cursor={'pointer'}
                         >
                             {subjectData.status ? translateStatus[subjectData.status] : translateStatus['todo']}
+                        </Button>
+                        <Button
+                            variant={'blue-800'}
+                            size={'xs'}
+                            onClick={() => {
+                                setSelectedSubject(subjectData);
+                                subjectModalOnOpen()
+                            }}
+                            cursor={'pointer'}
+                        >
+                            Ver mais
                         </Button>
                     </Box>
                 </Box>

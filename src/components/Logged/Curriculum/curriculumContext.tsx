@@ -8,10 +8,17 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     const [periods, setPeriods] = useState<IPeriods>(periodsData);
     const [subjects, setSubjects] = useState<ISubjects>(subjectsData);
     const [periodOrder, setPeriodOrder] = useState<string[]>(periodOrderData);
+    const [selectedSubject, setSelectedSubject] = useState<ISubject>({} as ISubject);
     const {
         isOpen: addSubjectModalIsOpen,
         onOpen: addSubjectModalOnOpen,
         onClose: addSubjectModalOnClose
+    } = useDisclosure();
+
+    const {
+        isOpen: subjectModalIsOpen,
+        onOpen: subjectModalOnOpen,
+        onClose: subjectModalOnClose
     } = useDisclosure();
 
     const curriculumContextData = {
@@ -21,9 +28,14 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         setSubjects,
         periodOrder,
         setPeriodOrder,
+        selectedSubject,
+        setSelectedSubject,
         addSubjectModalIsOpen,
         addSubjectModalOnOpen,
         addSubjectModalOnClose,
+        subjectModalIsOpen,
+        subjectModalOnOpen,
+        subjectModalOnClose
     }
 
     return (

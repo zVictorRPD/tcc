@@ -58,9 +58,14 @@ interface ICurriculumContext {
     setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
     setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
     setPeriodOrder: React.Dispatch<React.SetStateAction<string[]>>;
+    selectedSubject: ISubject;
+    setSelectedSubject: React.Dispatch<React.SetStateAction<ISubject>>;
     addSubjectModalIsOpen: boolean;
     addSubjectModalOnOpen: () => void;
     addSubjectModalOnClose: () => void;
+    subjectModalIsOpen: boolean;
+    subjectModalOnOpen: () => void;
+    subjectModalOnClose: () => void;
 }
 
 
