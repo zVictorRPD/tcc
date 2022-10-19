@@ -33,9 +33,8 @@ function SubjectModal() {
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='outline' mr={3} onClick={subjectModalOnClose}>
-                        Cancelar
+                        Fechar
                     </Button>
-                    <Button variant='blue-800'>Adicionar</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
