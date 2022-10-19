@@ -15,7 +15,7 @@
         font-weight: 600;
         transition: .1s ease-in-out;
 
-        &:hover {
+        &:not(:first-child):hover {
             background-color: #2a4365;
             color: #FFFFFF;
         }

@@ -3,9 +3,9 @@ import { GoogleMap, LoadScriptNext, useJsApiLoader } from '@react-google-maps/ap
 import process from 'process';
 import GoogleMapMarkers from './GoogleMapMarkers';
 import { locais } from './locais'
-import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Input, Text } from '@chakra-ui/react';
 import styles from './style.module.scss';
-import { FaArrowLeft, FaChevronLeft } from 'react-icons/fa';
+import { FaChevronLeft } from 'react-icons/fa';
 
 const containerStyle = {
     width: '100%',
@@ -51,6 +51,7 @@ const mapOptions = [
 
 function MapContainer() {
     const [locales, setLocales] = useState<ILocal[]>(locais);
+    const [search, setSearch] = useState<string>('');
     const [map, setMap] = useState<any>(null);
     const [center, setCenter] = useState({
         lat: -22.769076600925978,
@@ -64,7 +65,7 @@ function MapContainer() {
             lng: locale.lng
         });
         setZoom(18);
-        if(window.innerWidth < 991) setListHeight('57px');
+        if (window.innerWidth < 991) setListHeight('57px');
     }
     const handleCollapseList = () => {
         if (window.innerWidth > 991) return
@@ -74,6 +75,12 @@ function MapContainer() {
         } else {
             setListHeight('calc(85vh - 2px)');
         }
+    }
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+        const filteredLocales = locais.filter(locale => locale.name.toLowerCase().includes(e.target.value.toLowerCase()));
+        setLocales(filteredLocales);
     }
 
     return (
@@ -126,6 +133,26 @@ function MapContainer() {
                 </Box>
 
                 <ul className={styles.mapList}>
+                    <li>
+                        <Input
+                            placeholder={'Pesquisar'}
+                            size={'sm'}
+                            variant={'filled'}
+                            _focus={{
+                                borderColor: 'blue.800'
+                            }}
+                            _hover={{
+                                borderColor: 'blue.800'
+                            }}
+                            _placeholder={{
+                                color: 'blue.800'
+                            }}
+                            color={'blue.800'}
+                            value={search}
+                            onChange={(e) => handleSearch(e)}
+
+                        />
+                    </li>
                     {locales.map(locale => (
                         <li key={locale.id} onClick={() => handleListClick(locale)}>{locale.name}</li>
                     ))}

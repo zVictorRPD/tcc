@@ -29,7 +29,7 @@ export const locais: ILocal[] = [
     },
     {
         "id": 5,
-        "name": "Departamendo de Geociências (DG)",
+        "name": "Departamento de Geociências (DG)",
         "label": "DG",
         "lat": -22.781137778488542,
         "lng": -43.68288339439554
