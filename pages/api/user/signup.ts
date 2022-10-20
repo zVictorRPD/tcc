@@ -56,7 +56,7 @@ export default async function handler(
 
 		const token = bcrypt.hashSync(msgToToken, 9);
 
-		const link = `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"
+		const link = `${process.env.BASE_URL || "http://localhost:3000"
 			}/api/user/verifyAccount?token=${token}&email=${email}`;
 
 		await sendEmailFunction(
