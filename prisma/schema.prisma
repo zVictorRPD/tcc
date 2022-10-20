@@ -15,19 +15,64 @@ datasource db {
 }
 
 model User {
-    id              Int               @id @default(autoincrement())
-    email           String            @unique
-    name            String
-    emailVerified   Boolean           @default(false)
-    password        String
-    avatar          String            @db.LongText
-    recoverPassword RecoverPassword[]
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  name            String
+  emailVerified   Boolean           @default(false)
+  password        String
+  avatar          String            @db.LongText
+  recoverPassword RecoverPassword[]
 }
 
 model RecoverPassword {
-    id        Int      @id @default(autoincrement())
-    token     String   @unique
-    user      User     @relation(fields: [userEmail], references: [email])
-    userEmail String
-    createdAt DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  user      User     @relation(fields: [userEmail], references: [email])
+  userEmail String
+  createdAt DateTime @default(now())
+}
+
+model Teacher {
+  id               Int    @id
+  avatar           String
+  name             String
+  departament_code String
+  departament_name String
+  email            String
+  lattes           String @db.LongText
+}
+
+model Course {
+  code                                    String   @id
+  name                                    String
+  period_emergence                        String
+  workload_total                          Int
+  workload_normal_lessons                 Int
+  workload_academic_professional_guidance Int
+  workload_optional_lessons               Int
+  workload_complementary                  Int
+  periods                                 Period[]
+}
+
+model Period {
+  id         Int       @id @default(autoincrement())
+  name       String
+  course     Course    @relation(fields: [courseCode], references: [code])
+  courseCode String
+  subjects   SubjectsOnPeriods[]
+}
+
+model Subject {
+  code    String   @id
+  name    String
+  time    Int
+  periods SubjectsOnPeriods[]
+}
+
+model SubjectsOnPeriods {
+  subject  Subject @relation(fields: [subjectCode], references: [code])
+  subjectCode String
+  period   Period  @relation(fields: [periodId], references: [id])
+  periodId Int
+  @@id([subjectCode, periodId])
 }
