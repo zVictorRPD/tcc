@@ -1,13 +1,15 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { NextPage } from "next";
 import { Calendar as ReactCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import { Box, useDisclosure } from "@chakra-ui/react";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/pt-br';
-import EventModal from "../../src/components/Logged/Calendar/EventModal";
+import EventModal from "../../../src/components/Logged/Calendar/EventModal";
+import { useSession } from "next-auth/react";
+import { api } from "../../../src/services/api";
+import styles from './style.module.scss'
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
-
 
 const lang = {
     'pt-br': {
@@ -30,10 +32,12 @@ const lang = {
 }
 
 const Calendar: NextPage = () => {
+    const { data } = useSession();
+    const [userId, setUserId] = useState(0);
     const [events, setEvents] = useState<IEvent[]>([]);
+    const [onLoad, setOnLoad] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [eventData, setEventData] = useState<IEvent>({
-        id: 0,
         title: '',
         start: new Date(),
         end: new Date(),
@@ -44,10 +48,32 @@ const Calendar: NextPage = () => {
         onClose: eventModalOnClose
     } = useDisclosure();
 
+    const getEvents = async (id: number) => {
+        setOnLoad(true);
+        try {
+            const response = await api.get('/calendar/getEvents', {
+                params: {
+                    id: id,
+                }
+            });
+            const newEvents = response.data.events.map((event: IEvent) => {
+                return {
+                    ...event,
+                    start: new Date(event.start),
+                    end: new Date(event.end),
+                }
+            });
+            setEvents(newEvents);
+        } catch {
+            console.log("Erro ao buscar eventos");
+        } finally {
+            setOnLoad(false);
+        }
+    };
+
     const handleSelectSlot = useCallback(
         ({ start, end }: { start: Date, end: Date }) => {
             setEventData({
-                id: events.length + 1,
                 title: '',
                 start,
                 end,
@@ -81,6 +107,13 @@ const Calendar: NextPage = () => {
         []
     )
 
+    useEffect(() => {
+        if (typeof data?.id === 'number') {
+            setUserId(data.id);
+            getEvents(data.id);
+        }
+    }, [data]);
+
     return (
         <>
             <Box p={{ base: '.5rem', md: '2rem' }}>
@@ -90,7 +123,10 @@ const Calendar: NextPage = () => {
                     bg="white"
                     borderRadius={'12px'}
                     borderWidth="1px"
-                    borderColor={'gray.300'}>
+                    borderColor={'gray.300'}
+                    position="relative"
+                    className={onLoad ? styles.on_load : ''}
+                >
                     <ReactCalendar
                         localizer={localizer}
                         culture={'pt-br'}
@@ -112,6 +148,9 @@ const Calendar: NextPage = () => {
                 eventData,
                 setEventData,
                 isEdit,
+                userId,
+                onLoad,
+                setOnLoad,
             }} />
         </>
 

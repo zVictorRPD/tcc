@@ -1,6 +1,7 @@
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Textarea, useToast } from '@chakra-ui/react'
 import React from 'react'
 import moment from 'moment'
+import { api } from '../../../services/api'
 interface IEventModalProps {
     eventModal: {
         events: IEvent[],
@@ -10,12 +11,26 @@ interface IEventModalProps {
         eventData: IEvent,
         setEventData: React.Dispatch<React.SetStateAction<IEvent>>,
         isEdit: boolean,
+        userId: number,
+        onLoad: boolean,
+        setOnLoad: React.Dispatch<React.SetStateAction<boolean>>,
     }
 
 }
 
 function EventModal(props: IEventModalProps) {
-    const { events, setEvents, eventModalIsOpen, eventModalOnClose, eventData, setEventData, isEdit } = props.eventModal
+    const {
+        events,
+        setEvents,
+        eventModalIsOpen,
+        eventModalOnClose,
+        eventData,
+        setEventData,
+        isEdit,
+        userId,
+        onLoad,
+        setOnLoad,
+    } = props.eventModal
     const toast = useToast();
 
     const createToast = (msg: string) => {
@@ -29,7 +44,8 @@ function EventModal(props: IEventModalProps) {
         });
     }
 
-    const handleAddEvent = () => {
+    const handleSubmitEvent = async () => {
+        setOnLoad(true);
         if (eventData.title === '') {
             createToast('O título não pode ser vazio');
             return;
@@ -45,59 +61,81 @@ function EventModal(props: IEventModalProps) {
             return;
         }
 
-        if (isEdit) {
-            const newEvents = events.map(event => {
-                if (event.id === eventData.id) {
-                    return eventData;
-                }
-                return event;
-            })
-            setEvents(newEvents);
-        } else {
-            const newEvent = {
-                id: events.length + 1,
+        try {
+            let params = {
+                userId,
                 title: eventData.title,
                 start: eventData.start,
                 end: eventData.end,
                 description: eventData.description || '',
+            } as IEvent;
+
+            if (isEdit) params = { ...params, id: eventData?.id }
+
+            const response = await api.post(`/calendar/${isEdit ? 'editEvent' : 'addEvent'}`, params);
+            const newEvent = {
+                ...response.data.event,
+                start: new Date(response.data.event.start),
+                end: new Date(response.data.event.end),
             }
-            setEvents([...events, newEvent]);
+            if (isEdit) {
+                const newEvents = events.map(event => {
+                    if (event.id === newEvent.id) {
+                        return newEvent;
+                    }
+                    return event;
+                });
+                setEvents(newEvents);
+            } else {
+                setEvents([...events, newEvent]);
+            }
+            toast({
+                title: isEdit ? "Evento editado" : "Evento criado",
+                position: "top-right",
+                description: isEdit ? "O evento foi editado com sucesso" : "O evento foi criado com sucesso",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+            setEventData({
+                ...eventData,
+                title: '',
+                description: '',
+            });
+        } catch {
+            console.log(`Erro ao ${isEdit ? 'editar' : 'adicionar'} evento`);
         }
-        toast({
-            title: isEdit ? "Evento editado" : "Evento criado",
-            position: "top-right",
-            description: isEdit ? "O evento foi editado com sucesso" : "O evento foi criado com sucesso",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-        });
-        setEventData({
-            ...eventData,
-            title: '',
-            description: '',
-        });
+
         eventModalOnClose();
+        setOnLoad(false);
     };
 
     const handleDeleteEvent = () => {
-        const newEvents = events.filter((event) => {
-            return event.id !== eventData.id;
-        });
-        setEvents(newEvents);
-        toast({
-            title: "Evento deletado",
-            position: "top-right",
-            description: "O evento foi deletado com sucesso",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-        });
-        setEventData({
-            ...eventData,
-            title: '',
-            description: '',
-        });
-        eventModalOnClose();
+        setOnLoad(true);
+        try {
+            api.post('/calendar/deleteEvent', { id: eventData.id });
+            const newEvents = events.filter(event => event.id !== eventData.id);
+            setEvents(newEvents);
+            toast({
+                title: "Evento deletado",
+                position: "top-right",
+                description: "O evento foi deletado com sucesso",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+            setEventData({
+                ...eventData,
+                title: '',
+                description: '',
+            });
+        } catch {
+            console.log('Erro ao deletar evento');
+        } finally {
+            eventModalOnClose();
+            setOnLoad(false);
+        }
+
     };
 
     const handleCloseModal = () => {
@@ -141,7 +179,7 @@ function EventModal(props: IEventModalProps) {
                     </FormControl>
                     <FormControl mb={3}>
                         <FormLabel>Descrição</FormLabel>
-                        <Textarea placeholder='Descrição' value={eventData.description} resize={'none'} onChange={e => setEventData({...eventData, description: e.target.value})} />
+                        <Textarea placeholder='Descrição' value={eventData.description} resize={'none'} onChange={e => setEventData({ ...eventData, description: e.target.value })} />
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
@@ -155,7 +193,12 @@ function EventModal(props: IEventModalProps) {
                     <Button variant='outline' mr={3} onClick={handleCloseModal}>
                         Cancelar
                     </Button>
-                    <Button variant='blue-800' onClick={handleAddEvent}>
+                    <Button
+                        variant='blue-800'
+                        onClick={handleSubmitEvent}
+                        isLoading={onLoad}
+                        loadingText={isEdit ? 'Editando' : 'Adicionando'}
+                    >
                         {isEdit ? 'Editar' : 'Adicionar'}
                     </Button>
                 </ModalFooter>

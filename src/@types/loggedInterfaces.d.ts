@@ -91,11 +91,10 @@ interface IDepartament {
 
 /* CALENDAR */
 interface IEvent {
-    id: number;
+    id?: number;
     title: string;
     start: Date;
     end: Date;
-    allDay?: boolean;
     description?: string;
 }
 
