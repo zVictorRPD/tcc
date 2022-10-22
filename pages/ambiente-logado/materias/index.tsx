@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import styles from "./style.module.scss"
 import {
@@ -7,14 +7,21 @@ import {
     Editable,
     EditableInput,
     EditablePreview,
+    Flex,
     FormControl,
     FormLabel,
     HStack,
+    Image,
     Input,
     Menu,
     MenuButton,
     MenuItem,
     MenuList,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -22,20 +29,61 @@ import {
     PopoverContent,
     PopoverHeader,
     PopoverTrigger,
-    Select
+    Select,
+    Text,
+    useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import { FaChevronLeft, FaChevronRight, FaChevronDown, FaFilter } from "react-icons/fa";
-
-const Subject: NextPage = () => {
-    const [page, setPage] = React.useState(1);
-    const [onLoad, setOnLoad] = React.useState(false);
-    const [filterCamps, setFilterCamps] = React.useState({
+import { api } from "../../../src/services/api";
+import { toCapitalize } from "../../../src/functions/toCapitalize";
+import { validateSubjectCode } from "../../../src/functions/validation";
+const Subjects: NextPage = () => {
+    const [subjects, setSubjects] = useState<ISubjectList[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [onLoad, setOnLoad] = useState(false);
+    const { isOpen, onToggle, onClose } = useDisclosure();
+    const toast = useToast();
+    const [filterCamps, setFilterCamps] = useState({
         code: "",
         name: "",
         time: "",
     });
+
+    const getSubjects = async (filtering: boolean = false) => {
+        setOnLoad(true);
+        try {
+            const response = await api.get('/subject/getSubject', {
+                params: {
+                    page: page,
+                    code: filterCamps.code,
+                    name: filterCamps.name,
+                    time: filterCamps.time
+                }
+            });
+
+            setSubjects(response.data.subjects);
+            setTotalPages(response.data.totalPages);
+            if (filtering) {
+                toast({
+                    title: "Filtro aplicado",
+                    description: `Foram encontradas ${response.data.total} matérias`,
+                    status: "info",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top-right",
+                });
+            }
+        } catch {
+            console.log("Erro ao buscar matérias");
+        } finally {
+            setOnLoad(false);
+        }
+    };
+
     const changePage = (page: number) => {
-        if (Number(page) > 0 && Number(page) < 100) {
+        if (Number(page) > 0 && Number(page) <= totalPages) {
             setPage(page);
         } else {
             setPage(1);
@@ -51,10 +99,25 @@ const Subject: NextPage = () => {
     }
 
     const submitFilter = () => {
-        setOnLoad(true);
-        console.log(filterCamps);
-        setOnLoad(false);
+        if (!validateSubjectCode(filterCamps.code) && filterCamps.code !== "") {
+            toast({
+                title: "Código inválido",
+                description: "O código deve conter 2 letras seguidas de 3 números",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            });
+            return;
+        }
+        getSubjects(true);
+        setPage(1);
+        onClose();
     }
+
+    useEffect(() => {
+        getSubjects();
+    }, [page]);
 
     return (
         <>
@@ -67,24 +130,35 @@ const Subject: NextPage = () => {
                     borderColor={'gray.300'}
                 >
                     <Box>
-                        <Popover placement='bottom-start'>
+                        <Popover
+                            placement='bottom-start'
+                            isOpen={isOpen}
+
+                        >
                             <PopoverTrigger>
-                                <Button variant={"blue-800"} size="md" mb={'1rem'} leftIcon={<FaFilter />}>
+                                <Button
+                                    variant={"blue-800"}
+                                    size="md"
+                                    mb={'1rem'}
+                                    leftIcon={<FaFilter />}
+                                    onClick={onToggle}
+                                >
                                     Filtros
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent>
                                 <PopoverHeader fontWeight='semibold'>Filtro</PopoverHeader>
                                 <PopoverArrow />
-                                <PopoverCloseButton />
+                                <PopoverCloseButton onClick={onClose} />
                                 <PopoverBody p={'1rem'}>
                                     <FormControl mb={"1rem"}>
                                         <FormLabel fontWeight={500}>Código</FormLabel>
                                         <Input
                                             type="text"
-                                            placeholder="IC856"
+                                            placeholder="XX999"
                                             value={filterCamps.code}
-                                            onChange={(e) => setFilterCamps({ ...filterCamps, code: e.target.value })}
+                                            onChange={(e) => setFilterCamps({ ...filterCamps, code: e.target.value.toUpperCase() })}
+                                            maxLength={5}
                                         />
                                     </FormControl>
                                     <FormControl mb={"1rem"}>
@@ -98,12 +172,18 @@ const Subject: NextPage = () => {
                                     </FormControl>
                                     <FormControl mb={"1.5rem"}>
                                         <FormLabel fontWeight={500}>Carga horária</FormLabel>
-                                        <Input
-                                            type="text"
-                                            placeholder="60"
+                                        <NumberInput
+                                            isValidCharacter={char => '0123456789'.includes(char)}
+                                            onChange={(value) => setFilterCamps({ ...filterCamps, time: value })}
                                             value={filterCamps.time}
-                                            onChange={(e) => setFilterCamps({ ...filterCamps, time: e.target.value })}
-                                        />
+
+                                        >
+                                            <NumberInputField placeholder="60" />
+                                            <NumberInputStepper>
+                                                <NumberIncrementStepper />
+                                                <NumberDecrementStepper />
+                                            </NumberInputStepper>
+                                        </NumberInput>
                                     </FormControl>
                                     <HStack justifyContent={'flex-end'} columnGap={'8px'}>
                                         <Button variant={'outline'} onClick={clearFilter}>Limpar</Button>
@@ -114,7 +194,10 @@ const Subject: NextPage = () => {
                         </Popover>
                     </Box>
                     <Box overflowX={'auto'} className={styles.table_scrollbar}>
-                        <table className={styles.custom_table}>
+                        <table
+                            className={`${styles.custom_table} ${onLoad ? styles.on_load : ''}`}
+                            {...(subjects.length === 0 && { style: { minWidth: '0 !important' } })}
+                        >
                             <thead>
                                 <tr>
                                     <th>Código</th>
@@ -125,29 +208,48 @@ const Subject: NextPage = () => {
                             </thead>
                             <tbody>
                                 {
-                                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>IM147</td>
-                                                <td>FILOSOFIA E ETICA NAS ORGANIZACOES</td>
-                                                <td>60 Horas</td>
-                                                <td>
-                                                    <Menu>
-                                                        <MenuButton size={'sm'} as={Button} rightIcon={<FaChevronDown />}>
-                                                            Ações
-                                                        </MenuButton>
-                                                        <MenuList>
-                                                            <MenuItem>Download</MenuItem>
-                                                            <MenuItem>Create a Copy</MenuItem>
-                                                            <MenuItem>Mark as Draft</MenuItem>
-                                                            <MenuItem>Delete</MenuItem>
-                                                            <MenuItem>Attend a Workshop</MenuItem>
-                                                        </MenuList>
-                                                    </Menu>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
+                                    subjects.length > 0 ? (
+                                        subjects.map((subject: ISubjectList, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{subject.code}</td>
+                                                    <td>{toCapitalize(subject.name)}</td>
+                                                    <td>{subject.time !== 0 ? `${subject.time} Horas` : 'Desconhecida'}</td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={4}>
+                                                <Text
+                                                    fontSize={'2xl'}
+                                                    fontWeight={600}
+                                                    my={2}
+                                                    textAlign={'center'}
+                                                >
+                                                    Nenhuma matéria encontrada
+                                                </Text>
+                                                <Flex justifyContent={'center'}>
+                                                    <Image src="/assets/images/logged/svgs/empty.svg"
+                                                        alt="Lattes"
+                                                        w={{
+                                                            base: '200px',
+                                                            md: '300px',
+                                                            lg: '400px'
+                                                        }}
+                                                        h={{
+                                                            base: '200px',
+                                                            md: '300px',
+                                                            lg: '400px'
+                                                        }}
+                                                    />
+                                                </Flex>
+                                            </td>
+                                        </tr>
+                                    )
                                 }
                             </tbody>
                             <tfoot>
@@ -161,20 +263,13 @@ const Subject: NextPage = () => {
                                             >
                                                 <FaChevronLeft />
                                             </Button>
-                                            <Editable
-                                                value={page.toString()}
-                                                onChange={value => setPage(parseInt(value))}
-                                                onSubmit={(value) => changePage(parseInt(value))}
-                                            >
-
-                                                <Button variant={'outline'} px='0'>
-                                                    <EditablePreview w="100%" />
-                                                    <EditableInput w='20px' />
-                                                </Button>
-                                            </Editable>
+                                            <Button variant={'outline'} px='0'>
+                                                {page}
+                                            </Button>
                                             <Button
                                                 variant={'outline'}
                                                 onClick={() => changePage(page + 1)}
+                                                disabled={page == totalPages}
                                             >
                                                 <FaChevronRight />
                                             </Button>
@@ -192,4 +287,4 @@ const Subject: NextPage = () => {
     );
 };
 
-export default Subject;
+export default Subjects;

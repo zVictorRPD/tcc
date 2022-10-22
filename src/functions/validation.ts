@@ -26,3 +26,9 @@ export const validateFile = (file: File) => {
 export const validateFileSize = (file: File) => {
     return file.size <= 1048576;
 }
+
+export const validateSubjectCode = (code: string) => {
+    //check if the code is 2 letters and 3 numbers
+    const re = /^[a-zA-Z]{2}[0-9]{3}$/;
+    return re.test(code);
+};

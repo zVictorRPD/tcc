@@ -68,6 +68,13 @@ interface ICurriculumContext {
     subjectModalOnClose: () => void;
 }
 
+/* SUBJECTS */
+interface ISubjectList {
+    code: string;
+    name: string;
+    time: number;
+}
+
 /* TEACHERS */
 interface ITeacher extends IDepartament {
     id: number;

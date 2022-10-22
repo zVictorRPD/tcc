@@ -31,12 +31,12 @@ const Teachers: NextPage = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [onLoad, setOnLoad] = useState(false);
+    const { isOpen, onToggle, onClose } = useDisclosure();
+    const toast = useToast();
     const [filterCamps, setFilterCamps] = useState({
         name: "",
         departament: "",
     });
-    const { isOpen, onToggle, onClose } = useDisclosure();
-    const toast = useToast();
     const getDepartaments = async () => {
         try {
             const response = await api.get("/departament/getDepartament");
