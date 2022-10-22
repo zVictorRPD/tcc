@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import styles from "./style.module.scss"
 import {
     Box,
     Button,
-    Editable,
-    EditableInput,
-    EditablePreview,
+    Flex,
     FormControl,
     FormLabel,
     HStack,
@@ -19,19 +17,72 @@ import {
     PopoverContent,
     PopoverHeader,
     PopoverTrigger,
-    Select
+    Select,
+    Text,
+    useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import { FaChevronLeft, FaChevronRight, FaEnvelope, FaFilter } from "react-icons/fa";
-
+import { api } from "../../../src/services/api";
+import { toCapitalize } from "../../../src/functions/toCapitalize";
 const Teachers: NextPage = () => {
-    const [page, setPage] = React.useState(1);
-    const [onLoad, setOnLoad] = React.useState(false);
-    const [filterCamps, setFilterCamps] = React.useState({
+    const [teachers, setTeachers] = useState<ITeacher[]>([]);
+    const [departaments, setDepartaments] = useState<IDepartament[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [onLoad, setOnLoad] = useState(false);
+    const [filterCamps, setFilterCamps] = useState({
         name: "",
         departament: "",
     });
+    const { isOpen, onToggle, onClose } = useDisclosure();
+    const toast = useToast();
+    const getDepartaments = async () => {
+        try {
+            const response = await api.get("/departament/getDepartament");
+            setDepartaments(response.data);
+        } catch {
+            toast({
+                title: "Erro ao buscar departamentos",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            });
+        }
+    }
+
+    const getTeachers = async (filtering: boolean = false) => {
+        setOnLoad(true);
+        try {
+            const response = await api.get('/teacher/getTeacher', {
+                params: {
+                    page: page,
+                    name: filterCamps.name,
+                    departament_code: filterCamps.departament
+                }
+            });
+            setTeachers(response.data.teachers);
+            setTotalPages(response.data.totalPages);
+            if (filtering) {
+                toast({
+                    title: "Filtro aplicado",
+                    description: `Foram encontrados ${response.data.total} professores`,
+                    status: "info",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top-right",
+                });
+            }
+        } catch {
+            console.log("Erro ao buscar professores");
+        } finally {
+            setOnLoad(false);
+        }
+    };
+
     const changePage = (page: number) => {
-        if (Number(page) > 0 && Number(page) < 100) {
+        if (Number(page) > 0 && Number(page) <= totalPages) {
             setPage(page);
         } else {
             setPage(1);
@@ -46,10 +97,18 @@ const Teachers: NextPage = () => {
     }
 
     const submitFilter = () => {
-        setOnLoad(true);
-        console.log(filterCamps);
-        setOnLoad(false);
+        getTeachers(true);
+        setPage(1);
+        onClose();
     }
+
+    useEffect(() => {
+        getDepartaments();
+    }, []);
+
+    useEffect(() => {
+        getTeachers();
+    }, [page]);
 
     return (
         <>
@@ -62,16 +121,26 @@ const Teachers: NextPage = () => {
                     borderColor={'gray.300'}
                 >
                     <Box>
-                        <Popover placement='bottom-start'>
+                        <Popover
+                            placement='bottom-start'
+                            isOpen={isOpen}
+
+                        >
                             <PopoverTrigger>
-                                <Button variant={"blue-800"} size="md" mb={'1rem'} leftIcon={<FaFilter />}>
+                                <Button
+                                    variant={"blue-800"}
+                                    size="md"
+                                    mb={'1rem'}
+                                    leftIcon={<FaFilter />}
+                                    onClick={onToggle}
+                                >
                                     Filtros
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent>
                                 <PopoverHeader fontWeight='semibold'>Filtro</PopoverHeader>
                                 <PopoverArrow />
-                                <PopoverCloseButton />
+                                <PopoverCloseButton onClick={onClose} />
                                 <PopoverBody p={'1rem'}>
                                     <FormControl mb={"1rem"}>
                                         <FormLabel fontWeight={500}>Nome</FormLabel>
@@ -89,9 +158,14 @@ const Teachers: NextPage = () => {
                                             onChange={(e) => setFilterCamps({ ...filterCamps, departament: e.target.value })}
                                         >
                                             <option value=''>Selecione um departamento</option>
-                                            <option value='option1'>Option 1</option>
-                                            <option value='option2'>Option 2</option>
-                                            <option value='option3'>Option 3</option>
+                                            {departaments.map((departament) => (
+                                                <option
+                                                    key={departament.departament_code}
+                                                    value={departament.departament_code}
+                                                >
+                                                    {toCapitalize(departament.departament_name)}
+                                                </option>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                     <HStack justifyContent={'flex-end'} columnGap={'8px'}>
@@ -103,7 +177,10 @@ const Teachers: NextPage = () => {
                         </Popover>
                     </Box>
                     <Box overflowX={'auto'} className={styles.table_scrollbar}>
-                        <table className={styles.custom_table}>
+                        <table
+                            className={`${styles.custom_table} ${onLoad ? styles.on_load : ''}`}
+                            {...(teachers.length === 0 && { style: { minWidth: '0 !important' } })}
+                        >
                             <thead>
                                 <tr>
                                     <th>Foto</th>
@@ -114,43 +191,91 @@ const Teachers: NextPage = () => {
                             </thead>
                             <tbody>
                                 {
-                                    [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>
-                                                    <Image src="/assets/images/logged/user-default-image.webp" alt="Foto do professor" boxSize="57px" />
-                                                </td>
-                                                <td>Victor de Oliveira Martins Azevedo</td>
-                                                <td>DCOMP - DEPARTAMENTO DE COMPUTAÇÃO</td>
-                                                <td>
-                                                    <HStack columnGap={'8px'}>
-                                                        <Button
-                                                            variant={'outline'}
-                                                            leftIcon={<FaEnvelope />}
-                                                        >
-                                                            <a href="mailto:victor2007azevedo@hotmail.com">
-                                                                Email
-                                                            </a>
-                                                        </Button>
-                                                        <Button
-                                                            variant={'outline'}
-                                                            leftIcon={
-                                                                <Image src="/assets/images/logged/lattes.svg"
-                                                                    alt="Lattes"
-                                                                    w={'15px'}
-                                                                    h={'18px'}
-                                                                />}
-                                                        >
-                                                            <a href="https://lattes.com" target={'_blank'} rel="noreferrer">
-                                                                Lattes
-                                                            </a>
-                                                        </Button>
-                                                    </HStack>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
-                                }
+                                    teachers.length > 0 ? (
+                                        teachers.map((teacher, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Image
+                                                            src={teacher.avatar}
+                                                            alt="Foto do professor"
+                                                            onError={(e) => {
+                                                                e.currentTarget.src = '/assets/images/logged/user-default-image.webp';
+                                                            }}
+                                                            w={'46px'}
+                                                            h={'57px'}
+                                                            objectFit={'contain'}
+                                                        />
+                                                    </td>
+                                                    <td>{toCapitalize(teacher.name)}</td>
+                                                    <td>
+                                                        {`${teacher.departament_code} - ${toCapitalize(teacher.departament_name)}`}
+                                                    </td>
+                                                    <td>
+                                                        <HStack columnGap={'8px'}>
+                                                            {
+                                                                teacher.email && (
+                                                                    <Button
+                                                                        variant={'outline'}
+                                                                        leftIcon={<FaEnvelope />}
+                                                                    >
+                                                                        <a href={`mailto:${teacher.email}`}>
+                                                                            Email
+                                                                        </a>
+                                                                    </Button>
+                                                                )
+                                                            }
+                                                            {
+                                                                teacher.lattes && (
+                                                                    <Button
+                                                                        variant={'outline'}
+                                                                        leftIcon={
+                                                                            <Image src="/assets/images/logged/svgs/lattes.svg"
+                                                                                alt="Lattes"
+                                                                                w={'15px'}
+                                                                                h={'18px'}
+                                                                            />}
+                                                                    >
+                                                                        <a href={teacher.lattes} target={'_blank'} rel="noreferrer">
+                                                                            Lattes
+                                                                        </a>
+                                                                    </Button>
+                                                                )
+                                                            }
+                                                        </HStack>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={4}>
+                                                <Text
+                                                    fontSize={'2xl'}
+                                                    fontWeight={600}
+                                                    my={2}
+                                                    textAlign={'center'}
+                                                >
+                                                    Nenhum professor encontrado
+                                                </Text>
+                                                <Flex justifyContent={'center'}>
+                                                    <Image src="/assets/images/logged/svgs/empty.svg"
+                                                        alt="Lattes"
+                                                        w={{
+                                                            base: '200px',
+                                                            md: '300px',
+                                                            lg: '400px'
+                                                        }}
+                                                        h={{
+                                                            base: '200px',
+                                                            md: '300px',
+                                                            lg: '400px'
+                                                        }}
+                                                    />
+                                                </Flex>
+                                            </td>
+                                        </tr>
+                                    )}
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -163,20 +288,13 @@ const Teachers: NextPage = () => {
                                             >
                                                 <FaChevronLeft />
                                             </Button>
-                                            <Editable
-                                                value={page.toString()}
-                                                onChange={value => setPage(parseInt(value))}
-                                                onSubmit={(value) => changePage(parseInt(value))}
-                                            >
-
-                                                <Button variant={'outline'} px='0'>
-                                                    <EditablePreview w="100%" />
-                                                    <EditableInput w='20px' />
-                                                </Button>
-                                            </Editable>
+                                            <Button variant={'outline'} px='0'>
+                                                {page}
+                                            </Button>
                                             <Button
                                                 variant={'outline'}
                                                 onClick={() => changePage(page + 1)}
+                                                disabled={page == totalPages}
                                             >
                                                 <FaChevronRight />
                                             </Button>

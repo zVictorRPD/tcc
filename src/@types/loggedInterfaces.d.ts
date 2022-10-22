@@ -68,7 +68,19 @@ interface ICurriculumContext {
     subjectModalOnClose: () => void;
 }
 
+/* TEACHERS */
+interface ITeacher extends IDepartament {
+    id: number;
+    avatar: string;
+    name: string;
+    email: string;
+    lattes: string;
+}
 
+interface IDepartament {
+    departament_code: string;
+    departament_name: string;
+}
 
 /* CALENDAR */
 interface IEvent {
