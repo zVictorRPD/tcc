@@ -52,6 +52,11 @@ interface ISubjects {
 }
 
 interface ICurriculumContext {
+    userId: number;
+    hasCurriculum: boolean;
+    setHasCurriculum: React.Dispatch<React.SetStateAction<boolean>>;
+    courses: Object[];
+    setCourses: React.Dispatch<React.SetStateAction<Object[]>>;
     periods: IPeriods;
     subjects: ISubjects;
     periodOrder: string[];
@@ -66,6 +71,11 @@ interface ICurriculumContext {
     subjectModalIsOpen: boolean;
     subjectModalOnOpen: () => void;
     subjectModalOnClose: () => void;
+    selectCurriculumModalIsOpen: boolean;
+    selectCurriculumModalOnOpen: () => void;
+    selectCurriculumModalOnClose: () => void;
+    onLoad: boolean;
+    setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /* SUBJECTS */

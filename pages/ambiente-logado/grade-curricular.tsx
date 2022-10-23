@@ -3,6 +3,7 @@ import DragDropMainContainer from "../../src/components/Logged/Curriculum/DragDr
 import { CurriculumProvider } from "../../src/components/Logged/Curriculum/curriculumContext";
 import AddSubjectModal from "../../src/components/Logged/Curriculum/AddSubjectModal";
 import SubjectModal from "../../src/components/Logged/Curriculum/SubjectModal/SubjectModal";
+import SelectCurriculumModal from "../../src/components/Logged/Curriculum/SelectCurriculumModal";
 
 const Curriculum: NextPage = () => {
     return (
@@ -10,6 +11,7 @@ const Curriculum: NextPage = () => {
             <DragDropMainContainer />
             <AddSubjectModal />
             <SubjectModal />
+            <SelectCurriculumModal />
         </CurriculumProvider>
     );
 };

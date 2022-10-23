@@ -21,8 +21,10 @@ model User {
   emailVerified   Boolean           @default(false)
   password        String
   avatar          String            @db.LongText
+  hasCurriculum   Boolean           @default(false)
   recoverPassword RecoverPassword[]
   calendarEvents  CalendarEvents[]
+  curriculum      Curriculum[]
 }
 
 model RecoverPassword {
@@ -43,8 +45,9 @@ model Teacher {
   lattes           String @db.LongText
 }
 
+// default course structure
 model Course {
-  code                                    String   @id
+  code                                    String       @id
   name                                    String
   period_emergence                        String
   workload_total                          Int
@@ -53,6 +56,7 @@ model Course {
   workload_optional_lessons               Int
   workload_complementary                  Int
   periods                                 Period[]
+  Curriculum                              Curriculum[]
 }
 
 model Period {
@@ -64,10 +68,11 @@ model Period {
 }
 
 model Subject {
-  code    String              @id
-  name    String
-  time    Int
-  periods SubjectsOnPeriods[]
+  code          String              @id
+  name          String
+  time          Int
+  periods       SubjectsOnPeriods[]
+  usersSubjects UserSubjects[]
 }
 
 model SubjectsOnPeriods {
@@ -87,4 +92,36 @@ model CalendarEvents {
   description String   @db.LongText
   user        User     @relation(fields: [userId], references: [id])
   userId      Int
+}
+
+//user course structure
+model Curriculum {
+  id                     Int                 @id @default(autoincrement())
+  user                   User                @relation(fields: [userId], references: [id])
+  userId                 Int                 @unique
+  course                 Course              @relation(fields: [courseCode], references: [code])
+  courseCode             String
+  curriculumPeriods      CurriculumPeriods[]
+  curriculumPeriodsOrder Json
+}
+
+model CurriculumPeriods {
+  id           Int            @id @default(autoincrement())
+  curriculum   Curriculum     @relation(fields: [curriculumId], references: [id])
+  curriculumId Int
+  name         String
+  subjects     UserSubjects[]
+}
+
+model UserSubjects {
+  id          Int               @id @default(autoincrement())
+  subject     Subject           @relation(fields: [subjectCode], references: [code])
+  subjectCode String
+  status      String            @default("todo")
+  note        String?           @db.LongText
+  links       Json?
+  evaluations Json?
+  grade       Float?
+  period      CurriculumPeriods @relation(fields: [periodId], references: [id])
+  periodId    Int
 }
