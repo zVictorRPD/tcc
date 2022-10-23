@@ -224,29 +224,35 @@ const Subjects: NextPage = () => {
                                     ) : (
                                         <tr>
                                             <td colSpan={4}>
-                                                <Text
-                                                    fontSize={'2xl'}
-                                                    fontWeight={600}
-                                                    my={2}
-                                                    textAlign={'center'}
-                                                >
-                                                    Nenhuma matéria encontrada
-                                                </Text>
-                                                <Flex justifyContent={'center'}>
-                                                    <Image src="/assets/images/logged/svgs/empty.svg"
-                                                        alt="Lattes"
-                                                        w={{
-                                                            base: '200px',
-                                                            md: '300px',
-                                                            lg: '400px'
-                                                        }}
-                                                        h={{
-                                                            base: '200px',
-                                                            md: '300px',
-                                                            lg: '400px'
-                                                        }}
-                                                    />
-                                                </Flex>
+                                                {!onLoad ? (
+                                                    <>
+                                                        <Text
+                                                            fontSize={'2xl'}
+                                                            fontWeight={600}
+                                                            my={2}
+                                                            textAlign={'center'}
+                                                        >
+                                                            Nenhuma matéria encontrada
+                                                        </Text>
+                                                        <Flex justifyContent={'center'}>
+                                                            <Image src="/assets/images/logged/svgs/empty.svg"
+                                                                alt="vazio"
+                                                                w={{
+                                                                    base: '200px',
+                                                                    md: '300px',
+                                                                    lg: '400px'
+                                                                }}
+                                                                h={{
+                                                                    base: '200px',
+                                                                    md: '300px',
+                                                                    lg: '400px'
+                                                                }}
+                                                            />
+                                                        </Flex>
+                                                    </>
+                                                ): (
+                                                    <Box h={'60vh'}></Box>
+                                                )}
                                             </td>
                                         </tr>
                                     )
