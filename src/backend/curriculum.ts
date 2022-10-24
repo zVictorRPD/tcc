@@ -73,7 +73,6 @@ export async function createCurriculum(userId: number, courseCode: string) {
         data: {
             userId,
             courseCode,
-            curriculumPeriodsOrder: { 'empty': true },
         }
     }).catch((err) => {
         return err;
@@ -98,6 +97,21 @@ export async function createCurriculum(userId: number, courseCode: string) {
         return err;
     });
 
+    const periodsOrderArray = createdPeriods.map((period: any) => {
+        return period.id;
+    })
+
+    const curriculumPeriodsOrder = await prisma.curriculum.update({
+        where: {
+            id: curriculum.id
+        },
+        data: {
+            curriculumPeriodsOrder: JSON.stringify(periodsOrderArray)
+        }
+    }).catch((err) => {
+        return err;
+    });
+
     const subjectsToCreate = course.periods.map((period: any, index: number) => {
         return period.subjects.map((subject: any) => {
             return {
@@ -112,6 +126,35 @@ export async function createCurriculum(userId: number, courseCode: string) {
     }).catch((err) => {
         return err;
     });
+
+    interface IPeriodSubjectsOrder {
+        id: number
+        subjectsOrder?: String[]
+    }
+    const periodSubjectsOrder: IPeriodSubjectsOrder[] = []
+
+    subjectsToCreate.forEach((item: any) => {
+        const index = periodSubjectsOrder.findIndex(periodItem => periodItem.id === item.periodId)
+        if (index === -1) {
+            periodSubjectsOrder.push({ id: item.periodId, subjectsOrder: [item.subjectCode] })
+        } else {
+            periodSubjectsOrder[index].subjectsOrder?.push(item.subjectCode)
+        }
+    })
+
+    periodSubjectsOrder.map(async (item: IPeriodSubjectsOrder) => {
+        await prisma.curriculumPeriods.update({
+            where: {
+                id: item.id
+            },
+            data: {
+                subjectsOrder: JSON.stringify(item.subjectsOrder)
+            },
+        }).catch((err) => {
+            return err;
+        });
+    })
+
 
     const updateHasCurriculum = await prisma.user.update({
         where: {

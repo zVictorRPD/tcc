@@ -102,15 +102,16 @@ model Curriculum {
   course                 Course              @relation(fields: [courseCode], references: [code])
   courseCode             String
   curriculumPeriods      CurriculumPeriods[]
-  curriculumPeriodsOrder Json
+  curriculumPeriodsOrder String?             @db.LongText
 }
 
 model CurriculumPeriods {
-  id           Int            @id @default(autoincrement())
-  curriculum   Curriculum     @relation(fields: [curriculumId], references: [id])
-  curriculumId Int
-  name         String
-  subjects     UserSubjects[]
+  id            Int            @id @default(autoincrement())
+  curriculum    Curriculum     @relation(fields: [curriculumId], references: [id])
+  curriculumId  Int
+  name          String
+  subjects      UserSubjects[]
+  subjectsOrder String?        @db.LongText
 }
 
 model UserSubjects {
@@ -119,8 +120,8 @@ model UserSubjects {
   subjectCode String
   status      String            @default("todo")
   note        String?           @db.LongText
-  links       Json?
-  evaluations Json?
+  links       String?           @db.LongText
+  evaluations String?           @db.LongText
   grade       Float?
   period      CurriculumPeriods @relation(fields: [periodId], references: [id])
   periodId    Int
