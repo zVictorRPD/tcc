@@ -117,6 +117,7 @@ export async function createCurriculum(userId: number, courseCode: string) {
             return {
                 subjectCode: subject.subjectCode,
                 periodId: createdPeriods[index].id,
+                userId: userId,
             }
         })
     }).flat();
@@ -127,18 +128,29 @@ export async function createCurriculum(userId: number, courseCode: string) {
         return err;
     });
 
+    const createdSubjects = await prisma.userSubjects.findMany({
+        where: {
+            userId
+        },
+    }).catch((err) => {
+        return err;
+    });
+
     interface IPeriodSubjectsOrder {
         id: number
         subjectsOrder?: String[]
     }
     const periodSubjectsOrder: IPeriodSubjectsOrder[] = []
 
-    subjectsToCreate.forEach((item: any) => {
+    console.log(createdSubjects);
+    
+
+    createdSubjects.forEach((item: any) => {
         const index = periodSubjectsOrder.findIndex(periodItem => periodItem.id === item.periodId)
         if (index === -1) {
-            periodSubjectsOrder.push({ id: item.periodId, subjectsOrder: [item.subjectCode] })
+            periodSubjectsOrder.push({ id: item.periodId, subjectsOrder: [item.id] })
         } else {
-            periodSubjectsOrder[index].subjectsOrder?.push(item.subjectCode)
+            periodSubjectsOrder[index].subjectsOrder?.push(item.id)
         }
     })
 

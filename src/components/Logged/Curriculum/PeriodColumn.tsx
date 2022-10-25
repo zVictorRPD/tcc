@@ -159,9 +159,13 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             className={styles.period_scrollbar}
 
                         >
-                            {Object.keys(props.subjects).map((key: any, index) => {
-                                return <Subject key={index} index={index} subjectData={props.subjects[key]} />
-                            })}
+                            {
+                                props.subjects.length > 0 ?
+                                    Object.keys(props.subjects).map((key: any, index) => {
+                                        return <Subject key={index} index={index} subjectData={props.subjects[key]} />
+                                    })
+                                    : null
+                            }
                             {provided.placeholder}
                         </Stack>
                     )}

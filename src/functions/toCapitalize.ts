@@ -1,5 +1,5 @@
 export const toCapitalize = (str: string) => {
-    const wordsToIgnore = ['da', 'das', 'de', 'do', 'dos', 'e', 'em', 'na', 'nas', 'no', 'nos', 'o', 'os', 'para', 'por', 'um', 'uma', 'uns', 'umas', 'à', 'às', 'I', 'II', 'III', 'IV', 'V'];
+    const wordsToIgnore = ['da', 'das', 'de', 'do', 'dos', 'e', 'a', 'em', 'na', 'nas', 'no', 'nos', 'o', 'os', 'para', 'por', 'um', 'uma', 'uns', 'umas', 'à', 'às', 'I', 'II', 'III', 'IV', 'V'];
     const wordsToUpperCase = ['i', 'ii', 'iii', 'iv', 'v', 'i-a', 'ii-a', 'iii-a', 'iv-a', 'ea']
     const words = str.toLowerCase().split(' ');
     const capitalizedWords = words.map((word) => {

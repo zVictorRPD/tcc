@@ -12,8 +12,11 @@ interface ISubject {
     name: string;
     period: string;
     time: string;
-    type: string;
+    type?: string;
     status?: string;
+    notes?: string;
+    links?: string[];
+    grade?: number;
 }
 
 interface ITimeTableTranslation {

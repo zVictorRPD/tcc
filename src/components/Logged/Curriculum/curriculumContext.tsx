@@ -2,7 +2,6 @@ import { useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../../../services/api";
-import { periodsData, subjectsData, periodOrderData } from "./periodsData";
 
 export const CurriculumContext = createContext<ICurriculumContext>({} as ICurriculumContext);
 
@@ -12,9 +11,9 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     const [hasCurriculum, setHasCurriculum] = useState(false);
     const [userId, setUserId] = useState(0);
     const [courses, setCourses] = useState<Object[]>([]);
-    const [periods, setPeriods] = useState<IPeriods>(periodsData);
-    const [subjects, setSubjects] = useState<ISubjects>(subjectsData);
-    const [periodOrder, setPeriodOrder] = useState<string[]>(periodOrderData);
+    const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
+    const [subjects, setSubjects] = useState<ISubjects>({} as ISubjects);
+    const [periodOrder, setPeriodOrder] = useState<string[]>([]);
     const [selectedSubject, setSelectedSubject] = useState<ISubject>({} as ISubject);
     const {
         isOpen: addSubjectModalIsOpen,
@@ -33,7 +32,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         onOpen: selectCurriculumModalOnOpen,
         onClose: selectCurriculumModalOnClose
     } = useDisclosure();
-    
+
     const curriculumContextData = {
         userId,
         hasCurriculum,
@@ -73,6 +72,26 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
             if (response.data.hasCurriculum) {
                 console.log(response.data);
                 
+                const {
+                    course,
+                    periods,
+                    subjects,
+                    periodsOrder
+                }: {
+                    course: Object,
+                    periods: IPeriods,
+                    subjects: ISubjects,
+                    periodsOrder: string[]
+                } = response.data;
+
+                if (course && periods && subjects && periodsOrder) {
+                    console.log(periods);
+                    console.log(subjects);
+                    setHasCurriculum(true);
+                    setPeriods(periods);
+                    setSubjects(subjects);
+                    setPeriodOrder(periodsOrder);
+                }
             } else {
                 setCourses(response.data.courses);
                 selectCurriculumModalOnOpen();

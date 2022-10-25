@@ -1,6 +1,7 @@
 import { Box, Button, Text } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { Draggable } from 'react-beautiful-dnd';
+import { toCapitalize } from '../../../functions/toCapitalize';
 import { CurriculumContext } from './curriculumContext';
 
 
@@ -56,7 +57,7 @@ function Subject(props: ISubjectProps) {
         });
 
     }
-
+    
     return (
         <Draggable
             draggableId={subjectData.id}
@@ -67,7 +68,7 @@ function Subject(props: ISubjectProps) {
                 <Box
                     w={'100%'}
                     borderRadius={'1rem'}
-                    minH={'100px'}
+                    minH={'110px'}
                     bg={'white'}
                     mt={'1rem !important'}
                     display={'flex'}
@@ -91,12 +92,12 @@ function Subject(props: ISubjectProps) {
                             color={'white'}
                             textAlign={'center'}
                         >
-                            {`${subjectData.code} - ${subjectData.time}`}
+                            {`${subjectData.code} - ${subjectData.time} horas`}
                         </Text>
                     </Box>
                     {/* body */}
-                    <Box display={'flex'} alignItems={'center'} flexGrow={1}>
-                        <Text fontSize={'1.25rem'} fontWeight={'bold'}>{subjectData.name}</Text>
+                    <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexGrow={1}>
+                        <Text fontSize={'1rem'} fontWeight={'500'} textAlign={'center'}>{toCapitalize(subjectData.name)}</Text>
                     </Box>
                     {/* Footer */}
                     <Box 

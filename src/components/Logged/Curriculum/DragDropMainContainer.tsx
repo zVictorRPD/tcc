@@ -68,24 +68,30 @@ function DragDropMainContainer() {
         <DragDropContext
             onDragEnd={onDragEnd}
         >
-            <HStack
-                p={{ base: '.5rem', md: '2rem' }}
-                h={'91.7vh'}
-                gap={2}
-                position={'relative'}
-                overflowX={'auto'}
-                alignItems={'flex-start'}
-                className={styles.main_container_scrollbar}
-            >
-                {
-                    periodOrder.map((order, index) => {
-                        const period = periods[order];
-                        const periodSubjects = period.subjectIds.map(subjectId => subjects[subjectId]);
-                        return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
-                    })
-                }
-                <AddPeriodColumn />
-            </HStack>
+            {
+                periodOrder.length > 0 ? (
+                    <HStack
+                        p={{ base: '.5rem', md: '2rem' }}
+                        h={'91.7vh'}
+                        gap={2}
+                        position={'relative'}
+                        overflowX={'auto'}
+                        alignItems={'flex-start'}
+                        className={styles.main_container_scrollbar}
+                    >
+                        {
+                            periodOrder.map((order, index) => {
+                                const period = periods[order];
+                                const periodSubjects = period.subjectIds !== null ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];
+                                console.log(periodSubjects);
+                                
+                                return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
+                            })
+                        }
+                        <AddPeriodColumn />
+                    </HStack>
+                ) : 'vazio'
+            }
             <Box
                 position={'absolute'}
                 bottom={'1rem'}
