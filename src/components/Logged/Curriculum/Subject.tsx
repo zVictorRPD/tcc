@@ -1,9 +1,9 @@
 import { Box, Button, Text } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd';
 import { toCapitalize } from '../../../functions/toCapitalize';
+import { api } from '../../../services/api';
 import { CurriculumContext } from './curriculumContext';
-
 
 interface ISubjectProps {
     subjectData: ISubject;
@@ -34,19 +34,13 @@ const buttonStatus: any = {
 function Subject(props: ISubjectProps) {
     const { subjects, setSubjects, setSelectedSubject, subjectModalOnOpen } = useContext(CurriculumContext);
     const { subjectData, index } = props;
+    const [clockTimer, setClockTimer] = useState<NodeJS.Timer>();
 
     const changeStatus = () => {
-        console.log('changeStatus');
-        console.log(subjectData);
-
         const status = subjectData.status;
-        console.log(status);
         if (!status || status === '') return;
 
         const newStatus = status === 'todo' ? 'doing' : status === 'doing' ? 'done' : status === 'done' ? 'failed' : 'todo';
-
-        console.log(newStatus);
-
 
         setSubjects({
             ...subjects,
@@ -56,8 +50,23 @@ function Subject(props: ISubjectProps) {
             }
         });
 
+        if (clockTimer) clearInterval(clockTimer);
+
+        setClockTimer(
+            setTimeout(() => {
+                try {
+                    api.post('/curriculum/subject/updateStatus', {
+                        subjectId: subjectData.id,
+                        status: newStatus
+                    });    
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }, 2000)
+        );
     }
-    
+
     return (
         <Draggable
             draggableId={subjectData.id}
@@ -100,10 +109,10 @@ function Subject(props: ISubjectProps) {
                         <Text fontSize={'1rem'} fontWeight={'500'} textAlign={'center'}>{toCapitalize(subjectData.name)}</Text>
                     </Box>
                     {/* Footer */}
-                    <Box 
-                    mb={'.5rem'} 
-                    display={'flex'}
-                    columnGap={'.5rem'}
+                    <Box
+                        mb={'.5rem'}
+                        display={'flex'}
+                        columnGap={'.5rem'}
                     >
                         <Button
                             variant={subjectData.status ? buttonStatus[subjectData.status] : buttonStatus['todo']}
