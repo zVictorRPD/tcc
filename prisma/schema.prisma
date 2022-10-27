@@ -44,6 +44,7 @@ model Teacher {
   departament_name String
   email            String
   lattes           String @db.LongText
+  userSubjects     UserSubjects[]
 }
 
 // default course structure
@@ -124,6 +125,8 @@ model UserSubjects {
   links       String?           @db.LongText
   evaluations String?           @db.LongText
   grade       Float?
+  teacher     Teacher?          @relation(fields: [teacherId], references: [id])
+  teacherId   Int?
   period      CurriculumPeriods @relation(fields: [periodId], references: [id])
   periodId    Int
   user        User              @relation(fields: [userId], references: [id])

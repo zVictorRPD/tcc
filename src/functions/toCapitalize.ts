@@ -3,8 +3,6 @@ export const toCapitalize = (str: string) => {
     const wordsToUpperCase = ['i', 'ii', 'iii', 'iv', 'v', 'i-a', 'ii-a', 'iii-a', 'iv-a', 'ea']
     const words = str.toLowerCase().split(' ');
     const capitalizedWords = words.map((word) => {
-        console.log(word);
-
         if (wordsToIgnore.includes(word)) {
             return word;
         }

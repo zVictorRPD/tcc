@@ -82,9 +82,7 @@ function DragDropMainContainer() {
                         {
                             periodOrder.map((order, index) => {
                                 const period = periods[order];
-                                const periodSubjects = period.subjectIds !== null ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];
-                                console.log(periodSubjects);
-                                
+                                const periodSubjects = !!period.subjectIds ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];                                
                                 return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
                             })
                         }

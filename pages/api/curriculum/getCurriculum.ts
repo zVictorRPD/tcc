@@ -21,10 +21,11 @@ export default async function handler(
         let subjectsData: ISubjects = {};
 
         curriculum.curriculumPeriods.forEach((period: any) => {
+
             periodsData[period.id] = {
                 id: period.id.toString(),
                 name: period.name,
-                subjectIds: JSON.parse(period.subjectsOrder)
+                subjectIds: period.subjectsOrder !== null ? JSON.parse(period.subjectsOrder) : [],
             }
             period.subjects.forEach((subject: any) => {
                 subjectsData[subject.id] = {

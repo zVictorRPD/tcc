@@ -142,9 +142,6 @@ export async function createCurriculum(userId: number, courseCode: string) {
     }
     const periodSubjectsOrder: IPeriodSubjectsOrder[] = []
 
-    console.log(createdSubjects);
-    
-
     createdSubjects.forEach((item: any) => {
         const index = periodSubjectsOrder.findIndex(periodItem => periodItem.id === item.periodId)
         if (index === -1) {
@@ -181,3 +178,17 @@ export async function createCurriculum(userId: number, courseCode: string) {
 
     return 'Grade curricular criada com sucesso!';
 };
+
+export async function updatePeriod(periodId: number, name: string) {
+    const period = await prisma.curriculumPeriods.update({
+        where: {
+            id: periodId
+        },
+        data: {
+            name
+        }
+    }).catch((err) => {
+        return err;
+    });
+    return period;
+}

@@ -69,9 +69,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
                 }
             });
 
-            if (response.data.hasCurriculum) {
-                console.log(response.data);
-                
+            if (response.data.hasCurriculum) {                
                 const {
                     course,
                     periods,
@@ -85,8 +83,6 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
                 } = response.data;
 
                 if (course && periods && subjects && periodsOrder) {
-                    console.log(periods);
-                    console.log(subjects);
                     setHasCurriculum(true);
                     setPeriods(periods);
                     setSubjects(subjects);

@@ -1,10 +1,11 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react'
 import { FaEdit, FaEllipsisV, FaTrash } from 'react-icons/fa';
 import Subject from './Subject';
 import { Droppable } from 'react-beautiful-dnd';
 import styles from './style.module.scss';
 import { CurriculumContext } from './curriculumContext';
+import { api } from '../../../services/api';
 
 interface IPeriodColumnProps {
     period: IPeriods[number];
@@ -12,6 +13,7 @@ interface IPeriodColumnProps {
 }
 
 function PeriodColumn(props: IPeriodColumnProps) {
+    const toast = useToast();
     const cancelRef: any = React.useRef()
     const { period } = props;
     const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects } = useContext(CurriculumContext);
@@ -23,7 +25,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
         onClose: alertOnClose
     } = useDisclosure()
 
-    const handleEditPeriod = () => {
+    const handleEditPeriod = async () => {
         const newPeriods = {
             ...periods,
             [period.id]: {
@@ -31,8 +33,31 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 name: periodName
             }
         }
-        setPeriods(newPeriods);
-        setEditingPeriod(false);
+        try {
+            const response = await api.post('/curriculum/period/updatePeriod', {
+                periodId: period.id,
+                name: periodName
+            });
+
+            toast({
+                title: "Período atualizado com sucesso!",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            })
+            setPeriods(newPeriods);
+            setEditingPeriod(false);
+        } catch (error) {
+            toast({
+                title: "Erro ao editar período",
+                description: "Não foi possível editar o período",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            })
+        }
     }
     const handleDeletePeriod = () => {
         //deleta o periodo
