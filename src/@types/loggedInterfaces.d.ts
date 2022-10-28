@@ -17,6 +17,7 @@ interface ISubject {
     note?: string;
     links?: ILink[];
     grade?: number;
+    teacher?: ITeacher;
 }
 interface ILink {
     name: string;
@@ -97,8 +98,8 @@ interface ITeacher extends IDepartament {
     id: number;
     avatar: string;
     name: string;
-    email: string;
-    lattes: string;
+    email?: string;
+    lattes?: string;
 }
 
 interface IDepartament {

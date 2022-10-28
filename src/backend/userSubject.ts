@@ -41,3 +41,23 @@ export async function updateSubjectLink(subjectId: number, links: string) {
     });
     return subject;
 }
+
+export async function addTeacher(subjectId: number, teacherId: number) {
+
+    const subject = await prisma.userSubjects.update({
+        where: {
+            id: subjectId
+        },
+        data: {
+            teacherId: teacherId
+        },
+        include: {
+            teacher: true
+        }
+    }).catch((err) => {
+        return err;
+    });
+
+    return subject;
+}
+

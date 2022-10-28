@@ -23,7 +23,8 @@ export async function getCurriculum(id: number) {
                     include: {
                         subjects: {
                             include: {
-                                subject: true
+                                subject: true,
+                                teacher: true
                             }
                         }
                     }

@@ -1,6 +1,6 @@
 import { prisma } from "../config/prisma.config";
 
-export async function getTeacher(page: number, name: string, departament: string) {
+export async function getTeacher(page: number, name: string, departament: string, take:number = 8) {
     let filter = {};
     if(name.length > 0) {
         filter = {
@@ -23,7 +23,7 @@ export async function getTeacher(page: number, name: string, departament: string
             name: "asc"
         },
         skip: 8 * (page - 1),
-        take: 8,
+        take: take,
         where: filter,
     }).catch((err) => {
         return err;
@@ -37,3 +37,4 @@ export async function getTeacher(page: number, name: string, departament: string
     const totalPages = Math.ceil(total / 8);
     return {teachers, total, totalPages};
 }
+

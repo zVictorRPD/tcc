@@ -37,7 +37,9 @@ export default async function handler(
                     status: subject.status,
                     note: subject.note,
                     links: subject.links !== null ? JSON.parse(subject.links) : [],
-                    grade: subject.grade
+                    grade: subject.grade,
+                    teacher: subject.teacher
+
                 }
             });
         });
