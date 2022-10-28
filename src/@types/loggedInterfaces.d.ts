@@ -14,7 +14,7 @@ interface ISubject {
     time: string;
     type?: string;
     status?: string;
-    notes?: string;
+    note?: string;
     links?: string[];
     grade?: number;
 }

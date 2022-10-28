@@ -1,33 +1,16 @@
 import { Button, useToast, ButtonGroup, Divider, Editable, EditablePreview, EditableTextarea, Flex, HStack, IconButton, Input, Text, Textarea, useEditableControls, Box } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaEdit, FaCheck, FaTimes, FaPlus, FaTrash } from 'react-icons/fa'
+import { api } from '../../../../services/api';
+import { CurriculumContext } from '../curriculumContext';
 interface ILink {
     name: string;
     url: string;
 }
 
-function EditableControls() {
-    const {
-        isEditing,
-        getSubmitButtonProps,
-        getCancelButtonProps,
-        getEditButtonProps,
-    } = useEditableControls();
-
-    return isEditing ? (
-        <ButtonGroup w={'100%'} mt={'.5rem'} justifyContent='end' size='sm'>
-            <Button colorScheme={'red'} {...getCancelButtonProps()}><FaTimes /></Button>
-            <Button variant={'blue-800'} {...getSubmitButtonProps()}><FaCheck /></Button>
-        </ButtonGroup>
-    ) : (
-        <Flex justifyContent='end' mt={'.5rem'}>
-            <Button variant={'blue-800'} size={'sm'} {...getEditButtonProps()}><FaEdit /></Button>
-        </Flex>
-    )
-}
-
-
 export default function Notes() {
+    const { selectedSubject, subjects, setSubjects } = useContext(CurriculumContext);
+    const [note, setNote] = useState('');
     const [links, setLinks] = useState<ILink[]>([]);
     const [link, setLink] = useState<ILink>({
         name: '',
@@ -35,6 +18,25 @@ export default function Notes() {
     });
     const [addingLink, setAddingLink] = useState(false);
     const toast = useToast();
+
+    const handleSaveNote = () => {
+        try {
+            const response = api.post('curriculum/subject/updateNote', {
+                subjectId: selectedSubject.id,
+                text: note
+            });
+            setSubjects({
+                ...subjects,
+                [selectedSubject.id]: {
+                    ...subjects[selectedSubject.id],
+                    note: note
+                }
+            });
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
     const handleAddLink = () => {
         //regex to check if the url is valid
@@ -84,6 +86,27 @@ export default function Notes() {
         setAddingLink(false);
     }
 
+
+    function EditableControls() {
+        const {
+            isEditing,
+            getSubmitButtonProps,
+            getCancelButtonProps,
+            getEditButtonProps,
+        } = useEditableControls();
+
+        return isEditing ? (
+            <ButtonGroup w={'100%'} mt={'.5rem'} justifyContent='end' size='sm'>
+                <Button colorScheme={'red'} {...getCancelButtonProps()}><FaTimes /></Button>
+                <Button variant={'blue-800'} {...getSubmitButtonProps()}><FaCheck /></Button>
+            </ButtonGroup>
+        ) : (
+            <Flex justifyContent='end' mt={'.5rem'}>
+                <Button variant={'blue-800'} size={'sm'} {...getEditButtonProps()}><FaEdit /></Button>
+            </Flex>
+        )
+    }
+
     return (
         <>
             <Text fontSize={'xl'} fontWeight={600}>
@@ -91,9 +114,11 @@ export default function Notes() {
             </Text>
             <Divider my={'.5rem'} />
             <Editable
-                defaultValue=''
+                defaultValue={selectedSubject?.note || ''}
                 isPreviewFocusable={false}
                 placeholder='Digite aqui...'
+                onChange={(value) => setNote(value)}
+                onSubmit={handleSaveNote}
             >
                 <EditablePreview />
                 {/* Here is the custom input */}

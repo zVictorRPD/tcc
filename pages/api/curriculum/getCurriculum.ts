@@ -35,7 +35,7 @@ export default async function handler(
                     period: period.name,
                     time: subject.subject.time,
                     status: subject.status,
-                    notes: subject.notes,
+                    note: subject.note,
                     links: subject.link,
                     grade: subject.grade
                 }
