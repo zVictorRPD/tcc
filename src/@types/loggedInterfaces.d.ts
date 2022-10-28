@@ -15,8 +15,12 @@ interface ISubject {
     type?: string;
     status?: string;
     note?: string;
-    links?: string[];
+    links?: ILink[];
     grade?: number;
+}
+interface ILink {
+    name: string;
+    url: string;
 }
 
 interface ITimeTableTranslation {

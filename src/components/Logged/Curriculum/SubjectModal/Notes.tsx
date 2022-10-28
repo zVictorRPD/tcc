@@ -3,15 +3,12 @@ import React, { useContext, useState } from 'react'
 import { FaEdit, FaCheck, FaTimes, FaPlus, FaTrash } from 'react-icons/fa'
 import { api } from '../../../../services/api';
 import { CurriculumContext } from '../curriculumContext';
-interface ILink {
-    name: string;
-    url: string;
-}
+
 
 export default function Notes() {
     const { selectedSubject, subjects, setSubjects } = useContext(CurriculumContext);
     const [note, setNote] = useState('');
-    const [links, setLinks] = useState<ILink[]>([]);
+    const [links, setLinks] = useState<ILink[]>(selectedSubject?.links || []);
     const [link, setLink] = useState<ILink>({
         name: '',
         url: ''
@@ -75,16 +72,70 @@ export default function Notes() {
         if (!link.url.startsWith('http')) {
             url = `https://${link.url}`
         }
-        setLinks([...links, {
-            name: link.name,
-            url: url
-        }]);
-        setLink({
-            name: '',
-            url: ''
-        });
-        setAddingLink(false);
+
+        //check if the link already exists
+        if (links.find(l => l.url === url)) {
+            toast({
+                title: 'Erro ao adicionar link',
+                description: 'Link já adicionado',
+                status: 'error',
+                position: 'top-right',
+                duration: 3000,
+                isClosable: true
+            })
+            return;
+        }
+
+        try {
+            const newLinks = [...links, {
+                name: link.name,
+                url: url
+            }];
+            const response = api.post('curriculum/subject/updateLink', {
+                subjectId: selectedSubject.id,
+                links: newLinks
+            });
+
+            setLinks(newLinks);
+            setLink({
+                name: '',
+                url: ''
+            });
+            setSubjects({
+                ...subjects,
+                [selectedSubject.id]: {
+                    ...subjects[selectedSubject.id],
+                    links: newLinks
+                }
+            });
+            setAddingLink(false);
+        } catch (error) {
+            console.log(error);
+
+        }
+
     }
+
+    const handleDeleteLink = (url: string) => {
+        try {
+            const newLinks = links.filter((link, i) => link.url !== url);
+            const response = api.post('curriculum/subject/updateLink', {
+                subjectId: selectedSubject.id,
+                links: newLinks
+            });
+            setLinks(newLinks);
+            setSubjects({
+                ...subjects,
+                [selectedSubject.id]: {
+                    ...subjects[selectedSubject.id],
+                    links: newLinks
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
 
     function EditableControls() {
@@ -142,10 +193,7 @@ export default function Notes() {
                             ml={'auto !important'}
                             variant={'red-500'}
                             size={'xs'}
-                            onClick={() => {
-                                const newLinks = links.filter((l, i) => i !== index);
-                                setLinks(newLinks);
-                            }}
+                            onClick={() => handleDeleteLink(link.url)}
                         >
                             <FaTrash />
                         </Button>

@@ -36,12 +36,12 @@ export default async function handler(
                     time: subject.subject.time,
                     status: subject.status,
                     note: subject.note,
-                    links: subject.link,
+                    links: subject.links !== null ? JSON.parse(subject.links) : [],
                     grade: subject.grade
                 }
-            });            
+            });
         });
-        
+
 
         return res.status(200).json({
             course: curriculum.course,
