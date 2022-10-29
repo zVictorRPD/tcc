@@ -25,7 +25,7 @@ export default async function handler(
             periodsData[period.id] = {
                 id: period.id.toString(),
                 name: period.name,
-                subjectIds: period.subjectsOrder !== null ? JSON.parse(period.subjectsOrder) : [],
+                subjectIds: period.subjectsOrder !== null ? JSON.parse(period.subjectsOrder).map((subjectId:number) => subjectId.toString()) : [],
             }
             period.subjects.forEach((subject: any) => {
                 subjectsData[subject.id] = {

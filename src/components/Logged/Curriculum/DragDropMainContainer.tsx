@@ -1,16 +1,18 @@
-import { Box, Button, HStack } from '@chakra-ui/react';
-import React, { useContext } from 'react'
+import { Box, Button, HStack, useToast } from '@chakra-ui/react';
+import React, { useContext, useRef } from 'react'
 import { CurriculumContext } from './curriculumContext';
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd';
 import PeriodColumn from './PeriodColumn';
 import { FaPlus } from 'react-icons/fa';
 import AddPeriodColumn from './AddPeriodColumn';
 import styles from './style.module.scss';
+import { api } from '../../../services/api';
 
 function DragDropMainContainer() {
     resetServerContext();
     const { periods, subjects, periodOrder, setPeriods, addSubjectModalOnOpen } = useContext(CurriculumContext);
-    const onDragEnd = (result: any) => {
+    const toast = useToast();
+    const onDragEnd = async (result: any) => {
 
         const { destination, source, draggableId } = result;
 
@@ -38,6 +40,25 @@ function DragDropMainContainer() {
             };
             setPeriods(newPeriods);
 
+            try {
+                const response = await api.post('/curriculum/period/updateSubjectIds', {
+                    periodId: newPeriod.id,
+                    subjectIds: newSubjectIds,
+                    subjectId: draggableId,
+                    type: 'samePeriod'
+                });
+                if (!response.data.subjectsOrder) throw new Error('Erro ao atualizar período');
+            } catch (error) {
+                toast({
+                    title: "Erro ao atualizar",
+                    description: "Não foi possível atualizar as matérias",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top-right"
+                });
+            }
+
         } else {
             //moving from one list to another
             const startSubjectIds = Array.from(start.subjectIds);
@@ -60,9 +81,28 @@ function DragDropMainContainer() {
                 [newFinish.id]: newFinish,
             };
             setPeriods(newPeriods);
+            try {
+                const response = await api.post('/curriculum/period/updateSubjectIds', {
+                    periodId: [newStart.id, newFinish.id],
+                    subjectIds: [startSubjectIds, finishSubjectIds],
+                    subjectId: draggableId,
+                    type: 'differentPeriod'
+                });
+                if (!response.data.periodId) throw new Error('Erro ao atualizar período');
+            } catch (error) {
+                toast({
+                    title: "Erro ao atualizar",
+                    description: "Não foi possível atualizar as matérias",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                    position: "top-right"
+                });
+            }
         }
 
     }
+
 
     return (
         <DragDropContext
@@ -82,7 +122,7 @@ function DragDropMainContainer() {
                         {
                             periodOrder.map((order, index) => {
                                 const period = periods[order];
-                                const periodSubjects = !!period.subjectIds ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];                                
+                                const periodSubjects = !!period.subjectIds ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];
                                 return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
                             })
                         }
