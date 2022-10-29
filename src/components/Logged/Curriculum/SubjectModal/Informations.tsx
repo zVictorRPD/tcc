@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputLeftAddon, InputRightAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Stack, Text, Textarea, Tooltip, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Editable, EditableInput, EditablePreview, Flex, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputLeftAddon, InputRightAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Textarea, Tooltip, useDisclosure, useToast } from '@chakra-ui/react'
 import { response } from 'express';
 import React, { useContext, useEffect, useState } from 'react'
 import { FaBuilding, FaEdit, FaEnvelope, FaHouseUser, FaPlus } from 'react-icons/fa';
@@ -25,6 +25,8 @@ function Informations(props: IInformationsProps) {
 		name: "",
 		departament: "",
 	});
+	const [grade, setGrade] = useState<number>(selectedSubject.grade || 0);
+	const [editingGrade, setEditingGrade] = useState(false);
 	const firstField = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
 	const getDepartaments = async () => {
@@ -40,7 +42,7 @@ function Informations(props: IInformationsProps) {
 				position: "top-right",
 			});
 		}
-	}
+	};
 	const getTeachers = async () => {
 		setOnLoad(true);
 		if (filterCamps.name === "" && filterCamps.departament === "") {
@@ -126,16 +128,10 @@ function Informations(props: IInformationsProps) {
 				setSelectedSubject({
 					...selectedSubject,
 					teacher: response.data.teacher
-				})
+				});
 				onClose();
 			} else {
-				toast({
-					title: "Não foi possível adicionar o professor",
-					status: "error",
-					duration: 3000,
-					isClosable: true,
-					position: "top-right",
-				});
+				throw new Error();
 			}
 		} catch {
 			toast({
@@ -148,7 +144,58 @@ function Informations(props: IInformationsProps) {
 		} finally {
 			setOnLoad(false);
 		}
+	};
+
+	const handleSaveGrade = async () => {
+		setOnLoad(true);
+		try {
+			const response = await api.post('/curriculum/subject/updateGrade', {
+				subjectId: selectedSubject.id,
+				grade,
+			});
+			if (response.data.grade) {
+				toast({
+					title: "Professor adicionado com sucesso",
+					status: "success",
+					duration: 3000,
+					isClosable: true,
+					position: "top-right",
+				});
+				setSubjects({
+					...subjects,
+					[selectedSubject.id]: {
+						...subjects[selectedSubject.id],
+						grade: response.data.grade
+					}
+				});
+				setSelectedSubject({
+					...selectedSubject,
+					grade: response.data.grade
+				});
+				setEditingGrade(false);
+			} else {
+				throw new Error();
+			}
+		} catch (err) {
+			toast({
+				title: "Não foi possível editar a nota",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+				position: "top-right",
+			})
+		} finally {
+			setOnLoad(false);
+		}
 	}
+
+	useEffect(() => {
+		if (grade !== selectedSubject.grade) {
+			setEditingGrade(true);
+			return;
+		}
+		setEditingGrade(false);
+	}, [grade]);
 
 	useEffect(() => {
 		getDepartaments();
@@ -157,12 +204,51 @@ function Informations(props: IInformationsProps) {
 
 	return (
 		<>
+			<Flex flexDirection={'row'} alignItems={'center'}>
+				<Text fontSize={'xl'} fontWeight={600}>
+					Nota final:
+				</Text>
+				<NumberInput
+					defaultValue={selectedSubject.grade || 0}
+					precision={1}
+					step={0.1}
+					min={0}
+					max={10}
+					size={'sm'}
+					ml={'.5rem'}
+					maxW={'75px'}
+					allowMouseWheel={true}
+					onChange={(valueAsString: string, valueAsNumber: number) => setGrade(valueAsNumber)}
+				>
+					<NumberInputField value={grade} />
+					<NumberInputStepper>
+						<NumberIncrementStepper />
+						<NumberDecrementStepper />
+					</NumberInputStepper>
+				</NumberInput>
+				{
+					editingGrade && (
+						<Button
+							isLoading={onLoad}
+							variant={'blue-800'}
+							size={'sm'}
+							onClick={handleSaveGrade}
+							ml={'.5rem'}
+						>
+							Salvar nota
+						</Button>
+					)
+				}
+			</Flex>
+			<Divider my={'.5rem'} />
+
+
 			<Text fontSize={'xl'} fontWeight={600}>
 				Professor(a)
 			</Text>
-			<Divider my={'.5rem'} />
 			{selectedSubject.teacher && (
 				<Stack
+					mt={'.5rem'}
 					direction={'row'}
 				>
 					<Image
@@ -172,9 +258,7 @@ function Informations(props: IInformationsProps) {
 						objectFit={'cover'}
 						border={'2px solid #2a4365'}
 						alt={selectedSubject.teacher.name}
-						onError={(e) => {
-							e.currentTarget.src = '/assets/images/logged/user-default-image.webp';
-						}}
+						fallbackSrc={'/assets/images/logged/user-default-image.webp'}
 					/>
 					<Stack
 						ml={'1rem !important'}
@@ -244,6 +328,7 @@ function Informations(props: IInformationsProps) {
 					{selectedSubject.teacher ? 'Alterar professor' : 'Adicionar professor'}
 				</Button>
 			</Flex >
+
 			<Drawer
 				isOpen={isOpen}
 				placement='right'
