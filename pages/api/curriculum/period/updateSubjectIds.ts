@@ -21,9 +21,9 @@ export default async function handler(
                 return await updateSubjectIds(parseInt(periodId), subjectIds[index]);
             });
             const result = await Promise.all(response);
-
+            
             if(typeof subjectId !== "string" || isNaN(parseInt(subjectId as string))) return res.status(400).json({ error: "Bad request" });
-            const subjectResult = await updateSubjectPeriodId(parseInt(periodId), parseInt(subjectId));
+            const subjectResult = await updateSubjectPeriodId(parseInt(periodId[1]), parseInt(subjectId));
             return res.status(200).json(subjectResult);
         }
 

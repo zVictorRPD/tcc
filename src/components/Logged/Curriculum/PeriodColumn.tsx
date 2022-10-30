@@ -16,7 +16,8 @@ function PeriodColumn(props: IPeriodColumnProps) {
     const toast = useToast();
     const cancelRef: any = React.useRef()
     const { period } = props;
-    const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects } = useContext(CurriculumContext);
+    const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects, userId } = useContext(CurriculumContext);
+    const [onLoading, setOnLoading] = useState(false);
     const [editingPeriod, setEditingPeriod] = useState(false);
     const [periodName, setPeriodName] = useState(period.name);
     const {
@@ -26,6 +27,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
     } = useDisclosure()
 
     const handleEditPeriod = async () => {
+        setOnLoading(true);
         const newPeriods = {
             ...periods,
             [period.id]: {
@@ -57,30 +59,61 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 isClosable: true,
                 position: "top-right"
             })
+        } finally {
+            setOnLoading(false);
         }
     }
-    const handleDeletePeriod = () => {
-        //deleta o periodo
-        const newPeriods = {
-            ...periods
+
+    const handleDeletePeriod = async () => {
+        setOnLoading(true);
+        try {
+            const response = await api.post('/curriculum/period/deletePeriod', {
+                userId: userId,
+                periodId: period.id,
+                subjectIds: period.subjectIds,
+            });
+            if(!response.data.courseCode) throw new Error('Erro ao deletar período');
+            //deleta o periodo
+            const newPeriods = {
+                ...periods
+            }
+            delete newPeriods[period.id];
+            setPeriods(newPeriods);
+
+            //arruma a ordem dos periodos
+            const newPeriodOrder = periodOrder.filter(id => id !== period.id);
+            setPeriodOrder(newPeriodOrder);
+
+            //deleta as materias do periodo
+            let newSubjects = {
+                ...subjects
+            }
+            period.subjectIds.forEach(subjectId => {
+                delete newSubjects[subjectId];
+            });
+            setSubjects(newSubjects);
+            toast({
+                title: "Período deletado com sucesso!",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            });
+
+        } catch (error) {
+            toast({
+                title: "Erro ao deletar período",
+                description: "Não foi possível deletar o período",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            })
+        } finally {
+            setOnLoading(false);
+            alertOnClose();
         }
-        delete newPeriods[period.id];
-        setPeriods(newPeriods);
 
-        //arruma a ordem dos periodos
-        const newPeriodOrder = periodOrder.filter(id => id !== period.id);
-        setPeriodOrder(newPeriodOrder);
-
-        //deleta as materias do periodo
-        let newSubjects = {
-            ...subjects
-        }
-        period.subjectIds.forEach(subjectId => {
-            delete newSubjects[subjectId];
-        });
-        setSubjects(newSubjects);
-
-        alertOnClose();
     }
 
     return (
@@ -160,6 +193,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                     size={'sm'}
                                     variant='blue-800'
                                     onClick={handleEditPeriod}
+                                    isLoading={onLoading}
                                 >
                                     Editar
                                 </Button>
@@ -218,7 +252,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             <Button ref={cancelRef} onClick={alertOnClose}>
                                 Cancelar
                             </Button>
-                            <Button colorScheme='red' onClick={handleDeletePeriod} ml={3}>
+                            <Button colorScheme='red' onClick={handleDeletePeriod} isLoading={onLoading} ml={3}>
                                 Deletar
                             </Button>
                         </AlertDialogFooter>
