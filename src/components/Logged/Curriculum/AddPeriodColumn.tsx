@@ -1,16 +1,19 @@
 import { Box, Button, HStack, Input, Stack, Text } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
+import { api } from '../../../services/api';
 import { CurriculumContext } from './curriculumContext';
 
 function AddPeriodColumn() {
-    const [addingPeriod, setAddingPeriod] = React.useState(false);
-    const [periodName, setPeriodName] = React.useState('');
+    const [addingPeriod, setAddingPeriod] = useState(false);
+    const [periodName, setPeriodName] = useState('');
+    const [onLoad, setOnLoad] = useState(false);
     const toast = useToast();
-    const { setPeriods, periods, periodOrder, setPeriodOrder } = useContext(CurriculumContext);
+    const { setPeriods, periods, periodOrder, setPeriodOrder, userId } = useContext(CurriculumContext);
 
-    const handleAddPeriod = () => {
+    const handleAddPeriod = async () => {
+        setOnLoad(true);
         if (periodName === '') {
             toast({
                 title: 'Insira um nome para o período.',
@@ -21,17 +24,38 @@ function AddPeriodColumn() {
             });
             return;
         }
-        const newPeriod = {
-            id: `${periodOrder.length + 1}`,
-            name: periodName,
-            subjectIds: []
+        try {
+            const response = await api.post('/curriculum/period/createPeriod', {
+                userId,
+                periodName
+            });
+            if (!response.data.id) throw new Error('Erro ao criar período.');
+            const newPeriods = {
+                ...periods,
+                [response.data.id]: response.data
+            }
+            setPeriods(newPeriods);
+            setPeriodOrder([...periodOrder, response.data.id]);
+
+            toast({
+                title: 'Período criado com sucesso.',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+
+        } catch (error) {
+            toast({
+                title: 'Erro ao adicionar período.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+        } finally {
+            setOnLoad(false);
         }
-        const newPeriods = {
-            ...periods,
-            [newPeriod.id]: newPeriod
-        }
-        setPeriods(newPeriods);
-        setPeriodOrder([...periodOrder, newPeriod.id]);
         setPeriodName('');
         setAddingPeriod(false);
     }
@@ -109,6 +133,7 @@ function AddPeriodColumn() {
                             size={'sm'}
                             variant='blue-800'
                             onClick={handleAddPeriod}
+                            isLoading={onLoad}
                         >
                             Adicionar
                         </Button>

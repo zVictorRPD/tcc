@@ -70,7 +70,6 @@ function PeriodColumn(props: IPeriodColumnProps) {
             const response = await api.post('/curriculum/period/deletePeriod', {
                 userId: userId,
                 periodId: period.id,
-                subjectIds: period.subjectIds,
             });
             if(!response.data.courseCode) throw new Error('Erro ao deletar período');
             //deleta o periodo

@@ -7,11 +7,11 @@ export default async function handler(
 ) {
 
     if (req.method === "POST") {
-        const { userId, periodId, subjectIds } = req.body;
+        const { userId, periodId } = req.body;
         
         if (isNaN(userId) || typeof periodId !== "string" || isNaN(parseInt(periodId as string))) return res.status(400).json({ error: "Bad request" });
 
-        const response = await deletePeriod(parseInt(userId), parseInt(periodId), subjectIds);
+        const response = await deletePeriod(parseInt(userId), parseInt(periodId));
 
         return res.status(200).json(response);
     }

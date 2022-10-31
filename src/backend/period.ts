@@ -1,5 +1,49 @@
 import { prisma } from "../config/prisma.config";
 
+export async function createPeriod(userId: number, name: string) {
+
+    const curriculum = await prisma.curriculum.findUnique({
+        where: {
+            userId: userId
+        },
+        select: {
+            id: true,
+            curriculumPeriodsOrder: true
+        },
+    });
+
+    if (!curriculum || !curriculum.id || !curriculum.curriculumPeriodsOrder) return false;
+
+    const newPeriod = await prisma.curriculumPeriods.create({
+        data: {
+            name: name,
+            curriculumId: curriculum.id,
+        },
+        select: {
+            id: true,
+            name: true,
+        }
+    });
+
+    const periodsOrder = JSON.parse(curriculum.curriculumPeriodsOrder);
+    const newOrder = [...periodsOrder, newPeriod.id];
+
+    await prisma.curriculum.update({
+        where: {
+            id: curriculum.id
+        },
+        data: {
+            curriculumPeriodsOrder: JSON.stringify(newOrder)
+        }
+    });
+    return {
+        id: newPeriod.id.toString(),
+        name: newPeriod.name,
+        subjectIds: []
+    }
+}
+
+
 export async function updatePeriod(periodId: number, name: string) {
     const period = await prisma.curriculumPeriods.update({
         where: {
@@ -14,7 +58,7 @@ export async function updatePeriod(periodId: number, name: string) {
     return period;
 }
 
-export async function deletePeriod(userId: number, periodId: number, subjectsIds: string[]) {
+export async function deletePeriod(userId: number, periodId: number) {
     const subjectsDeleted = await prisma.userSubjects.deleteMany({
         where: {
             periodId: periodId,
