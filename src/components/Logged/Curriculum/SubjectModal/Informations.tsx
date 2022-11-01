@@ -98,10 +98,10 @@ function Informations(props: IInformationsProps) {
 		}
 	};
 
-	const handleAddTeacher = async (teacherId: number) => {
+	const handleCreateTeacher = async (teacherId: number) => {
 		setOnLoad(true);
 		try {
-			const response = await api.post('/curriculum/subject/addTeacher', {
+			const response = await api.post('/curriculum/subject/createTeacher', {
 				subjectId: selectedSubject.id,
 				teacherId: teacherId.toString()
 			});
@@ -389,7 +389,7 @@ function Informations(props: IInformationsProps) {
 											variant={'blue-800'}
 											size={'xs'}
 											isLoading={onLoad}
-											onClick={() => handleAddTeacher(teacher.id)}
+											onClick={() => handleCreateTeacher(teacher.id)}
 											mr={'.5rem !important'}
 											ml={'auto !important'}
 										>

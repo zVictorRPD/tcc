@@ -1,18 +1,22 @@
 import { Box, Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Tooltip, useToast } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa';
+import { validateSubjectCode } from '../../../functions/validation';
+import { api } from '../../../services/api';
 import { CurriculumContext } from './curriculumContext';
 
 function AddSubjectModal() {
-    const { addSubjectModalIsOpen, addSubjectModalOnClose, periods, setPeriods, subjects, setSubjects } = useContext(CurriculumContext);
+    const { addSubjectModalIsOpen, addSubjectModalOnClose, periods, setPeriods, subjects, setSubjects, userId } = useContext(CurriculumContext);
     const [code, setCode] = useState("");
+    const [onLoad, setOnLoad] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState("");
     const toast = useToast();
 
-    const handleAddSubject = () => {
-        if (code === "") {
+    const handleAddSubject = async () => {
+        setOnLoad(true);
+        if (code === "" || selectedPeriod === "") {
             toast({
-                title: 'Insira um código para a matéria.',
+                title: 'Insira um código e selecione um período.',
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
@@ -20,9 +24,10 @@ function AddSubjectModal() {
             });
             return;
         }
-        if (selectedPeriod === "") {
+        if (!validateSubjectCode(code)) {
             toast({
-                title: 'Selecione um período para a matéria.',
+                title: "Código inválido",
+                description: "O código deve conter 2 letras seguidas de 3 números",
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
@@ -30,32 +35,44 @@ function AddSubjectModal() {
             });
             return;
         }
-        const newSubject = {
-            id: `${Math.floor(Math.random() * 100)}`,
-            code,
-            name: 'false name',
-            period: periods[selectedPeriod].name,
-            time: '09:00 - 10:00',
-            type: 'Teórica',
-            status: 'todo'
-        }
-        const newSubjects = {
-            ...subjects,
-            [newSubject.id]: newSubject
-        }
-        const newPeriods = {
-            ...periods,
-            [selectedPeriod]: {
-                ...periods[selectedPeriod],
-                subjectIds: [...periods[selectedPeriod].subjectIds, newSubject.id]
+
+        try {
+            const response = await api.post('/curriculum/subject/createSubject', {
+                userId,
+                subjectCode: code,
+                periodId: selectedPeriod
+            });
+            if (!response.data.id) throw new Error('Erro ao adicionar matéria.');
+
+            const newSubjects = {
+                ...subjects,
+                [response.data.id]: response.data
             }
+            const newPeriods = {
+                ...periods,
+                [selectedPeriod]: {
+                    ...periods[selectedPeriod],
+                    subjectIds: [...periods[selectedPeriod].subjectIds, response.data.id]
+                }
+            }
+            setSubjects(newSubjects);
+            setPeriods(newPeriods);
+            setCode("");
+            setSelectedPeriod("");
+            addSubjectModalOnClose();
+
+        } catch (error) {
+            toast({
+                title: 'Erro ao adicionar matéria.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+        } finally {
+            setOnLoad(false);
         }
-        
-        setSubjects(newSubjects);
-        setPeriods(newPeriods);
-        setCode("");
-        setSelectedPeriod("");
-        addSubjectModalOnClose();
+
     }
 
     return (
@@ -88,7 +105,12 @@ function AddSubjectModal() {
                                 </a>
                             </Tooltip>
                         </FormLabel>
-                        <Input placeholder='IC856' value={code} onChange={e => setCode(e.target.value)} />
+                        <Input
+                            placeholder='XX999'
+                            value={code}
+                            onChange={e => setCode(e.target.value.toUpperCase())}
+                            maxLength={5}
+                        />
                     </FormControl>
                     <FormControl mb={3}>
                         <FormLabel>Período</FormLabel>
@@ -97,7 +119,7 @@ function AddSubjectModal() {
                             onChange={e => setSelectedPeriod(e.target.value)}
                         >
                             <option value={''}>Selecione o período</option>
-                            {periods && Object.values(periods).map(period => 
+                            {periods && Object.values(periods).map(period =>
                                 <option key={period.id} value={period.id}>{period.name}</option>
                             )}
                         </Select>

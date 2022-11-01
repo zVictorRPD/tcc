@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { addTeacher } from "../../../../src/backend/userSubject";
+import { createTeacher } from "../../../../src/backend/userSubject";
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,7 +11,7 @@ export default async function handler(
         
         if (typeof subjectId !== "string" || isNaN(parseInt(subjectId as string)) || typeof teacherId !== "string" || isNaN(parseInt(teacherId as string))) return res.status(400).json({ error: "Bad request" });
 
-        const response = await addTeacher(parseInt(subjectId), parseInt(teacherId));
+        const response = await createTeacher(parseInt(subjectId), parseInt(teacherId));
 
         return res.status(200).json(response);
     }

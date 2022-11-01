@@ -1,5 +1,52 @@
 import { prisma } from "../config/prisma.config";
 
+export async function createSubject(userId: number, periodId: number, subjectCode: string) {
+    const subject = await prisma.userSubjects.create({
+        data: {
+            userId,
+            periodId,
+            subjectCode,
+        },
+        include: {
+            subject: true,
+        }
+    }).catch((err) => {
+        return err;
+    });
+    const subjectsOrder = await prisma.curriculumPeriods.findUnique({
+        where: {
+            id: periodId
+        },
+        select: {
+            subjectsOrder: true
+        }
+    });
+    let newOrderArray = [];
+    if (subjectsOrder && subjectsOrder.subjectsOrder !== null) {
+        const orderArray = JSON.parse(subjectsOrder.subjectsOrder);
+        newOrderArray = [...orderArray, subject.id];
+    } else {
+        newOrderArray = [subject.id];
+    }
+
+    const period = await prisma.curriculumPeriods.update({
+        where: {
+            id: periodId
+        },
+        data: {
+            subjectsOrder: JSON.stringify(newOrderArray)
+        }
+    }).catch((err) => {
+        return err;
+    });
+    const subjectObject = {
+        ...subject,
+        ...subject.subject
+    };
+    delete subjectObject.subject;
+    return subjectObject;
+}
+
 export async function updateSubjectStatus(subjectId: number, status: string) {
     const subject = await prisma.userSubjects.update({
         where: {
@@ -57,7 +104,7 @@ export async function updateSubjectGrade(subjectId: number, grade: number) {
 }
 
 
-export async function addTeacher(subjectId: number, teacherId: number) {
+export async function createTeacher(subjectId: number, teacherId: number) {
 
     const subject = await prisma.userSubjects.update({
         where: {

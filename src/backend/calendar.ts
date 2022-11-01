@@ -14,10 +14,9 @@ export async function getEvents(id: number) {
         where: {
             userId: id
         }
-    })
-        .catch((err) => {
-            return err;
-        });
+    }).catch((err) => {
+        return err;
+    });
     return { events, total };
 }
 
@@ -53,7 +52,7 @@ export async function editEvent(id: number, title: string, start: Date, end: Dat
     });
 
     return { event };
-} 
+}
 
 export async function deleteEvent(id: number) {
     const event = await prisma.calendarEvents.delete({

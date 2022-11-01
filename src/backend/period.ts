@@ -10,7 +10,10 @@ export async function createPeriod(userId: number, name: string) {
             id: true,
             curriculumPeriodsOrder: true
         },
-    });
+
+    }).catch((err) => {
+        return err;
+    });;
 
     if (!curriculum || !curriculum.id || !curriculum.curriculumPeriodsOrder) return false;
 
@@ -23,7 +26,9 @@ export async function createPeriod(userId: number, name: string) {
             id: true,
             name: true,
         }
-    });
+    }).catch((err) => {
+        return err;
+    });;
 
     const periodsOrder = JSON.parse(curriculum.curriculumPeriodsOrder);
     const newOrder = [...periodsOrder, newPeriod.id];
@@ -35,6 +40,8 @@ export async function createPeriod(userId: number, name: string) {
         data: {
             curriculumPeriodsOrder: JSON.stringify(newOrder)
         }
+    }).catch((err) => {
+        return err;
     });
     return {
         id: newPeriod.id.toString(),
