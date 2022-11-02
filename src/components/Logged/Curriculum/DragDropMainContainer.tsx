@@ -1,4 +1,4 @@
-import { Box, Button, HStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Image, Text, useToast } from '@chakra-ui/react';
 import React, { useContext, useRef } from 'react'
 import { CurriculumContext } from './curriculumContext';
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd';
@@ -10,7 +10,7 @@ import { api } from '../../../services/api';
 
 function DragDropMainContainer() {
     resetServerContext();
-    const { periods, subjects, periodOrder, setPeriods, addSubjectModalOnOpen } = useContext(CurriculumContext);
+    const { periods, subjects, periodOrder, setPeriods, addSubjectModalOnOpen, onLoad, hasCurriculum, selectCurriculumModalOnOpen } = useContext(CurriculumContext);
     const toast = useToast();
     const onDragEnd = async (result: any) => {
 
@@ -105,48 +105,127 @@ function DragDropMainContainer() {
 
 
     return (
-        <DragDropContext
-            onDragEnd={onDragEnd}
-        >
-            {
-                periodOrder.length > 0 ? (
-                    <HStack
-                        p={{ base: '.5rem', md: '2rem' }}
-                        h={'91.7vh'}
-                        gap={2}
-                        position={'relative'}
-                        overflowX={'auto'}
-                        alignItems={'flex-start'}
-                        className={styles.main_container_scrollbar}
-                    >
-                        {
-                            periodOrder.map((order, index) => {
-                                const period = periods[order];
-                                const periodSubjects = !!period.subjectIds ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];
-                                return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
-                            })
-                        }
-                        <AddPeriodColumn />
-                    </HStack>
-                ) : 'vazio'
-            }
-            <Box
-                position={'absolute'}
-                bottom={'1rem'}
-                right={'1rem'}
-            >
-                <Button
-                    variant='blue-800'
-                    size={{ base: 'sm', md: 'md' }}
-                    leftIcon={<FaPlus />}
-                    onClick={() => {
-                        addSubjectModalOnOpen();
-                    }}
+
+        <>
+            {!onLoad ? (
+                <>
+
+                    {hasCurriculum ? (
+                        <DragDropContext
+                            onDragEnd={onDragEnd}
+                        >
+                            <HStack
+                                p={{ base: '.5rem', md: '2rem' }}
+                                h={'91.7vh'}
+                                gap={2}
+                                position={'relative'}
+                                overflowX={'auto'}
+                                alignItems={'flex-start'}
+                                className={styles.main_container_scrollbar}
+                            >
+                                {
+                                    periodOrder.length > 0 &&
+                                    periodOrder.map((order, index) => {
+                                        const period = periods[order];
+                                        const periodSubjects = !!period.subjectIds ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];
+                                        return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
+                                    })
+                                }
+                                <AddPeriodColumn />
+                            </HStack>
+                            <Box
+                                position={'absolute'}
+                                bottom={'1rem'}
+                                right={'1rem'}
+                            >
+                                <Button
+                                    variant='blue-800'
+                                    size={{ base: 'sm', md: 'md' }}
+                                    leftIcon={<FaPlus />}
+                                    onClick={() => {
+                                        addSubjectModalOnOpen();
+                                    }}
+                                >
+                                    Adicionar matéria
+                                </Button>
+                            </Box>
+                        </DragDropContext>
+                    ) : (
+                        <Flex
+                            h={'91.7vh'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            p={{
+                                base: '.5rem',
+                                md: '2rem'
+                            }}
+                        >
+                            <Box
+                                textAlign={'center'}
+                                background={'white'}
+                                w={'100%'}
+                                h={'auto'}
+                                bg="white"
+                                borderRadius={'12px'}
+                                borderWidth="1px"
+                                borderColor={'gray.300'}
+                                p={{ base: '1.5rem', md: '2rem' }}
+                            >
+                                <Text
+                                    fontSize={{
+                                        base: '1.5rem',
+                                        md: '2rem'
+                                    }}
+                                    fontWeight={'600'}
+                                >
+                                    Pelo visto você é novo aqui!
+                                </Text>
+                                <Image
+                                    src="/assets/images/logged/svgs/curriculum.svg"
+                                    boxSize={{
+                                        base: '200px',
+                                        md: '300px',
+                                        lg: '400px',
+                                        xl: '500px',
+                                    }}
+                                    margin={'0 auto'}
+                                    alt="Carregando..."
+                                />
+                                <Text
+                                    fontSize={{
+                                        base: '1.25rem',
+                                        md: '1.5rem'
+                                    }}
+                                    my={'.5rem'}
+                                >
+                                    Clique no botão e selecione o seu curso para criar sua grade curricular!
+                                </Text>
+                                <Button
+                                    variant='blue-800'
+                                    onClick={() => {
+                                        selectCurriculumModalOnOpen();
+                                    }}
+                                    mt={'1rem'}
+                                >
+                                    Criar minha grade!
+                                </Button>
+                            </Box>
+                        </Flex>
+                    )}
+                </>
+            ) : (
+                <Flex
+                    h={'91.7vh'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
                 >
-                    Adicionar matéria
-                </Button>
-            </Box>
-        </DragDropContext>
+                    <Image src="/assets/images/loading-spinner.svg" w={'200px'} h={'200px'} alt="Carregando..." margin={'0 auto'} />
+                </Flex>
+            )}
+        </>
+
+
+
     )
 }
 

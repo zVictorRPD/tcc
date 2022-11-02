@@ -90,7 +90,6 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
                 }
             } else {
                 setCourses(response.data.courses);
-                selectCurriculumModalOnOpen();
             }
 
         } catch (err) {
