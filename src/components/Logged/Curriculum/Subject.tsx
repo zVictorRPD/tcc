@@ -8,6 +8,7 @@ import { CurriculumContext } from './curriculumContext';
 interface ISubjectProps {
     subjectData: ISubject;
     index: number;
+    periodId: string;
 }
 
 const backgroundColors: any = {
@@ -33,7 +34,7 @@ const buttonStatus: any = {
 
 function Subject(props: ISubjectProps) {
     const { subjects, setSubjects, setSelectedSubject, subjectModalOnOpen } = useContext(CurriculumContext);
-    const { subjectData, index } = props;
+    const { subjectData, index, periodId } = props;
     const [clockTimer, setClockTimer] = useState<NodeJS.Timer>();
 
     const changeStatus = () => {
@@ -58,7 +59,7 @@ function Subject(props: ISubjectProps) {
                     api.post('/curriculum/subject/updateStatus', {
                         subjectId: subjectData.id,
                         status: newStatus
-                    });    
+                    });
                 }
                 catch (error) {
                     console.log(error);
@@ -66,7 +67,7 @@ function Subject(props: ISubjectProps) {
             }, 2000)
         );
     }
-
+    
     return (
         <Draggable
             draggableId={subjectData.id}
@@ -126,7 +127,10 @@ function Subject(props: ISubjectProps) {
                             variant={'blue-800'}
                             size={'xs'}
                             onClick={() => {
-                                setSelectedSubject(subjectData);
+                                setSelectedSubject({
+                                    ...subjectData,
+                                    periodId: periodId
+                                });
                                 subjectModalOnOpen()
                             }}
                             cursor={'pointer'}

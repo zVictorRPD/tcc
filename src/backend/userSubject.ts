@@ -47,6 +47,39 @@ export async function createSubject(userId: number, periodId: number, subjectCod
     return subjectObject;
 }
 
+export async function deleteSubject(subjectId: number, periodId: number) {
+    const period = await prisma.curriculumPeriods.findUnique({
+        where: {
+            id: periodId
+        },
+        select: {
+            subjectsOrder: true
+        }
+    }).catch((err) => {
+        return err;
+    });
+    const orderArray = JSON.parse(period.subjectsOrder);
+    const newOrderArray = orderArray.filter((id: number) => id !== subjectId);
+    const updatedPeriod = await prisma.curriculumPeriods.update({
+        where: {
+            id: periodId
+        },
+        data: {
+            subjectsOrder: JSON.stringify(newOrderArray)
+        }
+    }).catch((err) => {
+        return err;
+    });
+    const deletedSubject = await prisma.userSubjects.delete({
+        where: {
+            id: subjectId
+        }
+    }).catch((err) => {
+        return err;
+    });
+    return deletedSubject;
+}
+
 export async function updateSubjectStatus(subjectId: number, status: string) {
     const subject = await prisma.userSubjects.update({
         where: {

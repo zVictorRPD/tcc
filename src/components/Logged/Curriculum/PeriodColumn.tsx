@@ -71,7 +71,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 userId: userId,
                 periodId: period.id,
             });
-            if(!response.data.courseCode) throw new Error('Erro ao deletar período');
+            if (!response.data.courseCode) throw new Error('Erro ao deletar período');
             //deleta o periodo
             const newPeriods = {
                 ...periods
@@ -218,11 +218,11 @@ function PeriodColumn(props: IPeriodColumnProps) {
 
                         >
                             {
-                                props.subjects.length > 0 ?
-                                    Object.keys(props.subjects).map((key: any, index) => {
-                                        return <Subject key={index} index={index} subjectData={props.subjects[key]} />
-                                    })
-                                    : null
+                                props.subjects.length > 0 &&
+                                Object.keys(props.subjects).map((key: any, index) => {
+                                    return <Subject key={index} index={index} subjectData={props.subjects[key]} periodId={period.id} />
+                                })
+
                             }
                             {provided.placeholder}
                         </Stack>

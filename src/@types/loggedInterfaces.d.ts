@@ -59,6 +59,10 @@ interface ISubjects {
     [key: string]: ISubject;
 }
 
+interface ISelectedSubject extends ISubject {
+    periodId: string;
+}
+
 interface ICurriculumContext {
     userId: number;
     hasCurriculum: boolean;
@@ -71,8 +75,8 @@ interface ICurriculumContext {
     setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
     setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
     setPeriodOrder: React.Dispatch<React.SetStateAction<string[]>>;
-    selectedSubject: ISubject;
-    setSelectedSubject: React.Dispatch<React.SetStateAction<ISubject>>;
+    selectedSubject: ISelectedSubject;
+    setSelectedSubject: React.Dispatch<React.SetStateAction<ISelectedSubject>>;
     addSubjectModalIsOpen: boolean;
     addSubjectModalOnOpen: () => void;
     addSubjectModalOnClose: () => void;
@@ -82,6 +86,9 @@ interface ICurriculumContext {
     selectCurriculumModalIsOpen: boolean;
     selectCurriculumModalOnOpen: () => void;
     selectCurriculumModalOnClose: () => void;
+    curriculumDrawerIsOpen: boolean;
+    curriculumDrawerOnOpen: () => void;
+    curriculumDrawerOnClose: () => void;
     onLoad: boolean;
     setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }

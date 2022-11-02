@@ -12,13 +12,14 @@ export default async function handler(
 
         if (type === "samePeriod") {
             if (typeof periodId !== "string" || isNaN(parseInt(periodId as string))) return res.status(400).json({ error: "Bad request" });
-            const response = await updateSubjectIds(parseInt(periodId), subjectIds);
+            const subjectIdsNumber = subjectIds.map((id: string) => parseInt(id));
+            const response = await updateSubjectIds(parseInt(periodId), subjectIdsNumber);
             return res.status(200).json(response);
         } else {
             const response = periodId.map(async (periodId: string, index: number) => {
                 if (typeof periodId !== "string" || isNaN(parseInt(periodId as string))) return res.status(400).json({ error: "Bad request" });
-
-                return await updateSubjectIds(parseInt(periodId), subjectIds[index]);
+                const subjectIdsNumber = subjectIds[index].map((id: string) => parseInt(id));
+                return await updateSubjectIds(parseInt(periodId), subjectIdsNumber);
             });
             const result = await Promise.all(response);
             

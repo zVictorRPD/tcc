@@ -112,7 +112,7 @@ export async function deletePeriod(userId: number, periodId: number) {
 }
 
 
-export async function updateSubjectIds(periodId: number, subjectsIds: string[]) {
+export async function updateSubjectIds(periodId: number, subjectsIds: number[]) {
     const period = await prisma.curriculumPeriods.update({
         where: {
             id: periodId

@@ -14,7 +14,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
     const [subjects, setSubjects] = useState<ISubjects>({} as ISubjects);
     const [periodOrder, setPeriodOrder] = useState<string[]>([]);
-    const [selectedSubject, setSelectedSubject] = useState<ISubject>({} as ISubject);
+    const [selectedSubject, setSelectedSubject] = useState<ISelectedSubject>({} as ISelectedSubject);
     const {
         isOpen: addSubjectModalIsOpen,
         onOpen: addSubjectModalOnOpen,
@@ -31,6 +31,12 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         isOpen: selectCurriculumModalIsOpen,
         onOpen: selectCurriculumModalOnOpen,
         onClose: selectCurriculumModalOnClose
+    } = useDisclosure();
+
+    const {
+        isOpen: curriculumDrawerIsOpen,
+        onOpen: curriculumDrawerOnOpen,
+        onClose: curriculumDrawerOnClose
     } = useDisclosure();
 
     const curriculumContextData = {
@@ -56,6 +62,9 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         selectCurriculumModalIsOpen,
         selectCurriculumModalOnOpen,
         selectCurriculumModalOnClose,
+        curriculumDrawerIsOpen,
+        curriculumDrawerOnOpen,
+        curriculumDrawerOnClose,
         onLoad,
         setOnLoad,
     }
@@ -69,7 +78,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
                 }
             });
 
-            if (response.data.hasCurriculum) {                
+            if (response.data.hasCurriculum) {
                 const {
                     course,
                     periods,

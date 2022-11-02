@@ -7,10 +7,11 @@ import { FaPlus } from 'react-icons/fa';
 import AddPeriodColumn from './AddPeriodColumn';
 import styles from './style.module.scss';
 import { api } from '../../../services/api';
+import NoCurriculum from './NoCurriculum';
 
 function DragDropMainContainer() {
     resetServerContext();
-    const { periods, subjects, periodOrder, setPeriods, addSubjectModalOnOpen, onLoad, hasCurriculum, selectCurriculumModalOnOpen } = useContext(CurriculumContext);
+    const { periods, subjects, periodOrder, setPeriods, addSubjectModalOnOpen, onLoad, hasCurriculum, curriculumDrawerOnOpen } = useContext(CurriculumContext);
     const toast = useToast();
     const onDragEnd = async (result: any) => {
 
@@ -103,9 +104,7 @@ function DragDropMainContainer() {
 
     }
 
-
     return (
-
         <>
             {!onLoad ? (
                 <>
@@ -141,76 +140,16 @@ function DragDropMainContainer() {
                                 <Button
                                     variant='blue-800'
                                     size={{ base: 'sm', md: 'md' }}
-                                    leftIcon={<FaPlus />}
                                     onClick={() => {
-                                        addSubjectModalOnOpen();
+                                        curriculumDrawerOnOpen();
                                     }}
                                 >
-                                    Adicionar matéria
+                                    Informação sobre a grade
                                 </Button>
                             </Box>
                         </DragDropContext>
                     ) : (
-                        <Flex
-                            h={'91.7vh'}
-                            alignItems={'center'}
-                            justifyContent={'center'}
-                            p={{
-                                base: '.5rem',
-                                md: '2rem'
-                            }}
-                        >
-                            <Box
-                                textAlign={'center'}
-                                background={'white'}
-                                w={'100%'}
-                                h={'auto'}
-                                bg="white"
-                                borderRadius={'12px'}
-                                borderWidth="1px"
-                                borderColor={'gray.300'}
-                                p={{ base: '1.5rem', md: '2rem' }}
-                            >
-                                <Text
-                                    fontSize={{
-                                        base: '1.5rem',
-                                        md: '2rem'
-                                    }}
-                                    fontWeight={'600'}
-                                >
-                                    Pelo visto você é novo aqui!
-                                </Text>
-                                <Image
-                                    src="/assets/images/logged/svgs/curriculum.svg"
-                                    boxSize={{
-                                        base: '200px',
-                                        md: '300px',
-                                        lg: '400px',
-                                        xl: '500px',
-                                    }}
-                                    margin={'0 auto'}
-                                    alt="Carregando..."
-                                />
-                                <Text
-                                    fontSize={{
-                                        base: '1.25rem',
-                                        md: '1.5rem'
-                                    }}
-                                    my={'.5rem'}
-                                >
-                                    Clique no botão e selecione o seu curso para criar sua grade curricular!
-                                </Text>
-                                <Button
-                                    variant='blue-800'
-                                    onClick={() => {
-                                        selectCurriculumModalOnOpen();
-                                    }}
-                                    mt={'1rem'}
-                                >
-                                    Criar minha grade!
-                                </Button>
-                            </Box>
-                        </Flex>
+                        <NoCurriculum />
                     )}
                 </>
             ) : (
@@ -223,9 +162,6 @@ function DragDropMainContainer() {
                 </Flex>
             )}
         </>
-
-
-
     )
 }
 
