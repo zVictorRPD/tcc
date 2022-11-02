@@ -7,7 +7,7 @@ import SelectCurriculumModal from "../../src/components/Logged/Curriculum/Select
 
 const Curriculum: NextPage = () => {
     return (
-        <CurriculumProvider>
+        <CurriculumProvider>  
             <DragDropMainContainer />
             <AddSubjectModal />
             <SubjectModal />

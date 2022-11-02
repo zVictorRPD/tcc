@@ -250,7 +250,7 @@ const Subjects: NextPage = () => {
                                                             />
                                                         </Flex>
                                                     </>
-                                                ): (
+                                                ) : (
                                                     <Box h={'60vh'}></Box>
                                                 )}
                                             </td>
