@@ -10,6 +10,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     const [onLoad, setOnLoad] = useState(false);
     const [hasCurriculum, setHasCurriculum] = useState(false);
     const [userId, setUserId] = useState(0);
+    const [course, setCourse] = useState<ICourse>({} as ICourse);
     const [courses, setCourses] = useState<Object[]>([]);
     const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
     const [subjects, setSubjects] = useState<ISubjects>({} as ISubjects);
@@ -43,6 +44,8 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         userId,
         hasCurriculum,
         setHasCurriculum,
+        course,
+        setCourse,
         courses,
         setCourses,
         periods,
@@ -85,7 +88,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
                     subjects,
                     periodsOrder
                 }: {
-                    course: Object,
+                    course: ICourse,
                     periods: IPeriods,
                     subjects: ISubjects,
                     periodsOrder: string[]
@@ -93,6 +96,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
 
                 if (course && periods && subjects && periodsOrder) {
                     setHasCurriculum(true);
+                    setCourse(course);
                     setPeriods(periods);
                     setSubjects(subjects);
                     setPeriodOrder(periodsOrder);

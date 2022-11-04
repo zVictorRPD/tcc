@@ -46,6 +46,23 @@ interface IAddSubjectModalTimetable {
 
 
 /* GRADE CURRICULAR */
+interface ICourse {
+    code: string;
+    name: string;
+    period_emergence: string;
+    workload_academic_professional_guidance: number;
+    workload_complementary: number;
+    workload_normal_lessons: number;
+    workload_optional_lessons: number;
+    workload_total: number;
+}
+
+interface IWorkload {
+    complementary: number;
+    obrigatory: number;
+    optional: number;
+    total: number;
+}
 
 interface IPeriods {
     [key: string]: {
@@ -63,10 +80,14 @@ interface ISelectedSubject extends ISubject {
     periodId: string;
 }
 
+
+
 interface ICurriculumContext {
     userId: number;
     hasCurriculum: boolean;
     setHasCurriculum: React.Dispatch<React.SetStateAction<boolean>>;
+    course: ICourse;
+    setCourse: React.Dispatch<React.SetStateAction<ICourse>>;
     courses: Object[];
     setCourses: React.Dispatch<React.SetStateAction<Object[]>>;
     periods: IPeriods;
