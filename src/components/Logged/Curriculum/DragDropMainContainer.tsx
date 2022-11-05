@@ -126,6 +126,7 @@ function DragDropMainContainer() {
                                     periodOrder.length > 0 &&
                                     periodOrder.map((order, index) => {
                                         const period = periods[order];
+                                        if (period.visible === false) return null;
                                         const periodSubjects = !!period.subjectIds ? period.subjectIds.map(subjectId => subjects[subjectId]) : [];
                                         return <PeriodColumn key={index} period={period} subjects={periodSubjects} />
                                     })

@@ -199,9 +199,7 @@ const Teachers: NextPage = () => {
                                                         <Image
                                                             src={teacher.avatar}
                                                             alt="Foto do professor"
-                                                            onError={(e) => {
-                                                                e.currentTarget.src = '/assets/images/logged/user-default-image.webp';
-                                                            }}
+                                                            fallbackSrc="/assets/images/logged/user-default-image.webp"
                                                             w={'46px'}
                                                             h={'57px'}
                                                             objectFit={'contain'}

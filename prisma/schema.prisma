@@ -112,6 +112,7 @@ model CurriculumPeriods {
   curriculum    Curriculum     @relation(fields: [curriculumId], references: [id])
   curriculumId  Int
   name          String
+  visible       Boolean        @default(true)
   subjects      UserSubjects[]
   subjectsOrder String?        @db.LongText
 }

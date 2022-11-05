@@ -68,6 +68,7 @@ interface IPeriods {
     [key: string]: {
         id: string;
         name: string;
+        visible: boolean;
         subjectIds: string[];
     }
 }

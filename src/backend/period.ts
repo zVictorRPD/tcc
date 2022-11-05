@@ -111,6 +111,19 @@ export async function deletePeriod(userId: number, periodId: number) {
     return curriculumUpdated;
 }
 
+export async function updatePeriodVisibility(periodId: number, visible: boolean) {
+    const period = await prisma.curriculumPeriods.update({
+        where: {
+            id: periodId
+        },
+        data: {
+            visible, 
+        }
+    }).catch((err) => {
+        return err;
+    });
+    return period;
+}
 
 export async function updateSubjectIds(periodId: number, subjectsIds: number[]) {
     const period = await prisma.curriculumPeriods.update({
