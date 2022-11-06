@@ -35,14 +35,6 @@ function PeriodTab() {
 				}
 			};
 			setPeriods(newPeriods);
-			toast({
-				title: "Atualizado",
-				description: "Visibilidade do período atualizada",
-				status: "success",
-				duration: 3000,
-				isClosable: true,
-				position: "top-right"
-			});
 		} catch (err) {
 			toast({
 				title: "Erro ao atualizar",
