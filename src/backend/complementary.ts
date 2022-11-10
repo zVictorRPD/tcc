@@ -22,3 +22,16 @@ export async function createComplementary(userId: number, name: string, time: nu
 
     return complementary;
 }
+
+export async function deleteComplementary(complementaryId: number) {
+    const complementary = await prisma.userComplementary.delete({
+        where: {
+            id: complementaryId
+        }
+    }).catch((err) => {
+        return err;
+    });
+    return {
+        id: complementaryId,
+    };
+}

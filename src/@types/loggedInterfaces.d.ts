@@ -24,6 +24,7 @@ interface ILink {
     url: string;
 }
 interface IComplementary {
+    id: number;
     name: string;
     time: number;
 }

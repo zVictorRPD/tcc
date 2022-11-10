@@ -1,6 +1,6 @@
 import { TableContainer, Table, Tbody, Tr, Th, Td, Text, Box, Thead, Button, Flex, useToast, HStack, Input, NumberInput, NumberInputField, NumberDecrementStepper, NumberIncrementStepper, NumberInputStepper } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTrash } from 'react-icons/fa';
 import { api } from '../../../../services/api';
 import { CurriculumContext } from '../curriculumContext';
 import style from '../style.module.scss';
@@ -9,7 +9,7 @@ function PeriodTab() {
     const { complementary, setComplementary, userId } = useContext(CurriculumContext);
     const [onLoad, setOnLoad] = useState(false);
     const toast = useToast();
-    const [newComplementary, setNewComplementary] = useState<IComplementary>({
+    const [newComplementary, setNewComplementary] = useState({
         name: '',
         time: 0
     });
@@ -48,6 +48,33 @@ function PeriodTab() {
             setOnLoad(false);
         }
     }
+    const handleDeleteComplementary = async (id: number) => {
+        setOnLoad(true);
+        try {
+            const response = await api.post('/curriculum/complementary/deleteComplementary',{
+                id,
+            });
+            if(!response.data.id) throw new Error('Erro ao deletar atividade complementar');
+            setComplementary(complementary.filter(complementary => complementary.id !== id));
+            toast({
+                title: "Atividade complementar deletada com sucesso.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+        } catch (error) {
+            toast({
+                title: "Erro ao deletar atividade complementar",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+        } finally {
+            setOnLoad(false);
+        }
+    }
     return (
         <>
             <Text
@@ -70,6 +97,7 @@ function PeriodTab() {
                             <Tr>
                                 <Th>Nome</Th>
                                 <Th isNumeric>Horas</Th>
+                                <Th isNumeric></Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -78,6 +106,15 @@ function PeriodTab() {
                                     <Tr key={index}>
                                         <Td>{complementary.name}</Td>
                                         <Td isNumeric>{complementary.time}</Td>
+                                        <Td isNumeric>
+                                            <Button
+                                                colorScheme='red'
+                                                size='xs'
+                                                onClick={() => handleDeleteComplementary(complementary.id)}
+                                            >
+                                                <FaTrash />
+                                            </Button>
+                                        </Td>
                                     </Tr>
                                 ))
                             ) : (
