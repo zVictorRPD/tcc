@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getComplementary } from "../../../src/backend/complementary";
 import { getCurriculum } from "../../../src/backend/curriculum";
 
 export default async function handler(
@@ -17,6 +18,7 @@ export default async function handler(
         if (!hasCurriculum) return res.status(200).json(response);
 
         const periodsOrderData = JSON.parse(curriculum.curriculumPeriodsOrder).map((periodId: number) => periodId.toString());
+        
         let periodsData: IPeriods = {};
         let subjectsData: ISubjects = {};
 
@@ -45,13 +47,15 @@ export default async function handler(
             });
         });
 
+        const complementary = await getComplementary(parseInt(userId));
 
         return res.status(200).json({
             course: curriculum.course,
             periods: periodsData,
             subjects: subjectsData,
             periodsOrder: periodsOrderData,
-            hasCurriculum
+            hasCurriculum,
+            complementary
         });
 
     }

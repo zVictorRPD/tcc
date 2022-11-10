@@ -14,6 +14,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     const [courses, setCourses] = useState<Object[]>([]);
     const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
     const [subjects, setSubjects] = useState<ISubjects>({} as ISubjects);
+    const [complementary, setComplementary] = useState<IComplementary[]>([]);
     const [periodOrder, setPeriodOrder] = useState<string[]>([]);
     const [selectedSubject, setSelectedSubject] = useState<ISelectedSubject>({} as ISelectedSubject);
     const {
@@ -52,6 +53,8 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         setPeriods,
         subjects,
         setSubjects,
+        complementary,
+        setComplementary,
         periodOrder,
         setPeriodOrder,
         selectedSubject,
@@ -86,20 +89,23 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
                     course,
                     periods,
                     subjects,
-                    periodsOrder
+                    periodsOrder,
+                    complementary
                 }: {
                     course: ICourse,
                     periods: IPeriods,
                     subjects: ISubjects,
-                    periodsOrder: string[]
+                    periodsOrder: string[],
+                    complementary: IComplementary[]
                 } = response.data;
 
-                if (course && periods && subjects && periodsOrder) {
+                if (course && periods && subjects && periodsOrder && complementary) {
                     setHasCurriculum(true);
                     setCourse(course);
                     setPeriods(periods);
                     setSubjects(subjects);
                     setPeriodOrder(periodsOrder);
+                    setComplementary(complementary);
                 }
             } else {
                 setCourses(response.data.courses);

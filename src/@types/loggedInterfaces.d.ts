@@ -23,6 +23,10 @@ interface ILink {
     name: string;
     url: string;
 }
+interface IComplementary {
+    name: string;
+    time: number;
+}
 
 interface ITimeTableTranslation {
     [key: string]: string;
@@ -93,9 +97,11 @@ interface ICurriculumContext {
     setCourses: React.Dispatch<React.SetStateAction<Object[]>>;
     periods: IPeriods;
     subjects: ISubjects;
+    complementary: IComplementary[];
     periodOrder: string[];
     setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
     setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
+    setComplementary: React.Dispatch<React.SetStateAction<IComplementary[]>>;
     setPeriodOrder: React.Dispatch<React.SetStateAction<string[]>>;
     selectedSubject: ISelectedSubject;
     setSelectedSubject: React.Dispatch<React.SetStateAction<ISelectedSubject>>;

@@ -4,6 +4,7 @@ import { CurriculumContext } from '../curriculumContext';
 import CourseTab from './CourseTab';
 import PeriodTab from './PeriodTab';
 import SubjectTab from './SubjectTab';
+import ComplementaryTab from './ComplementaryTab';
 
 function CurriculumDrawer() {
     const { curriculumDrawerIsOpen, curriculumDrawerOnClose, addSubjectModalOnOpen } = useContext(CurriculumContext);
@@ -15,10 +16,16 @@ function CurriculumDrawer() {
                 <DrawerHeader>Grade Curricular</DrawerHeader>
                 <DrawerBody>
                     <Tabs isFitted >
-                        <TabList>
-                            <Tab>Curso</Tab>
-                            <Tab>Períodos</Tab>
-                            <Tab>Matérias</Tab>
+                        <TabList
+                            flexWrap={{
+                                base: 'wrap',
+                                md: 'nowrap',
+                            }}
+                        >
+                            <Tab flex={'50%'}>Curso</Tab>
+                            <Tab flex={'50%'}>Períodos</Tab>
+                            <Tab flex={'50%'}>Matérias</Tab>
+                            <Tab flex={'50%'}>Complementares</Tab>
                         </TabList>
 
                         <TabPanels>
@@ -30,6 +37,9 @@ function CurriculumDrawer() {
                             </TabPanel>
                             <TabPanel px={0}>
                                 <SubjectTab />
+                            </TabPanel>
+                            <TabPanel px={0}>
+                                <ComplementaryTab />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
