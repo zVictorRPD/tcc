@@ -117,6 +117,7 @@ export async function createCurriculum(userId: number, courseCode: string) {
         return period.subjects.map((subject: any) => {
             return {
                 subjectCode: subject.subjectCode,
+                isOptional: period.name === "Optativas",
                 periodId: createdPeriods[index].id,
                 userId: userId,
             }

@@ -1,4 +1,4 @@
-import { Box, Button, Text } from '@chakra-ui/react'
+import { Box, Button, Text, Tooltip } from '@chakra-ui/react'
 import React, { useContext, useRef, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd';
 import { toCapitalize } from '../../../functions/toCapitalize';
@@ -67,7 +67,7 @@ function Subject(props: ISubjectProps) {
             }, 2000)
         );
     }
-    
+
     return (
         <Draggable
             draggableId={subjectData.id}
@@ -102,7 +102,12 @@ function Subject(props: ISubjectProps) {
                             color={'white'}
                             textAlign={'center'}
                         >
-                            {`${subjectData.code} - ${subjectData.time} horas`}
+                            {`${subjectData.code} - ${subjectData.time} horas `}
+                            {subjectData.isOptional && (
+                                <Tooltip label='Matéria optativa'>
+                                    <span style={{cursor: 'help'}}>- Opt</span>
+                                </Tooltip>
+                            )}
                         </Text>
                     </Box>
                     {/* body */}

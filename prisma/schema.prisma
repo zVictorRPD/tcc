@@ -123,6 +123,7 @@ model UserSubjects {
   subject           Subject             @relation(fields: [subjectCode], references: [code])
   subjectCode       String
   status            String              @default("todo")
+  isOptional        Boolean             @default(false)
   note              String?             @db.LongText
   links             String?             @db.LongText
   grade             Float?

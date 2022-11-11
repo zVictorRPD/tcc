@@ -35,6 +35,7 @@ export default async function handler(
                     id: subject.id.toString(),
                     code: subject.subject.code,
                     name: subject.subject.name,
+                    isOptional: subject.isOptional,
                     period: period.name,
                     time: subject.subject.time,
                     status: subject.status,
@@ -42,7 +43,6 @@ export default async function handler(
                     links: subject.links !== null ? JSON.parse(subject.links) : [],
                     grade: subject.grade,
                     teacher: subject.teacher
-
                 }
             });
         });

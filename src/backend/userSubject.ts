@@ -1,11 +1,12 @@
 import { prisma } from "../config/prisma.config";
 
-export async function createSubject(userId: number, periodId: number, subjectCode: string) {
+export async function createSubject(userId: number, periodId: number, subjectCode: string, type: boolean) {
     const subject = await prisma.userSubjects.create({
         data: {
             userId,
             periodId,
             subjectCode,
+            isOptional: type
         },
         include: {
             subject: true,
@@ -44,7 +45,10 @@ export async function createSubject(userId: number, periodId: number, subjectCod
         ...subject.subject
     };
     delete subjectObject.subject;
-    return subjectObject;
+    return {
+        ...subjectObject,
+        id: subjectObject.id.toString(),
+    };
 }
 
 export async function deleteSubject(subjectId: number, periodId: number) {

@@ -5,23 +5,28 @@ import { toCapitalize } from '../../../../functions/toCapitalize';
 import { CurriculumContext } from '../curriculumContext';
 import { RiArrowLeftRightLine } from 'react-icons/ri'
 import style from '../style.module.scss';
+import { getDoneWorkload } from '../../../../functions/curriculum';
 
 function CourseTab() {
-	const { course } = useContext(CurriculumContext);
-	const [courseProgress, setCourseProgress] = useState(0);
-	const [viewType, setViewType] = useState<"done" | "remains">('remains');
-	const [doneWorkload, setDoneWorkload] = useState<IWorkload>({
-		complementary: 0,
-		obrigatory: 0,
-		optional: 0,
-		total: 0,
-	} as IWorkload);
-	const [remainsWorkload, setRemainsWorkload] = useState<IWorkload>({
+	const { course, complementary, subjects } = useContext(CurriculumContext);
+	const [viewType, setViewType] = useState<"done" | "remains">('done');
+	const [doneWorkload, setDoneWorkload] = useState<IWorkload>({} as IWorkload);
+	const [totalWorkload, setTotalWorkload] = useState<IWorkload>({
 		complementary: course.workload_complementary,
 		obrigatory: course.workload_normal_lessons + course.workload_academic_professional_guidance,
 		optional: course.workload_optional_lessons,
 		total: course.workload_total,
 	} as IWorkload);
+	const [courseProgress, setCourseProgress] = useState(0);
+
+	useEffect(() => {
+		setDoneWorkload(() => {
+			const data = getDoneWorkload(subjects, complementary, false, totalWorkload);
+			setCourseProgress(parseFloat(((data.total / totalWorkload.total) * 100).toFixed(2)));
+			return data;
+		});
+	}, [course, complementary]);
+
 	return (
 		<>
 			<Text
@@ -68,19 +73,19 @@ function CourseTab() {
 
 									</Tooltip>
 								</Th>
-								<Td>{course.workload_normal_lessons + course.workload_academic_professional_guidance} horas</Td>
+								<Td>{totalWorkload.obrigatory} horas</Td>
 							</Tr>
 							<Tr>
 								<Th>CH. optativa</Th>
-								<Td>{course.workload_optional_lessons} horas</Td>
+								<Td>{totalWorkload.optional} horas</Td>
 							</Tr>
 							<Tr>
 								<Th>CH. complementar</Th>
-								<Td>{course.workload_complementary} horas</Td>
+								<Td>{totalWorkload.complementary} horas</Td>
 							</Tr>
 							<Tr>
 								<Th>CH. total</Th>
-								<Td>{course.workload_total} horas</Td>
+								<Td>{totalWorkload.total} horas</Td>
 							</Tr>
 						</Tbody>
 					</Table>
@@ -130,19 +135,19 @@ function CourseTab() {
 
 									</Tooltip>
 								</Th>
-								<Td>{viewType === 'done' ? doneWorkload.obrigatory : remainsWorkload.obrigatory} horas</Td>
+								<Td>{viewType === 'done' ? doneWorkload.obrigatory : totalWorkload.obrigatory - doneWorkload.obrigatory} horas</Td>
 							</Tr>
 							<Tr>
 								<Th>CH. optativa</Th>
-								<Td>{viewType === 'done' ? doneWorkload.optional : remainsWorkload.optional} horas</Td>
+								<Td>{viewType === 'done' ? doneWorkload.optional : totalWorkload.optional - doneWorkload.optional} horas</Td>
 							</Tr>
 							<Tr>
 								<Th>CH. complementar</Th>
-								<Td>{viewType === 'done' ? doneWorkload.complementary : remainsWorkload.complementary} horas</Td>
+								<Td>{viewType === 'done' ? doneWorkload.complementary : totalWorkload.complementary - doneWorkload.complementary} horas</Td>
 							</Tr>
 							<Tr>
 								<Th>CH. total</Th>
-								<Td>{viewType === 'done' ? doneWorkload.total : remainsWorkload.total} horas</Td>
+								<Td>{viewType === 'done' ? doneWorkload.total : totalWorkload.total - doneWorkload.total} horas</Td>
 							</Tr>
 						</Tbody>
 					</Table>
@@ -153,7 +158,7 @@ function CourseTab() {
 					fontWeight={600}
 					textAlign={'center'}
 				>
-					{viewType === 'done' ? `Você já fez ${courseProgress}` : `Falta você fazer ${100 - courseProgress}`}% do curso
+					{viewType === 'done' ? `Você já fez ${courseProgress}` : `Falta você fazer ${(100 - courseProgress).toFixed(2)}`}% do curso
 				</Text>
 				<Progress
 					colorScheme='whatsapp'

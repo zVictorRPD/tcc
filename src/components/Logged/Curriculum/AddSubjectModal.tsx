@@ -6,15 +6,16 @@ import { api } from '../../../services/api';
 import { CurriculumContext } from './curriculumContext';
 
 function AddSubjectModal() {
-    const { addSubjectModalIsOpen, addSubjectModalOnClose, periods, setPeriods, subjects, setSubjects, userId } = useContext(CurriculumContext);
+    const { addSubjectModalIsOpen, addSubjectModalOnClose, periods, setPeriods, subjects, setSubjects, userId, curriculumDrawerOnClose } = useContext(CurriculumContext);
     const [code, setCode] = useState("");
     const [onLoad, setOnLoad] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState("");
+    const [subjectType, setSubjectType] = useState<string>("");
     const toast = useToast();
 
     const handleAddSubject = async () => {
         setOnLoad(true);
-        if (code === "" || selectedPeriod === "") {
+        if (code === "" || selectedPeriod === "" || subjectType === "") {
             toast({
                 title: 'Insira um código e selecione um período.',
                 status: 'error',
@@ -40,7 +41,8 @@ function AddSubjectModal() {
             const response = await api.post('/curriculum/subject/createSubject', {
                 userId,
                 subjectCode: code,
-                periodId: selectedPeriod
+                periodId: selectedPeriod,
+                subjectType
             });
             if (!response.data.id) throw new Error('Erro ao adicionar matéria.');
 
@@ -60,7 +62,14 @@ function AddSubjectModal() {
             setCode("");
             setSelectedPeriod("");
             addSubjectModalOnClose();
-
+            curriculumDrawerOnClose();
+            toast({
+                title: 'Matéria adicionada com sucesso.',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
         } catch (error) {
             toast({
                 title: 'Erro ao adicionar matéria.',
@@ -111,6 +120,18 @@ function AddSubjectModal() {
                             onChange={e => setCode(e.target.value.toUpperCase())}
                             maxLength={5}
                         />
+                    </FormControl>
+                    <FormControl mb={3}>
+                        <FormLabel>Tipo de matéria</FormLabel>
+                        <Select
+                            value={subjectType}
+                            onChange={e => setSubjectType(e.target.value)}
+                        >
+                            <option value={''}>Selecione o tipo</option>
+                            <option value={'false'}>Obrigatória</option>
+                            <option value={'true'}>Optativa</option>
+
+                        </Select>
                     </FormControl>
                     <FormControl mb={3}>
                         <FormLabel>Período</FormLabel>

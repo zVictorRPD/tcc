@@ -12,7 +12,7 @@ interface ISubject {
     name: string;
     period: string;
     time: string;
-    type?: string;
+    isOptional: boolean;
     status?: string;
     note?: string;
     links?: ILink[];
@@ -47,8 +47,6 @@ interface IAddSubjectModalTimetable {
     defaultTimeType: boolean;
     times: string[];
 }
-
-
 
 /* GRADE CURRICULAR */
 interface ICourse {
@@ -85,8 +83,6 @@ interface ISubjects {
 interface ISelectedSubject extends ISubject {
     periodId: string;
 }
-
-
 
 interface ICurriculumContext {
     userId: number;
