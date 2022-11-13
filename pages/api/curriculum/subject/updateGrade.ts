@@ -8,7 +8,6 @@ export default async function handler(
 
     if (req.method === "POST") {
         const { subjectId, grade } = req.body;
-        console.log(grade);
         
         if (typeof subjectId !== "string" || isNaN(parseInt(subjectId as string)) || typeof grade === "string") return res.status(400).json({ error: "Bad request" });
 

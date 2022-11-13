@@ -160,3 +160,4 @@ export const timeTableTranslation: ITimeTableTranslation = {
 }
 
 export const weekDays = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+

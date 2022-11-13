@@ -8,7 +8,6 @@ export default async function handler(
 
     if (req.method === "POST") {
         const { userId, courseCode } = req.body;
-        console.log(userId, courseCode);
         
         if (typeof userId !== "number" || typeof courseCode !== "string" ) return res.status(400).json({ error: "Bad request" });
 

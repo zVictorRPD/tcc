@@ -1,19 +1,25 @@
 import { Box, GridItem } from '@chakra-ui/react'
 import React, { useContext } from 'react'
+import { toCapitalize } from '../../../functions/toCapitalize';
 import { TimetableContext } from './TimetableContext';
 
 interface SubjectCardProps {
-    subject: ISubject | '',
+    subject: string | {
+        id: string,
+        bgColor: string;
+    },
 }
 
 function SubjectCard(props: SubjectCardProps) {
     const { subject } = props;
-    const { addSubjectModalOnOpen } = useContext(TimetableContext);
+    const { addSubjectModalOnOpen, subjects } = useContext(TimetableContext);
+
     return (
         <GridItem w='100%'>
             <Box
                 p={{ base: '.5rem' }}
-                bg="white"
+                bg={typeof subject !== 'string' ? subject.bgColor : 'white'}
+                color={typeof subject !== 'string' ? 'white' : 'gray.800'}
                 borderRadius={'12px'}
                 borderWidth="1px"
                 borderColor={'gray.300'}
@@ -28,7 +34,7 @@ function SubjectCard(props: SubjectCardProps) {
                 }}
                 onClick={addSubjectModalOnOpen}
             >
-                {subject != '' ? subject.name : 'Horário vago'}
+                {typeof subject !== 'string' ? toCapitalize(subjects[subject.id].name) : 'Horário vago'}
             </Box>
         </GridItem>
     )

@@ -50,7 +50,6 @@ export default async function handler(
 		const response = await createUser(name, email, password, avatar);
 
 		if (response.code === 409) return res.status(200).json(response);
-		console.log(name);
 
 		const msgToToken = email + name;
 

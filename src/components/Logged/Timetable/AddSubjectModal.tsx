@@ -1,18 +1,20 @@
-import { Button, Checkbox, FormControl, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Tooltip, useToast } from '@chakra-ui/react'
-import Link from 'next/link';
+import { Button, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Tooltip, useToast } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa';
 import { TagsInput } from 'react-tag-input-component';
 import { TimetableContext } from './TimetableContext';
+import { weekDays as weekdaysTranslation } from './timeTableObject';
 import styles from './style.module.scss';
+import { toCapitalize } from '../../../functions/toCapitalize';
 
 function AddSubjectModal() {
-    const { addSubjectModalIsOpen, addSubjectModalOnClose } = useContext(TimetableContext);
+    const { addSubjectModalIsOpen, addSubjectModalOnClose, subjects, periods, setTimetableSubjects, timetableSubjects } = useContext(TimetableContext);
     const toast = useToast()
     const [addSubjectModalData, setAddSubjectModalData] = React.useState<IAddSubjectModalTimetable>(
         {
             period: '',
             subject: '',
+            color: '',
             defaultTimeType: true,
             times: [],
         }
@@ -27,6 +29,15 @@ function AddSubjectModal() {
             duration: 3000,
             isClosable: true,
         });
+    }
+
+    const getSubjectsOptions = () => {
+        if (Object.keys(periods[addSubjectModalData.period].subjectIds).length > 0) {
+            return periods[addSubjectModalData.period].subjectIds.map((subjectId, index) => <option key={index} value={subjectId}>{toCapitalize(subjects[subjectId].name)}</option>)
+        }
+        return (
+            <option value="">Nenhuma matéria disponível</option>
+        )
     }
 
     const validateTime = (input: string) => {
@@ -85,8 +96,8 @@ function AddSubjectModal() {
 
         //check if the days are between 1 and 7
         for (let i = 0; i < weekdays.length; i++) {
-            if (parseInt(weekdays[i]) < 1 || parseInt(weekdays[i]) > 7) {
-                createToast('Os dias da semana devem conter apenas números entre 1 e 7');
+            if (parseInt(weekdays[i]) < 2 || parseInt(weekdays[i]) > 7) {
+                createToast('Os dias da semana devem conter apenas números entre 2 e 7');
                 return false;
             }
         }
@@ -131,16 +142,25 @@ function AddSubjectModal() {
         const finalTime = `${orderedWeekdays}${period}${orderedHours}`;
 
         //check if the time is already in the list
-        
+        try {
+            let newTimetableSubjects = timetableSubjects;
+            orderedWeekdays.split('').forEach((day, index) => {
+                orderedHours.split('').forEach((hour, index) => {
+                    if (timetableSubjects[day][period.toLowerCase()][hour] !== '') throw new Error();
+                    newTimetableSubjects[day][period.toLowerCase()][hour] = {
+                        id: addSubjectModalData.subject,
+                        bgColor: addSubjectModalData.color,
+                    };
+                });
+            });
+            setAddSubjectModalData({ ...addSubjectModalData, times: [...addSubjectModalData.times, finalTime] });
+            setTimetableSubjects(newTimetableSubjects);
+            return true;
+        } catch (err) {
+            createToast("Já existe uma matéria nesse horário");
+            return false;
+        }
 
-        // if(timeAlreadyInList.length > 0){
-        //     createToast('O horário já está na lista');
-        //     return false;
-        // }
-
-        setAddSubjectModalData({ ...addSubjectModalData, times: [...addSubjectModalData.times, finalTime] });
-
-        return true;
     }
 
     const removeTime = (time: string) => {
@@ -156,11 +176,21 @@ function AddSubjectModal() {
                     const weekdays = time.split(`${period}`)[0];
                     const hours = time.split(`${period}`)[1];
 
-                    let weekdaysTranslated = '';
+                    let text = '';
+
+                    weekdays.split('').forEach((day, index) => {
+                        text += `${weekdaysTranslation[parseInt(day) - 2]}${index < weekdays.length - 1 ? ', ' : '.'}`;
+                    });
+                    const lastIndex = text.lastIndexOf(',');
+                    const replacement = ' e';
+                    text =
+                        text.substring(0, lastIndex) +
+                        replacement +
+                        text.substring(lastIndex + 1);
 
                     return (
                         <div key={index}>
-                            <p>{time.toUpperCase()} = {weekdaysTranslated}</p>
+                            <p>{time.toUpperCase()} = {text}</p>
                         </div>
                     )
                 })}
@@ -168,7 +198,6 @@ function AddSubjectModal() {
         )
 
     }
-    console.log(addSubjectModalData.times);
 
 
     return (
@@ -183,16 +212,50 @@ function AddSubjectModal() {
                         <FormLabel>Período</FormLabel>
                         <Select onChange={e => setAddSubjectModalData({ ...addSubjectModalData, period: e.target.value })}>
                             <option value={''}>Selecione o período</option>
-                            <option value={'m_1'}>Valor 1</option>
-                            <option value={'m_2'}>Valor 2</option>
+                            {Object.keys(periods).length > 0 && Object.keys(periods).map((id, index) => {
+                                return (
+                                    <option key={index} value={id}>{periods[id].name}</option>
+                                )
+                            })}
                         </Select>
                     </FormControl>
                     <FormControl mb={3}>
                         <FormLabel>Matéria</FormLabel>
-                        <Select onChange={e => setAddSubjectModalData({ ...addSubjectModalData, subject: e.target.value })}>
+                        <Select
+                            onChange={e => setAddSubjectModalData({ ...addSubjectModalData, subject: e.target.value })}
+                            disabled={addSubjectModalData.period == ''}
+                        >
                             <option value={''}>Selecione a matéria</option>
-                            <option value={'s_1'}>Valor 1</option>
-                            <option value={'s_2'}>Valor 2</option>
+                            {addSubjectModalData.period !== '' && getSubjectsOptions()}
+                        </Select>
+                    </FormControl>
+
+                    <FormControl mb={3}>
+                        <FormLabel
+                            display={'flex'}
+                            alignItems={'center'}
+                        >
+                            Cor da matéria
+                            <Tooltip label='A cor de fundo que sua matéria terá na grade' placement='top' hasArrow>
+                                <span style={{ marginLeft: '.375rem' }}>
+                                    <FaRegQuestionCircle />
+                                </span>
+                            </Tooltip>
+                        </FormLabel>
+                        <Select
+                            onChange={e => setAddSubjectModalData({ ...addSubjectModalData, color: e.target.value })}
+                            disabled={addSubjectModalData.subject == ''}
+                        >
+                            <option value="blackAlpha.900">Preto</option>
+                            <option value="red.500">Vermelho</option>
+                            <option value="red.700">Vinho</option>
+                            <option value="orange.500">Laranja</option>
+                            <option value="green.500">Verde</option>
+                            <option value="blue.500">Azul</option>
+                            <option value="blue.800">Azul escuro</option>
+                            <option value="cyan.600">Ciano</option>
+                            <option value="purple.500">Roxo</option>
+                            <option value="pink.500">Rosa</option>
                         </Select>
                     </FormControl>
 
@@ -222,7 +285,7 @@ function AddSubjectModal() {
                             beforeAddValidate={(tag: string) => validateTime(tag)}
                             onRemoved={(tag: string) => removeTime(tag)}
                             // onChange={value => setAddSubjectModalData({ ...addSubjectModalData, times: value })}
-                            placeHolder="1234567T12345"
+                            placeHolder="234567T12345"
                         />
                     </FormControl>
                     {addSubjectModalData.times.length > 0 && createTranslatedTime(addSubjectModalData.times)}

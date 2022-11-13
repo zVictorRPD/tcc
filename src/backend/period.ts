@@ -83,7 +83,6 @@ export async function deletePeriod(userId: number, periodId: number) {
     }).catch((err) => {
         return err;
     });
-    console.log(periodDeleted);
 
     const periodOrder = await prisma.curriculum.findUnique({
         where: {

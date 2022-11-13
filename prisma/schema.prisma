@@ -22,6 +22,7 @@ model User {
   password          String
   avatar            String              @db.LongText
   hasCurriculum     Boolean             @default(false)
+  timetable         String?             @db.LongText
   recoverPassword   RecoverPassword[]
   calendarEvents    CalendarEvents[]
   curriculum        Curriculum[]
@@ -119,26 +120,26 @@ model CurriculumPeriods {
 }
 
 model UserSubjects {
-  id                Int                 @id @default(autoincrement())
-  subject           Subject             @relation(fields: [subjectCode], references: [code])
-  subjectCode       String
-  status            String              @default("todo")
-  isOptional        Boolean             @default(false)
-  note              String?             @db.LongText
-  links             String?             @db.LongText
-  grade             Float?
-  teacher           Teacher?            @relation(fields: [teacherId], references: [id])
-  teacherId         Int?
-  period            CurriculumPeriods   @relation(fields: [periodId], references: [id])
-  periodId          Int
-  user              User                @relation(fields: [userId], references: [id])
-  userId            Int
+  id          Int               @id @default(autoincrement())
+  subject     Subject           @relation(fields: [subjectCode], references: [code])
+  subjectCode String
+  status      String            @default("todo")
+  isOptional  Boolean           @default(false)
+  note        String?           @db.LongText
+  links       String?           @db.LongText
+  grade       Float?
+  teacher     Teacher?          @relation(fields: [teacherId], references: [id])
+  teacherId   Int?
+  period      CurriculumPeriods @relation(fields: [periodId], references: [id])
+  periodId    Int
+  user        User              @relation(fields: [userId], references: [id])
+  userId      Int
 }
 
 model UserComplementary {
-  id             Int           @id @default(autoincrement())
-  name           String
-  time           Int
-  user           User          @relation(fields: [userId], references: [id])
-  userId         Int
+  id     Int    @id @default(autoincrement())
+  name   String
+  time   Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
 }

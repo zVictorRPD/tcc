@@ -12,6 +12,7 @@ interface ISubjectGridProps {
 function SubjectGrid(props: ISubjectGridProps) {
     const { type, index } = props;
     const { timetableSubjects } = useContext(TimetableContext);  
+
     
     const shiftSelector = (type: string, day: any, index: number) => {
         

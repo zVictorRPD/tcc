@@ -1,7 +1,10 @@
 interface ITimeTable {
     [key: string]: {
         [key: string]: {
-            [key: string]: ISubject | '';
+            [key: string]: string | {
+                id: string;
+                bgColor: string;
+            };
         }
     }
 }
@@ -34,14 +37,23 @@ interface ITimeTableTranslation {
 }
 
 interface ITimetableContext {
+    userId: number;
+    hasCurriculum: boolean;
     timetableSubjects: ITimeTable;
+    periods: IPeriods;
+    subjects: ISubjects;
     setTimetableSubjects: React.Dispatch<React.SetStateAction<ITimeTable>>;
+    setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
+    setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
     addSubjectModalIsOpen: boolean;
     addSubjectModalOnOpen: () => void;
     addSubjectModalOnClose: () => void;
+    onLoad: boolean;
+    setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface IAddSubjectModalTimetable {
+    color: string;
     period: string;
     subject: string;
     defaultTimeType: boolean;

@@ -32,12 +32,6 @@ export default async function handler(
 
     const msgToUnToken = response.data.email + response.data.name;
 
-    console.log(msgToUnToken);
-
-    console.log(await bcrypt.compare(msgToUnToken, tokenString));
-
-    console.log(tokenString);
-
     if (!(await bcrypt.compare(msgToUnToken, tokenString))) {
       res.redirect("/login?message=invalidlink");
     }

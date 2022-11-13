@@ -10,8 +10,6 @@ export default async function handler(
   if (req.method === "POST") {
     const { email }: { email: string } = req.body;
 
-    console.log(req.body);
-
     if (email === "") {
       return res.status(200).json({
         code: 400,

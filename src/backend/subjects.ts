@@ -25,7 +25,6 @@ export async function getSubject(page: number, code: string, name: string, time:
             }
         }
     }
-    console.log(filter);
     
     const subjects = await prisma.subject.findMany({
         orderBy: {
