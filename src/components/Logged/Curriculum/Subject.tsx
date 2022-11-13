@@ -15,21 +15,18 @@ const backgroundColors: any = {
     'todo': 'gray.500',
     'doing': 'blue.500',
     'done': 'green.500',
-    'failed': 'red.500'
 }
 
 const translateStatus: any = {
     'todo': 'Pendente',
     'doing': 'Cursando',
     'done': 'Aprovado',
-    'failed': 'Reprovado'
 }
 
 const buttonStatus: any = {
     'todo': 'gray-500',
     'doing': 'blue-500',
     'done': 'green-500',
-    'failed': 'red-500'
 }
 
 function Subject(props: ISubjectProps) {
@@ -41,7 +38,7 @@ function Subject(props: ISubjectProps) {
         const status = subjectData.status;
         if (!status || status === '') return;
 
-        const newStatus = status === 'todo' ? 'doing' : status === 'doing' ? 'done' : status === 'done' ? 'failed' : 'todo';
+        const newStatus = status === 'todo' ? 'doing' : status === 'doing' ? 'done' : 'todo';
 
         setSubjects({
             ...subjects,
