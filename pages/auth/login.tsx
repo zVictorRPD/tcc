@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import type { NextPage } from "next";
 import Head from "next/head";
-import VLibras from "@djpfs/react-vlibras";
 import AuthContainer from "../../src/components/Auth/AuthContainer";
 import ConfirmationModal from "../../src/components/Auth/Signup/ConfirmationModal";
 import {
@@ -13,7 +12,6 @@ import {
 import {
     Box,
     Button,
-    Checkbox,
     FormControl,
     FormErrorMessage,
     FormLabel,

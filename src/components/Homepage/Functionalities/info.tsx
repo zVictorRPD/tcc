@@ -1,6 +1,5 @@
 import { IFunctionalities } from "../../../interfaces/homepage/funcitonalites.interface";
 import {AiFillAppstore} from "react-icons/ai";
-import { ReactNode } from "react";
 
 export const funcitonalites:IFunctionalities[] = [
     {

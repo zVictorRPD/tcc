@@ -1,6 +1,5 @@
-import { TableContainer, Table, Tbody, Tr, Th, Td, Tooltip, Text, Box, Thead, Switch, Button, Flex, useToast } from '@chakra-ui/react'
-import React, { ChangeEvent, useContext, useState } from 'react'
-import { FaRegQuestionCircle } from 'react-icons/fa'
+import { TableContainer, Table, Tbody, Tr, Th, Td, Text, Box, Thead, Switch, Button, Flex, useToast } from '@chakra-ui/react'
+import React, { useContext, useState } from 'react'
 import { RiArrowLeftRightLine } from 'react-icons/ri';
 import { periodTotalTime } from '../../../../functions/curriculum';
 import { api } from '../../../../services/api';

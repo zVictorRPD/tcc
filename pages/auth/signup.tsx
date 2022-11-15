@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
-import VLibras from "@djpfs/react-vlibras";
 import Head from "next/head";
 import {
     Avatar,
     Box,
     Button,
-    Checkbox,
     FormControl,
     FormErrorMessage,
     FormLabel,
@@ -24,7 +22,6 @@ import { FiEdit2 } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import AuthContainer from "../../src/components/Auth/AuthContainer";
 import {
-    AiOutlineClose,
     AiOutlineEye,
     AiOutlineEyeInvisible,
 } from "react-icons/ai";

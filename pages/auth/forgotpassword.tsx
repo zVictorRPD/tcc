@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import Head from "next/head";
-import VLibras from "@djpfs/react-vlibras";
 import AuthContainer from "../../src/components/Auth/AuthContainer";
 import { Box, Button, HStack, Text, useToast } from "@chakra-ui/react";
 import FirstStep from "../../src/components/Auth/ForgotPassword/FirstStep";

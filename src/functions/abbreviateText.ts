@@ -1,4 +1,3 @@
-import { toCapitalize } from "./toCapitalize";
 
 const abreviations:any = {
     "BACHARELADO": "Bach.",

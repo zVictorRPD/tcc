@@ -1,5 +1,5 @@
 import { Box, Button, Text, Tooltip } from '@chakra-ui/react'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd';
 import { toCapitalize } from '../../../functions/toCapitalize';
 import { api } from '../../../services/api';

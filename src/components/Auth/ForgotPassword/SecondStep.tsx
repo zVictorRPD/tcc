@@ -3,7 +3,6 @@ import {
     FormControl,
     FormErrorMessage,
     FormLabel,
-    Input,
     NumberInput,
     NumberInputField,
 } from "@chakra-ui/react";

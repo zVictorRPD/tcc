@@ -1,14 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import NextAuth, { NextAuthOptions } from "next-auth";
-import { createUser, updatePasswordId, updateUser } from "../../../src/backend/users";
+import { updatePasswordId, updateUser } from "../../../src/backend/users";
 import {
     validateName,
-    validateEmail,
     validatePassword,
 } from "../../../src/functions/validation";
-import bcrypt from "bcrypt";
-import { sendEmailFunction } from "../../../src/backend/nodemailer";
 
 export default async function handler(
     req: NextApiRequest,

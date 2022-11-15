@@ -6,8 +6,7 @@ import {
     GridItem,
     Heading,
     Hide,
-    HStack,
-    Input,
+    Image,
     Stack,
     Text,
 } from "@chakra-ui/react";
@@ -69,7 +68,7 @@ export default function Apresentation() {
                 </GridItem>
                 <Hide below="md">
                     <GridItem>
-                        <img src="/assets/images/homepage/svgs/studying.svg" />
+                        <Image src="/assets/images/homepage/svgs/studying.svg" alt="Aluno estudando" />
                     </GridItem>
                 </Hide>
             </Grid>

@@ -1,10 +1,7 @@
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Tooltip, useToast } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa';
-import { TagsInput } from 'react-tag-input-component';
 import { TimetableContext } from './TimetableContext';
-import { weekDays as weekdaysTranslation } from './timeTableObject';
-import styles from './style.module.scss';
 import { toCapitalize } from '../../../functions/toCapitalize';
 import { api } from '../../../services/api';
 

@@ -4,19 +4,12 @@ import styles from "./style.module.scss"
 import {
     Box,
     Button,
-    Editable,
-    EditableInput,
-    EditablePreview,
     Flex,
     FormControl,
     FormLabel,
     HStack,
     Image,
     Input,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -29,12 +22,11 @@ import {
     PopoverContent,
     PopoverHeader,
     PopoverTrigger,
-    Select,
     Text,
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
-import { FaChevronLeft, FaChevronRight, FaChevronDown, FaFilter } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaFilter } from "react-icons/fa";
 import { api } from "../../../src/services/api";
 import { toCapitalize } from "../../../src/functions/toCapitalize";
 import { validateSubjectCode } from "../../../src/functions/validation";

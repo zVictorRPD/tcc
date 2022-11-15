@@ -1,9 +1,8 @@
-import { Box, Button, Flex, HStack, Image, Text, useToast } from '@chakra-ui/react';
-import React, { useContext, useRef } from 'react'
+import { Box, Button, Flex, HStack, Image, useToast } from '@chakra-ui/react';
+import React, { useContext } from 'react'
 import { CurriculumContext } from './curriculumContext';
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd';
 import PeriodColumn from './PeriodColumn';
-import { FaPlus } from 'react-icons/fa';
 import AddPeriodColumn from './AddPeriodColumn';
 import styles from './style.module.scss';
 import { api } from '../../../services/api';

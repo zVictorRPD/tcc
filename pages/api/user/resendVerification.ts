@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getUserInfo, verifyUserEmail } from "../../../src/backend/users";
+import { getUserInfo } from "../../../src/backend/users";
 import bcrypt from "bcrypt";
 import { sendEmailFunction } from "../../../src/backend/nodemailer";
 export default async function handler(

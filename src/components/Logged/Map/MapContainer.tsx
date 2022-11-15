@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { GoogleMap, LoadScriptNext, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, LoadScriptNext } from '@react-google-maps/api';
 import process from 'process';
 import GoogleMapMarkers from './GoogleMapMarkers';
 import { locais } from './locais'

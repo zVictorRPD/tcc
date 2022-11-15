@@ -1,7 +1,6 @@
-import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Editable, EditableInput, EditablePreview, Flex, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputLeftAddon, InputRightAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Textarea, Tooltip, useDisclosure, useToast } from '@chakra-ui/react'
-import { response } from 'express';
+import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormControl, FormLabel, HStack, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Tooltip, useToast } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
-import { FaBuilding, FaEdit, FaEnvelope, FaHouseUser, FaPlus, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaBuilding, FaEdit, FaEnvelope, FaPlus, FaRegQuestionCircle } from 'react-icons/fa';
 import { updateSubjectColor } from '../../../../functions/timetable';
 import { toCapitalize } from '../../../../functions/toCapitalize';
 import { api } from '../../../../services/api';

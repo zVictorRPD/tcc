@@ -14,7 +14,6 @@ import {
     MenuDivider,
     MenuItem,
     MenuList,
-    Image,
     Popover,
     PopoverTrigger,
     PopoverContent,

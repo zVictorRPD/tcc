@@ -1,4 +1,4 @@
-import { Box, Image, Stack, Text } from '@chakra-ui/react'
+import { Box, Image, Stack } from '@chakra-ui/react'
 import React from 'react'
 
 export default function LoadingPage() {

@@ -6,7 +6,6 @@ import Footer from "../src/components/Homepage/Footer";
 import Functionalities from "../src/components/Homepage/Functionalities/Index";
 import Header from "../src/components/Homepage/Header";
 import SignupShortcut from "../src/components/Homepage/SignupShortcut";
-import VLibras from "@djpfs/react-vlibras";
 const Home: NextPage = () => {
     return (
         <>

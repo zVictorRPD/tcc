@@ -6,7 +6,6 @@ import {
     Icon,
     useColorModeValue,
     Link,
-    Text,
     BoxProps,
     FlexProps,
     Image,
