@@ -73,7 +73,13 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 />
             </Flex>
             {LinkItems.map((link) => (
-                <NavItem key={link.name} onClick={() => router.push(link.href)} icon={link.icon}>
+                <NavItem
+                    key={link.name}
+                    onClick={() => {
+                        router.push(link.href)
+                        onClose();
+                    }}
+                    icon={link.icon}>
                     {link.name}
                 </NavItem>
             ))}
