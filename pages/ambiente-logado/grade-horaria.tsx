@@ -6,6 +6,7 @@ import SubjectGrid from "../../src/components/Logged/Timetable/SubjectGrid";
 import WeekdaysGrid from "../../src/components/Logged/Timetable/WeekdaysGrid";
 import { TimetableProvider } from "../../src/components/Logged/Timetable/TimetableContext";
 import AddSubjectModal from "../../src/components/Logged/Timetable/AddSubjectModal";
+import SubjectModal from "../../src/components/Logged/Timetable/SubjectModal/SubjectModal";
 
 const Timetable: NextPage = () => {
     return (
@@ -17,6 +18,7 @@ const Timetable: NextPage = () => {
                 })}
             </Stack>
             <AddSubjectModal />
+            <SubjectModal />
         </TimetableProvider>
     );
 };

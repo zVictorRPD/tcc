@@ -15,11 +15,18 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
     const [hasCurriculum, setHasCurriculum] = useState(false);
     const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
     const [subjects, setSubjects] = useState<ISubjects>({} as ISubjects);
+    const [selectedSubject, setSelectedSubject] = useState<ISubject>({} as ISelectedSubject);
 
     const {
         isOpen: addSubjectModalIsOpen,
         onOpen: addSubjectModalOnOpen,
         onClose: addSubjectModalOnClose
+    } = useDisclosure();
+    
+    const {
+        isOpen: subjectModalIsOpen,
+        onOpen: subjectModalOnOpen,
+        onClose: subjectModalOnClose
     } = useDisclosure();
 
     const timetableContextData = {
@@ -32,10 +39,15 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
         setPeriods,
         subjects,
         setSubjects,
+        selectedSubject, 
+        setSelectedSubject,
         setTimetableSubjects,
         addSubjectModalIsOpen,
         addSubjectModalOnOpen,
         addSubjectModalOnClose,
+        subjectModalIsOpen,
+        subjectModalOnOpen,
+        subjectModalOnClose
     };
 
     const getTimetable = async (userId: number) => {

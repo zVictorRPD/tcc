@@ -12,8 +12,7 @@ interface SubjectCardProps {
 
 function SubjectCard(props: SubjectCardProps) {
     const { subject } = props;
-    const { addSubjectModalOnOpen, subjects } = useContext(TimetableContext);
-
+    const { addSubjectModalOnOpen, setSelectedSubject, subjects, subjectModalOnOpen } = useContext(TimetableContext);
     return (
         <GridItem w='100%'>
             <Box
@@ -32,7 +31,14 @@ function SubjectCard(props: SubjectCardProps) {
                     filter: 'brightness(.95)',
                     transition: 'all .2s ease-in-out',
                 }}
-                onClick={addSubjectModalOnOpen}
+                onClick={() => {
+                    if (typeof subject !== 'string') {
+                        setSelectedSubject(subjects[subject.id]);
+                        subjectModalOnOpen();
+                    } else {
+                        addSubjectModalOnOpen();
+                    }
+                }}
             >
                 {typeof subject !== 'string' ? toCapitalize(subjects[subject.id].name) : 'Horário vago'}
             </Box>
