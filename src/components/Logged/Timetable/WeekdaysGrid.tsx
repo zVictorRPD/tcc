@@ -14,7 +14,11 @@ function WeekdaysGrid() {
             {
                 weekDays.map((day, index) => {
                     return (
-                        <GridItem key={index} w='100%'>
+                        <GridItem
+                            key={index}
+                            maxW='100%'
+                            minW={'240px'}
+                        >
                             <VStack justifyContent={'center'} h={'100%'}>
                                 <Text fontWeight={600}>{day}</Text>
                             </VStack>

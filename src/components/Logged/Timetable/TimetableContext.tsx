@@ -90,7 +90,10 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
                 position: "top-right",
             });
         } finally {
-            setOnLoad(false);
+            setTimeout(() => {
+                setOnLoad(false);
+            }, 200);
+            
         }
     };
 
