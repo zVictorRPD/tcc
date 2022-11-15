@@ -27,6 +27,7 @@ function SubjectCard(props: SubjectCardProps) {
                 justifyContent={'center'}
                 alignItems={'center'}
                 cursor={'pointer'}
+                textAlign={'center'}
                 _hover={{
                     filter: 'brightness(.95)',
                     transition: 'all .2s ease-in-out',

@@ -207,7 +207,7 @@ function AddSubjectModal() {
             return;
         }
         try {
-            const response = await api.post('/timetable/addTimetable', {
+            const response = await api.post('/timetable/updateTimetable', {
                 userId,
                 timetable: timetableSubjects,
             });

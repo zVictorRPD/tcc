@@ -12,7 +12,7 @@ export async function getTimetable(userId: number) {
     return timetable;
 }
 
-export async function addTimetable(userId: number, timetable: ITimeTable) {
+export async function updateTimetable(userId: number, timetable: ITimeTable) {
     const response = await prisma.user.update({
         where: {
             id: userId

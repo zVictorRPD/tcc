@@ -1,13 +1,14 @@
 import { Box, Button, ButtonGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useDisclosure, useToast } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa';
+import { removeSubject } from '../../../../functions/timetable';
 import { api } from '../../../../services/api';
 import { TimetableContext } from '../TimetableContext';
 import Informations from './Informations';
 import Notes from './Notes';
 
 function SubjectModal() {
-    const { subjectModalIsOpen, subjectModalOnClose, selectedSubject, subjects, setSubjects } = useContext(TimetableContext);
+    const { subjectModalIsOpen, subjectModalOnClose, selectedSubject, setTimetableSubjects, timetableSubjects, userId } = useContext(TimetableContext);
     const [onLoad, setOnLoad] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -17,6 +18,38 @@ function SubjectModal() {
     } = useDisclosure();
     const toast = useToast();
 
+    const removeSubjectFromTimetable = async () => {
+        setOnLoad(true);
+        const newTimetable = removeSubject(selectedSubject.id, timetableSubjects);
+        try {
+            await api.post('timetable/updateTimetable', {
+                userId,
+                timetable: newTimetable
+            });
+            toast({
+                title: 'Disciplina removida',
+                description: 'Disciplina removida com sucesso',
+                status: 'success',
+                position: 'top-right',
+                duration: 3000,
+                isClosable: true
+            });
+            setTimetableSubjects(newTimetable);
+            popoverOnClose();
+        } catch (error) {
+            toast({
+                title: 'Erro ao remover matéria',
+                description: 'Tente novamente mais tarde',
+                status: 'error',
+                position: 'top-right',
+                duration: 3000,
+                isClosable: true
+            })
+        } finally {
+            setOnLoad(false);
+            subjectModalOnClose();
+        }
+    };
 
     return (
         <Modal
@@ -59,14 +92,14 @@ function SubjectModal() {
                         onClose={popoverOnClose}
                     >
                         <PopoverTrigger>
-                            <Button colorScheme='red' mr={3}>Deletar</Button>
+                            <Button colorScheme='red' mr={3}>Remover</Button>
                         </PopoverTrigger>
                         <PopoverContent>
                             <PopoverHeader fontWeight='semibold'>Confirmação</PopoverHeader>
                             <PopoverArrow />
                             <PopoverCloseButton />
                             <PopoverBody>
-                                Tem certeza que deseja deletar a matéria <Text display={'inline'} fontWeight={600}>{selectedSubject.name}?</Text> Essa ação não pode ser desfeita.
+                                Tem certeza que deseja remover a matéria <Text display={'inline'} fontWeight={600}>{selectedSubject.name}</Text> da sua grade horária?
                             </PopoverBody>
                             <PopoverFooter display='flex' justifyContent='flex-end'>
                                 <ButtonGroup size='sm'>
@@ -79,7 +112,7 @@ function SubjectModal() {
                                     <Button
                                         colorScheme='red'
                                         isLoading={onLoad}
-                                        
+                                        onClick={removeSubjectFromTimetable}
                                     >
                                         Remover
                                     </Button>
