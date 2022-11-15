@@ -51,7 +51,7 @@ export default async function handler(
             periods: periodsData,
             subjects: subjectsData,
             hasCurriculum,
-            timetable: timetable !== null ? timetable.timetable : null
+            timetable: timetable !== null && timetable.timetable ? JSON.parse(timetable.timetable) : null
         });
 
     }

@@ -12,3 +12,15 @@ export async function getTimetable(userId: number) {
     return timetable;
 }
 
+export async function addTimetable(userId: number, timetable: ITimeTable) {
+    const response = await prisma.user.update({
+        where: {
+            id: userId
+        },
+        data: {
+            timetable: JSON.stringify(timetable)
+        }
+    });
+    return { success: true };
+}
+

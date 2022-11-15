@@ -1,24 +1,25 @@
-import { Button, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Tooltip, useToast } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Tooltip, useToast } from '@chakra-ui/react'
+import React, { useContext, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa';
 import { TagsInput } from 'react-tag-input-component';
 import { TimetableContext } from './TimetableContext';
 import { weekDays as weekdaysTranslation } from './timeTableObject';
 import styles from './style.module.scss';
 import { toCapitalize } from '../../../functions/toCapitalize';
+import { api } from '../../../services/api';
 
 function AddSubjectModal() {
-    const { addSubjectModalIsOpen, addSubjectModalOnClose, subjects, periods, setTimetableSubjects, timetableSubjects } = useContext(TimetableContext);
-    const toast = useToast()
-    const [addSubjectModalData, setAddSubjectModalData] = React.useState<IAddSubjectModalTimetable>(
+    const toast = useToast();
+    const { addSubjectModalIsOpen, addSubjectModalOnClose, subjects, periods, setTimetableSubjects, timetableSubjects, userId } = useContext(TimetableContext);
+    const [addSubjectModalData, setAddSubjectModalData] = useState<IAddSubjectModalTimetable>(
         {
             period: '',
             subject: '',
-            color: '',
-            defaultTimeType: true,
-            times: [],
+            color: 'blackAlpha.900',
+            time: '',
         }
     );
+    const [onLoad, setOnLoad] = useState(false);
 
     const createToast = (msg: string) => {
         toast({
@@ -30,7 +31,7 @@ function AddSubjectModal() {
             isClosable: true,
         });
     }
-
+    
     const getSubjectsOptions = () => {
         if (Object.keys(periods[addSubjectModalData.period].subjectIds).length > 0) {
             return periods[addSubjectModalData.period].subjectIds.map((subjectId, index) => <option key={index} value={subjectId}>{toCapitalize(subjects[subjectId].name)}</option>)
@@ -40,8 +41,8 @@ function AddSubjectModal() {
         )
     }
 
-    const validateTime = (input: string) => {
-        const time = input.toUpperCase();
+    const validateTime = () => {
+        const time = addSubjectModalData.time.toUpperCase();
 
         //check how many letter are in the time
         const letters = time.match(/[A-Z]/g) || [];
@@ -153,8 +154,8 @@ function AddSubjectModal() {
                     };
                 });
             });
-            setAddSubjectModalData({ ...addSubjectModalData, times: [...addSubjectModalData.times, finalTime] });
             setTimetableSubjects(newTimetableSubjects);
+            // setAllTimes([...allTimes, finalTime]);
             return true;
         } catch (err) {
             createToast("Já existe uma matéria nesse horário");
@@ -163,40 +164,75 @@ function AddSubjectModal() {
 
     }
 
-    const removeTime = (time: string) => {
-        const times = addSubjectModalData.times.filter(t => t != time.toUpperCase());
-        setAddSubjectModalData({ ...addSubjectModalData, times: times });
-    }
+    // const createTranslatedTime = (times: string[]) => {
+    //     return (
+    //         <>
+    //             {times.map((time, index) => {
+    //                 const period = time.includes('M') ? 'M' : time.includes('T') ? 'T' : 'N';
+    //                 const weekdays = time.split(`${period}`)[0];
+    //                 const hours = time.split(`${period}`)[1];
 
-    const createTranslatedTime = (times: string[]) => {
-        return (
-            <>
-                {times.map((time, index) => {
-                    const period = time.includes('M') ? 'M' : time.includes('T') ? 'T' : 'N';
-                    const weekdays = time.split(`${period}`)[0];
-                    const hours = time.split(`${period}`)[1];
+    //                 let text = '';
 
-                    let text = '';
+    //                 weekdays.split('').forEach((day, index) => {
+    //                     text += `${weekdaysTranslation[parseInt(day) - 2]}${index < weekdays.length - 1 ? ', ' : '.'}`;
+    //                 });
+    //                 const lastIndex = text.lastIndexOf(',');
+    //                 const replacement = ' e';
+    //                 text =
+    //                     text.substring(0, lastIndex) +
+    //                     replacement +
+    //                     text.substring(lastIndex + 1);
 
-                    weekdays.split('').forEach((day, index) => {
-                        text += `${weekdaysTranslation[parseInt(day) - 2]}${index < weekdays.length - 1 ? ', ' : '.'}`;
-                    });
-                    const lastIndex = text.lastIndexOf(',');
-                    const replacement = ' e';
-                    text =
-                        text.substring(0, lastIndex) +
-                        replacement +
-                        text.substring(lastIndex + 1);
+    //                 return (
+    //                     <div key={index}>
+    //                         <p>{time.toUpperCase()} = {text}</p>
+    //                     </div>
+    //                 )
+    //             })}
+    //         </>
+    //     )
 
-                    return (
-                        <div key={index}>
-                            <p>{time.toUpperCase()} = {text}</p>
-                        </div>
-                    )
-                })}
-            </>
-        )
+    // }
 
+    const handleSubmit = async () => {
+        setOnLoad(true);
+        if (addSubjectModalData.period === "" || addSubjectModalData.subject === "" || addSubjectModalData.color === "") {
+            createToast("Preencha todos os campos");
+            setOnLoad(false);
+            return;
+        }
+        if (!validateTime()) {
+            setOnLoad(false);
+            return;
+        }
+        try {
+            const response = await api.post('/timetable/addTimetable', {
+                userId,
+                timetable: timetableSubjects,
+            });
+            if (!response.data.success) throw new Error();
+            toast({
+                title: "Horário cadastrado com sucesso",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            });
+            setOnLoad(false);
+            setAddSubjectModalData({
+                period: "",
+                subject: "",
+                color: "blackAlpha.900",
+                time: "",
+            });
+            addSubjectModalOnClose();
+        } catch (err) {
+            
+            createToast("Erro ao adicionar horário");
+        } finally {
+            setOnLoad(false);
+        }
     }
 
 
@@ -223,7 +259,7 @@ function AddSubjectModal() {
                         <FormLabel>Matéria</FormLabel>
                         <Select
                             onChange={e => setAddSubjectModalData({ ...addSubjectModalData, subject: e.target.value })}
-                            disabled={addSubjectModalData.period == ''}
+                            disabled={addSubjectModalData.period === ''}
                         >
                             <option value={''}>Selecione a matéria</option>
                             {addSubjectModalData.period !== '' && getSubjectsOptions()}
@@ -243,8 +279,8 @@ function AddSubjectModal() {
                             </Tooltip>
                         </FormLabel>
                         <Select
+
                             onChange={e => setAddSubjectModalData({ ...addSubjectModalData, color: e.target.value })}
-                            disabled={addSubjectModalData.subject == ''}
                         >
                             <option value="blackAlpha.900">Preto</option>
                             <option value="red.500">Vermelho</option>
@@ -276,25 +312,25 @@ function AddSubjectModal() {
                                 </a>
                             </Tooltip>
                         </FormLabel>
-                        <TagsInput
-                            classNames={{
-                                tag: styles.taginput_tag,
-                                input: styles.taginput_input,
-                            }}
-                            value={addSubjectModalData.times}
-                            beforeAddValidate={(tag: string) => validateTime(tag)}
-                            onRemoved={(tag: string) => removeTime(tag)}
-                            // onChange={value => setAddSubjectModalData({ ...addSubjectModalData, times: value })}
-                            placeHolder="234567T12345"
+                        <Input
+                            value={addSubjectModalData.time}
+                            onChange={e => setAddSubjectModalData({ ...addSubjectModalData, time: e.target.value.toUpperCase() })}
+                            placeholder="234567T12345"
                         />
                     </FormControl>
-                    {addSubjectModalData.times.length > 0 && createTranslatedTime(addSubjectModalData.times)}
+                    {/* {allTimes.length > 0 && createTranslatedTime(allTimes)} */}
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='outline' mr={3} onClick={addSubjectModalOnClose}>
                         Cancelar
                     </Button>
-                    <Button variant='blue-800'>Salvar</Button>
+                    <Button
+                        variant='blue-800'
+                        onClick={handleSubmit}
+                        isLoading={onLoad}
+                    >
+                        Adicionar
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

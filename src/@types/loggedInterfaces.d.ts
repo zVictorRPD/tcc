@@ -42,12 +42,17 @@ interface ITimetableContext {
     timetableSubjects: ITimeTable;
     periods: IPeriods;
     subjects: ISubjects;
+    selectedSubject: ISubject;
     setTimetableSubjects: React.Dispatch<React.SetStateAction<ITimeTable>>;
     setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
     setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
+    setSelectedSubject: React.Dispatch<React.SetStateAction<ISubject>>;
     addSubjectModalIsOpen: boolean;
     addSubjectModalOnOpen: () => void;
     addSubjectModalOnClose: () => void;
+    subjectModalIsOpen: boolean;
+    subjectModalOnOpen: () => void;
+    subjectModalOnClose: () => void;
     onLoad: boolean;
     setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -56,8 +61,7 @@ interface IAddSubjectModalTimetable {
     color: string;
     period: string;
     subject: string;
-    defaultTimeType: boolean;
-    times: string[];
+    time: string;
 }
 
 /* GRADE CURRICULAR */
