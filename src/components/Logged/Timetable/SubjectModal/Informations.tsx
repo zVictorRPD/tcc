@@ -1,7 +1,8 @@
 import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Editable, EditableInput, EditablePreview, Flex, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputLeftAddon, InputRightAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Textarea, Tooltip, useDisclosure, useToast } from '@chakra-ui/react'
 import { response } from 'express';
 import React, { useContext, useEffect, useState } from 'react'
-import { FaBuilding, FaEdit, FaEnvelope, FaHouseUser, FaPlus } from 'react-icons/fa';
+import { FaBuilding, FaEdit, FaEnvelope, FaHouseUser, FaPlus, FaRegQuestionCircle } from 'react-icons/fa';
+import { updateSubjectColor } from '../../../../functions/timetable';
 import { toCapitalize } from '../../../../functions/toCapitalize';
 import { api } from '../../../../services/api';
 import { TimetableContext } from '../TimetableContext';
@@ -15,10 +16,9 @@ interface IInformationsProps {
 
 
 function Informations(props: IInformationsProps) {
-	const { setSelectedSubject, selectedSubject, subjects, setSubjects } = useContext(TimetableContext);
+	const { setSelectedSubject, selectedSubject, subjects, setSubjects, setTimetableSubjects, selectedColor, timetableSubjects, onLoad, setOnLoad,  userId } = useContext(TimetableContext);
 	const { isOpen, onClose, onOpen } = props;
 	const toast = useToast();
-	const [onLoad, setOnLoad] = useState(false);
 	const [teachers, setTeachers] = useState<ITeacher[]>([]);
 	const [departaments, setDepartaments] = useState<IDepartament[]>([]);
 	const [filterCamps, setFilterCamps] = useState({
@@ -27,6 +27,7 @@ function Informations(props: IInformationsProps) {
 	});
 	const [grade, setGrade] = useState<number>(selectedSubject.grade || 0);
 	const [editingGrade, setEditingGrade] = useState(false);
+	const [subjectColor, setSubjectColor] = useState(selectedColor);
 	const firstField = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
 	const getDepartaments = async () => {
@@ -189,6 +190,30 @@ function Informations(props: IInformationsProps) {
 		}
 	}
 
+	const changeColor = async (color: string) => {
+		setOnLoad(true);
+		setSubjectColor(color);
+		const newTimetable = updateSubjectColor(selectedSubject.id, color, timetableSubjects);
+		try {
+			await api.post('timetable/updateTimetable', {
+				userId,
+				timetable: newTimetable
+			});
+			setTimetableSubjects(newTimetable);
+		} catch (error) {
+			toast({
+				title: 'Erro ao remover matéria',
+				description: 'Tente novamente mais tarde',
+				status: 'error',
+				position: 'top-right',
+				duration: 3000,
+				isClosable: true
+			})
+		} finally {
+			setOnLoad(false);
+		}
+	}
+
 	useEffect(() => {
 		if (grade !== selectedSubject.grade) {
 			setEditingGrade(true);
@@ -328,6 +353,36 @@ function Informations(props: IInformationsProps) {
 					{selectedSubject.teacher ? 'Alterar professor' : 'Adicionar professor'}
 				</Button>
 			</Flex >
+			<Divider my={'.5rem'} />
+			<FormControl mb={3}>
+				<FormLabel
+					display={'flex'}
+					alignItems={'center'}
+				>
+					Cor da matéria
+					<Tooltip label='A cor de fundo que sua matéria terá na grade' placement='top' hasArrow>
+						<span style={{ marginLeft: '.375rem' }}>
+							<FaRegQuestionCircle />
+						</span>
+					</Tooltip>
+				</FormLabel>
+				<Select
+					onChange={e => changeColor(e.target.value)}
+					value={subjectColor}
+					isDisabled={onLoad}
+				>
+					<option value="blackAlpha.900">Preto</option>
+					<option value="red.500">Vermelho</option>
+					<option value="red.700">Vinho</option>
+					<option value="orange.500">Laranja</option>
+					<option value="green.500">Verde</option>
+					<option value="blue.500">Azul</option>
+					<option value="blue.800">Azul escuro</option>
+					<option value="cyan.600">Ciano</option>
+					<option value="purple.500">Roxo</option>
+					<option value="pink.500">Rosa</option>
+				</Select>
+			</FormControl>
 
 			<Drawer
 				isOpen={isOpen}

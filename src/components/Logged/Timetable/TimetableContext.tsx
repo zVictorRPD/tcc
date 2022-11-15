@@ -16,13 +16,13 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
     const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
     const [subjects, setSubjects] = useState<ISubjects>({} as ISubjects);
     const [selectedSubject, setSelectedSubject] = useState<ISubject>({} as ISelectedSubject);
-
+    const [selectedColor, setSelectedColor] = useState<string>('');
     const {
         isOpen: addSubjectModalIsOpen,
         onOpen: addSubjectModalOnOpen,
         onClose: addSubjectModalOnClose
     } = useDisclosure();
-    
+
     const {
         isOpen: subjectModalIsOpen,
         onOpen: subjectModalOnOpen,
@@ -39,8 +39,10 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
         setPeriods,
         subjects,
         setSubjects,
-        selectedSubject, 
+        selectedSubject,
         setSelectedSubject,
+        selectedColor,
+        setSelectedColor,
         setTimetableSubjects,
         addSubjectModalIsOpen,
         addSubjectModalOnOpen,
@@ -91,7 +93,7 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
             setOnLoad(false);
         }
     };
-    
+
     useEffect(() => {
         if (typeof data?.id === 'number') {
             setUserId(data?.id);

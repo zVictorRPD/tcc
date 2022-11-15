@@ -12,7 +12,7 @@ interface SubjectCardProps {
 
 function SubjectCard(props: SubjectCardProps) {
     const { subject } = props;
-    const { addSubjectModalOnOpen, setSelectedSubject, subjects, subjectModalOnOpen } = useContext(TimetableContext);
+    const { addSubjectModalOnOpen, setSelectedSubject, setSelectedColor, subjects, subjectModalOnOpen } = useContext(TimetableContext);
     return (
         <GridItem w='100%'>
             <Box
@@ -35,6 +35,7 @@ function SubjectCard(props: SubjectCardProps) {
                 onClick={() => {
                     if (typeof subject !== 'string') {
                         setSelectedSubject(subjects[subject.id]);
+                        setSelectedColor(subject.bgColor);
                         subjectModalOnOpen();
                     } else {
                         addSubjectModalOnOpen();

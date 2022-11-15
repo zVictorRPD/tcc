@@ -43,10 +43,12 @@ interface ITimetableContext {
     periods: IPeriods;
     subjects: ISubjects;
     selectedSubject: ISubject;
+    selectedColor: string;
     setTimetableSubjects: React.Dispatch<React.SetStateAction<ITimeTable>>;
     setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
     setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
     setSelectedSubject: React.Dispatch<React.SetStateAction<ISubject>>;
+    setSelectedColor: React.Dispatch<React.SetStateAction<string>>;
     addSubjectModalIsOpen: boolean;
     addSubjectModalOnOpen: () => void;
     addSubjectModalOnClose: () => void;
