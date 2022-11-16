@@ -1,6 +1,6 @@
 import { Grid, GridItem, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { weekDays } from './timeTableObject'
+import { weekDays } from '../../../functions/timetable'
 
 
 function WeekdaysGrid() {

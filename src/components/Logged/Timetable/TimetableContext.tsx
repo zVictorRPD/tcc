@@ -2,7 +2,7 @@ import { useToast, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../../../services/api";
-import { TimetableObject } from "./timeTableObject";
+import { TimetableObject } from "../../../functions/timetable";
 
 export const TimetableContext = createContext<ITimetableContext>({} as ITimetableContext);
 

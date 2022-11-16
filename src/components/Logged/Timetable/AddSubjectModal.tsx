@@ -151,8 +151,9 @@ function AddSubjectModal() {
                     };
                 });
             });
+            console.log(newTimetableSubjects);
+            
             setTimetableSubjects(newTimetableSubjects);
-            // setAllTimes([...allTimes, finalTime]);
             return true;
         } catch (err) {
             createToast("Já existe uma matéria nesse horário");
@@ -160,37 +161,6 @@ function AddSubjectModal() {
         }
 
     }
-
-    // const createTranslatedTime = (times: string[]) => {
-    //     return (
-    //         <>
-    //             {times.map((time, index) => {
-    //                 const period = time.includes('M') ? 'M' : time.includes('T') ? 'T' : 'N';
-    //                 const weekdays = time.split(`${period}`)[0];
-    //                 const hours = time.split(`${period}`)[1];
-
-    //                 let text = '';
-
-    //                 weekdays.split('').forEach((day, index) => {
-    //                     text += `${weekdaysTranslation[parseInt(day) - 2]}${index < weekdays.length - 1 ? ', ' : '.'}`;
-    //                 });
-    //                 const lastIndex = text.lastIndexOf(',');
-    //                 const replacement = ' e';
-    //                 text =
-    //                     text.substring(0, lastIndex) +
-    //                     replacement +
-    //                     text.substring(lastIndex + 1);
-
-    //                 return (
-    //                     <div key={index}>
-    //                         <p>{time.toUpperCase()} = {text}</p>
-    //                     </div>
-    //                 )
-    //             })}
-    //         </>
-    //     )
-
-    // }
 
     const handleSubmit = async () => {
         setOnLoad(true);
@@ -315,7 +285,6 @@ function AddSubjectModal() {
                             placeholder="234567T12345"
                         />
                     </FormControl>
-                    {/* {allTimes.length > 0 && createTranslatedTime(allTimes)} */}
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='outline' mr={3} onClick={addSubjectModalOnClose}>
