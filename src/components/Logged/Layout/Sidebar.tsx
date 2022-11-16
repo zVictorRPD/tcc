@@ -63,7 +63,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 >
                     <Image
                         src="/assets/images/homepage/logo.png"
-                        height={"44px"}
+                        height={"34px"}
                         alt="Logo"
                     />
                 </a>

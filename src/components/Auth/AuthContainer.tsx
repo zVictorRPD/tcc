@@ -33,6 +33,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                         >
                             <Image
                                 src="/assets/images/homepage/logo.png"
+                                height={"34px"}
                                 alt="Logo"
                             />
                         </a>

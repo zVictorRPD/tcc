@@ -26,7 +26,11 @@ export default function Header() {
                     onClick={() => router.push("/#")}
                     style={{ cursor: "pointer" }}
                 >
-                    <Image src="/assets/images/homepage/logo.png" alt="Logo" />
+                    <Image
+                        src="/assets/images/homepage/logo.png"
+                        height={"34px"}
+                        alt="Logo"
+                    />
                 </a>
 
                 <Button
