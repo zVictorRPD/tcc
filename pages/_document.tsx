@@ -33,14 +33,14 @@ export default function Document() {
                 <meta name="twitter:url" content="https://tcc-zvictorrpd.vercel.app/" />
                 <meta name="twitter:title" content="Facilita Rural" />
                 <meta name="twitter:description" content="Organize a sua vida acadêmica na lendária UFRRJ" />
-                <meta name="twitter:image" content="https://tcc-zvictorrpd.vercel.app/icons/maskable_icon_x192.png" />
+                <meta name="twitter:image" content="/api/og" />
                 <meta name="twitter:creator" content="@zvictor__rpd" />
                 <meta property="og:type" content="website" />
                 <meta property="og:title" content="Facilita Rural" />
                 <meta property="og:description" content="Organize a sua vida acadêmica na lendária UFRRJ" />
                 <meta property="og:site_name" content="Facilita Rural" />
                 <meta property="og:url" content="https://tcc-zvictorrpd.vercel.app/" />
-                <meta property="og:image" content="https://tcc-zvictorrpd.vercel.app/icons/apple-touch-icon.png" />
+                <meta property="og:image" content="/api/og" />
                 {/* <link rel='apple-touch-startup-image' href='/images/apple_splash_2048.png' sizes='2048x2732' />
                 <link rel='apple-touch-startup-image' href='/images/apple_splash_1668.png' sizes='1668x2224' />
                 <link rel='apple-touch-startup-image' href='/images/apple_splash_1536.png' sizes='1536x2048' />
