@@ -10,7 +10,7 @@ export default function Document() {
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                 <meta name="apple-mobile-web-app-title" content="Facilita Rural" />
-                <meta name="description" content="Facilitando a finalização do seu curso." />
+                <meta name="description" content="Organize a sua vida acadêmica na lendária UFRRJ" />
                 <meta name="format-detection" content="telephone=no" />
                 <meta name="mobile-web-app-capable" content="yes" />
                 <meta name="msapplication-config" content="/icons/browserconfig.xml" />
@@ -31,13 +31,13 @@ export default function Document() {
 
                 <meta name="twitter:card" content="summary" />
                 <meta name="twitter:url" content="https://tcc-zvictorrpd.vercel.app/" />
-                <meta name="twitter:title" content="PWA App" />
-                <meta name="twitter:description" content="Best PWA App in the world" />
+                <meta name="twitter:title" content="Facilita Rural" />
+                <meta name="twitter:description" content="Organize a sua vida acadêmica na lendária UFRRJ" />
                 <meta name="twitter:image" content="https://tcc-zvictorrpd.vercel.app/icons/maskable_icon_x192.png" />
                 <meta name="twitter:creator" content="@zvictor__rpd" />
                 <meta property="og:type" content="website" />
                 <meta property="og:title" content="Facilita Rural" />
-                <meta property="og:description" content="Facilitando a finalização do seu curso." />
+                <meta property="og:description" content="Organize a sua vida acadêmica na lendária UFRRJ" />
                 <meta property="og:site_name" content="Facilita Rural" />
                 <meta property="og:url" content="https://tcc-zvictorrpd.vercel.app/" />
                 <meta property="og:image" content="https://tcc-zvictorrpd.vercel.app/icons/apple-touch-icon.png" />
