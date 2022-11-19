@@ -1,10 +1,10 @@
-import { Box, Flex, GridItem, Text } from '@chakra-ui/react'
+import { Box, Flex, GridItem, SkeletonText, Text } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { DashboardContext } from './DashboardContext';
 
 function Events() {
-    const { events, setEventData, eventModalOnOpen } = useContext(DashboardContext);
-     
+    const { events, setEventData, eventModalOnOpen, onLoad } = useContext(DashboardContext);
+
     return (
         <GridItem
             bg={'white'}
@@ -27,49 +27,65 @@ function Events() {
                 Próximos eventos
             </Text>
             <Box>
-                {events.length > 0 ? events.map((event, index) => {
-                    return (
-                        <Flex
-                            key={index}
-                            alignItems={'center'}
-                            justifyContent={'space-between'}
-                            p={'.5rem'}
-                            borderBottom={'1px solid #E2E8F0'}
-                            cursor={'pointer'}
-                            _hover={{
-                                bg: '#F7FAFC',
-                            }}
-                            onClick={() => {
-                                setEventData(event);
-                                eventModalOnOpen();
-                            }}
-                        >
-                            <Text
-                                fontSize={{
-                                    base: '.875rem',
-                                    md: '1rem',
-                                }}
-                                fontWeight={'400'}
-                                w={'200px'}
-                                textOverflow={'ellipsis'}
-                                overflow={'hidden'}
-                                whiteSpace={'nowrap'}
-                            >
-                                {event.title}
-                            </Text>
-                            <Text
-                                fontSize={{
-                                    base: '.875rem',
-                                    md: '1rem',
-                                }}
-                                fontWeight={'400'}
+                {!onLoad ? (
+                    <>
+                        {events.length > 0 ? events.map((event, index) => {
+                            return (
+                                <Flex
+                                    key={index}
+                                    alignItems={'center'}
+                                    justifyContent={'space-between'}
+                                    p={'.5rem'}
+                                    borderBottom={'1px solid #E2E8F0'}
+                                    cursor={'pointer'}
+                                    _hover={{
+                                        bg: '#F7FAFC',
+                                    }}
+                                    onClick={() => {
+                                        setEventData(event);
+                                        eventModalOnOpen();
+                                    }}
+                                >
+                                    <Text
+                                        fontSize={{
+                                            base: '.875rem',
+                                            md: '1rem',
+                                        }}
+                                        fontWeight={'400'}
+                                        w={'200px'}
+                                        textOverflow={'ellipsis'}
+                                        overflow={'hidden'}
+                                        whiteSpace={'nowrap'}
+                                    >
+                                        {event.title}
+                                    </Text>
+                                    <Text
+                                        fontSize={{
+                                            base: '.875rem',
+                                            md: '1rem',
+                                        }}
+                                        fontWeight={'400'}
 
+                                    >
+                                        {new Date(event.start).toLocaleDateString().slice(0, 5)}
+                                    </Text>
+                                </Flex>
+                            )
+                        }) : (
+                            <Text
+                                fontSize={{
+                                    base: '.875rem',
+                                    md: '1rem',
+                                }}
+                                fontWeight={'400'}
                             >
-                                {new Date(event.start).toLocaleDateString().slice(0, 5)}
+                                Você não tem eventos marcados
                             </Text>
-                        </Flex>
-                    )
-                }) : ('vazio')}
+                        )}
+                    </>
+                ) : (
+                    <SkeletonText mt='4' noOfLines={6} spacing='4' />
+                )}
             </Box>
         </GridItem>
     )

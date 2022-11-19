@@ -32,7 +32,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     };
 
     const getDashboard = async (userId: number) => {
-        setOnLoad(true);
         try {
             const response = await api.get('/dashboard/getInfo', {
                 params: {
@@ -65,16 +64,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                 isClosable: true,
                 position: "top-right",
             });
-        } finally {
-            setTimeout(() => {
-                setOnLoad(false);
-            }, 200);
-
         }
     };
 
     const getEvents = async (userId: number) => {
-        setOnLoad(true);
         try {
             const response = await api.get('dashboard/events', {
                 params: {
@@ -92,16 +85,16 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                 isClosable: true,
                 position: 'top-right'
             });
-        } finally {
-            setOnLoad(false);
         }
     }
 
     useEffect(() => {
         if (typeof data?.id === 'number') {
             setUserId(data?.id);
+            setOnLoad(true);
             getDashboard(data.id);
             getEvents(data.id);
+            setOnLoad(false);
         }
     }, [data]);
 
