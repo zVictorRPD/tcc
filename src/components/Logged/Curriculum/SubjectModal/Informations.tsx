@@ -152,29 +152,20 @@ function Informations(props: IInformationsProps) {
 				subjectId: selectedSubject.id,
 				grade,
 			});
-			if (response.data.grade) {
-				toast({
-					title: "Professor adicionado com sucesso",
-					status: "success",
-					duration: 3000,
-					isClosable: true,
-					position: "top-right",
-				});
-				setSubjects({
-					...subjects,
-					[selectedSubject.id]: {
-						...subjects[selectedSubject.id],
-						grade: response.data.grade
-					}
-				});
-				setSelectedSubject({
-					...selectedSubject,
+			if (!response.data.id) throw new Error();
+			setSubjects({
+				...subjects,
+				[selectedSubject.id]: {
+					...subjects[selectedSubject.id],
 					grade: response.data.grade
-				});
-				setEditingGrade(false);
-			} else {
-				throw new Error();
-			}
+				}
+			});
+			setSelectedSubject({
+				...selectedSubject,
+				grade: response.data.grade
+			});
+			setEditingGrade(false);
+
 		} catch (err) {
 			toast({
 				title: "Não foi possível editar a nota",

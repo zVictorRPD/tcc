@@ -4,7 +4,7 @@ import theme from "../theme";
 
 export default function Document() {
     return (
-        <Html>
+        <Html lang="pt-br">
             <Head>
                 <meta name="application-name" content="Facilita Rural" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
