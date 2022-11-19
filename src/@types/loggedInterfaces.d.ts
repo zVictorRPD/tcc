@@ -1,3 +1,17 @@
+interface IDashboardContext {
+    userId: number;
+    events: IEvent[];
+    setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
+    eventData: IEvent;
+    setEventData: React.Dispatch<React.SetStateAction<IEvent>>;
+    eventModalIsOpen: boolean;
+    eventModalOnOpen: () => void;
+    eventModalOnClose: () => void;
+    onLoad: boolean;
+    setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+
 interface ITimeTable {
     [key: string]: {
         [key: string]: {

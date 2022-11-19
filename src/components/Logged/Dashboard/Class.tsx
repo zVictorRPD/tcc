@@ -64,7 +64,7 @@ function Class() {
                         md: '1rem',
                     }}
                     ml={'.5rem'}
-                    onClick={() => window.open('https://www.google.com', '_blank')}
+                    
                     cursor={'pointer'}
                 >
                     Link 1, 
@@ -77,7 +77,7 @@ function Class() {
                         md: '1rem',
                     }}
                     ml={'.5rem'}
-                    onClick={() => window.open('https://www.google.com', '_blank')}
+                    
                     cursor={'pointer'}
                 >
                     Link 1, 
@@ -90,7 +90,7 @@ function Class() {
                         md: '1rem',
                     }}
                     ml={'.5rem'}
-                    onClick={() => window.open('https://www.google.com', '_blank')}
+                    
                     cursor={'pointer'}
                 >
                     Link 1

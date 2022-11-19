@@ -93,48 +93,7 @@ function Teachers() {
                                 icon={<FaEnvelope />}
                                 size={'sm'}
                                 variant={'blue-800'}
-                                onClick={() => {
-                                    window.open(`mailto:${teacher.email}`)
-                                }}
-                            />
-                        </Flex>
-                    )
-                })}
-                {teachers.map((teacher, index) => {
-                    return (
-                        <Flex
-                            key={index}
-                            alignItems={'center'}
-                            justifyContent={'start'}
-                            p={'.5rem'}
-                            borderBottom={'1px solid #E2E8F0'}
-                        >
-
-                            <Image
-                                src={teacher.avatar}
-                                alt={teacher.name}
-                                borderRadius={'full'}
-                                boxSize={'2.5rem'}
-                                mr={'.75rem'}
-                            />
-                            <Text
-                                fontSize={{
-                                    base: '1rem',
-                                    md: '1.25rem',
-                                }}
-                                fontWeight={'400'}
-                            >
-                                {toCapitalize(teacher.name)}
-                            </Text>
-                            <IconButton
-                                aria-label="Enviar email"
-                                ml={'auto'}
-                                icon={<FaEnvelope />}
-                                size={'sm'}
-                                variant={'blue-800'}
-                                onClick={() => {
-                                    window.open(`mailto:${teacher.email}`)
-                                }}
+                                
                             />
                         </Flex>
                     )
