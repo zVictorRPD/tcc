@@ -10,6 +10,11 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     const { data } = useSession();
     const [userId, setUserId] = useState(0);
     const [onLoad, setOnLoad] = useState(false);
+    const [hasCurriculum, setHasCurriculum] = useState(false);
+    const [course, setCourse] = useState<ICourse>({} as ICourse);
+    const [subjects, setSubjects] = useState<ISubject[]>({} as ISubject[]);
+    const [timetable, setTimetable] = useState<ITimeTable>({} as ITimeTable);
+    const [complementary, setComplementary] = useState<object[]>([]);
     const [events, setEvents] = useState<IEvent[]>([]);
     const [eventData, setEventData] = useState<IEvent>({} as IEvent);
     const {
@@ -22,8 +27,12 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         userId,
         onLoad,
         setOnLoad,
+        hasCurriculum,
+        course,
+        subjects,
+        timetable,
+        complementary,
         events,
-        setEvents,
         eventData,
         setEventData,
         eventModalIsOpen,
@@ -38,23 +47,25 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                     userId,
                 }
             });
-
-            if (response.data.hasCurriculum) {
-                const {
-                    periods,
-                    subjects,
-                    timetable
-                }: {
-                    periods: IPeriods,
-                    subjects: ISubjects,
-                    timetable: ITimeTable
-                } = response.data;
-
-                if (periods && subjects) {
-
-                }
-                return;
-            }
+            if (typeof response.data.hasCurriculum === 'undefined') throw new Error('No curriculum');
+            if (!response.data.hasCurriculum) return;
+            const {
+                course,
+                subjects,
+                timetable,
+                complementary,
+            }: {
+                course: ICourse,
+                subjects: ISubject[],
+                timetable: ITimeTable,
+                complementary: object[],
+            } = response.data;
+            if (course) setCourse(course);
+            if (subjects) setSubjects(subjects);
+            if (timetable) setTimetable(timetable);
+            if (complementary) setComplementary(complementary);
+            console.log(subjects);
+            
         } catch (err) {
             toast({
                 title: "Erro ao carregar o dashboard",
@@ -66,7 +77,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
             });
         }
     };
-
+    
     const getEvents = async (userId: number) => {
         try {
             const response = await api.get('dashboard/events', {

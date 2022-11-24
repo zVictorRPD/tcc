@@ -6,20 +6,10 @@ import Events from "../../src/components/Logged/Dashboard/Events";
 import Status from "../../src/components/Logged/Dashboard/Status";
 import Subjects from "../../src/components/Logged/Dashboard/Subjects";
 import Teachers from "../../src/components/Logged/Dashboard/Teachers";
-import { useSession } from "next-auth/react";
 import { DashboardProvider } from "../../src/components/Logged/Dashboard/DashboardContext";
 import EventModal from "../../src/components/Logged/Dashboard/EventsModal";
 
 const Dashboard: NextPage = () => {
-    const [userId, setUserId] = useState(0);
-    const { data } = useSession();
-
-    useEffect(() => {
-        if (typeof data?.id === 'number') {
-            setUserId(data?.id);
-        }
-    }, [data]);
-
     return (
         <DashboardProvider>
             <Grid
