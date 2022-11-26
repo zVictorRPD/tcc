@@ -150,9 +150,7 @@ function AddSubjectModal() {
                         bgColor: addSubjectModalData.color,
                     };
                 });
-            });
-            console.log(newTimetableSubjects);
-            
+            });           
             setTimetableSubjects(newTimetableSubjects);
             return true;
         } catch (err) {

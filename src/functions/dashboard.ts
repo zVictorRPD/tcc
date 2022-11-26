@@ -1,9 +1,5 @@
 //ABA DE CURSO  
-export function getDoneWorkload(subjects: ISubject[], complementary: IComplementary[], useDoing: boolean, totalWorkload: IWorkload) {
-    console.log(subjects);
-    console.log(complementary);
-    console.log(totalWorkload);
-    
+export function getDoneWorkload(subjects: ISubject[], complementary: IComplementary[], useDoing: boolean, totalWorkload: IWorkload) {    
     const doneComplementary = complementary.reduce((acc, cur) => {
         if (cur.time > 0) return acc + cur.time;
         return acc;
