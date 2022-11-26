@@ -73,13 +73,10 @@ function Events() {
                             )
                         }) : (
                             <Text
-                                fontSize={{
-                                    base: '.875rem',
-                                    md: '1rem',
-                                }}
+                                fontSize={'1rem'}
                                 fontWeight={'400'}
                             >
-                                Você não tem eventos marcados
+                                Você não tem eventos marcados.
                             </Text>
                         )}
                     </>

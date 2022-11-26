@@ -87,8 +87,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                     id: userId
                 }
             });
-            if (!response.data.events) throw new Error();
-            setEvents(response.data.events);
+            if (!response.data) throw new Error();
+            setEvents(response.data);
         } catch (err) {
             toast({
                 title: "Erro ao carregar eventos",

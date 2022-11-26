@@ -13,15 +13,8 @@ export async function getEvents(id: number) {
     }).catch((err) => {
         return err;
     });
-
-    const total = await prisma.calendarEvents.count({
-        where: {
-            userId: id
-        }
-    }).catch((err) => {
-        return err;
-    });
-    return { events, total };
+    const chronologicalOrder = events.sort((a: any, b: any) => a.start.getTime() - b.start.getTime());
+    return chronologicalOrder;
 }
 
 export async function getDashboardData(id: number) {
