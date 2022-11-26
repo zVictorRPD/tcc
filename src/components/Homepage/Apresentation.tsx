@@ -43,14 +43,14 @@ export default function Apresentation() {
                                 size={["xl", "xl", "3xl"]}
                                 mb={".5rem"}
                             >
-                                <Text color={"green.400"}>Apresentação legal,</Text>
-                                Muito legal mesmo
+                                <Text color={"green.400"}>Facilita Rural,</Text>
+                                Feito para você
                             </Heading>
                             <Text fontSize={"lg"} mb={"2rem"}>
-                                Lorem ipsum dolor sit, amet consectetur
-                                adipisicing elit. Voluptas soluta mollitia culpa
-                                itaque? Aut suscipit consequatur odit placeat
-                                corporis doloremque!
+                                O objetivo do sistema é de forma ágil, fácil e objetiva, facilitar a vida
+                                acadêmica do estudante, trazendo para o mesmo informações de relevância e
+                                ferramentas para projetar a sua trajetória na universidade da forma que o
+                                convém.
                             </Text>
                             <Box>
                                 <Button

@@ -27,15 +27,6 @@ export default function Functionalities() {
                 gap={["1rem", "2rem"]}
             >
                 {funcitonalites.map((functionality, index) => {
-                    if (index > 2) {
-                        return (
-                            <Hide key={index} below="md">
-                                <GridItem w={"100%"}>
-                                    <Card functionality={functionality} />
-                                </GridItem>
-                            </Hide>
-                        );
-                    }
                     return (
                         <GridItem key={index} w={"100%"}>
                             <Card functionality={functionality} />
