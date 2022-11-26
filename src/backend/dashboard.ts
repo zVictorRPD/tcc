@@ -38,11 +38,7 @@ export async function getDashboardData(id: number) {
                 }
             },
             timetable: true,
-            userComplementary: {
-                select: {
-                    time: true
-                }
-            }
+            userComplementary: true
         }
     }).catch((err) => {
         return err;
@@ -53,7 +49,6 @@ export async function getDashboardData(id: number) {
     const subjects = await prisma.userSubjects.findMany({
         where: {
             userId: id,
-            status: "doing"
         },
         include: {
             subject: true,

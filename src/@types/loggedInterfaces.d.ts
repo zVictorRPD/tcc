@@ -6,7 +6,7 @@ interface IDashboardContext {
     course: ICourse;
     subjects: ISubject[];
     timetable: ITimeTable;
-    complementary: object[];
+    complementary: IComplementary[];
     events: IEvent[];
     eventData: IEvent;
     setEventData: React.Dispatch<React.SetStateAction<IEvent>>;

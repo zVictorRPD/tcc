@@ -1,12 +1,43 @@
-import { Box, Button, Flex, GridItem, Progress, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Tooltip, Tr } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import { Box, Button, Flex, GridItem, Progress, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Tooltip, Tr, VisuallyHidden } from '@chakra-ui/react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { RiArrowLeftRightLine } from 'react-icons/ri'
+import { getDoneWorkload } from '../../../functions/dashboard'
+import { toCapitalize } from '../../../functions/toCapitalize'
 import { DashboardContext } from './DashboardContext'
 import style from './style.module.scss'
 
 function Status() {
-    const { onLoad } = useContext(DashboardContext);
+    const initialState = {
+        complementary: 0,
+        obrigatory: 0,
+        optional: 0,
+        total: 0,
+    }
+    const { onLoad, course, complementary, subjects } = useContext(DashboardContext);
+    const [viewType, setViewType] = useState<"done" | "remains">('done');
+    const [doneWorkload, setDoneWorkload] = useState<IWorkload>(initialState);
+    const [totalWorkload, setTotalWorkload] = useState<IWorkload>(initialState);
+    const [courseProgress, setCourseProgress] = useState(0);
+
+    useEffect(() => {
+        if (course && subjects && complementary) {
+            const totalWorkLoadObject = {
+                complementary: course.workload_complementary,
+                obrigatory: course.workload_normal_lessons + course.workload_academic_professional_guidance,
+                optional: course.workload_optional_lessons,
+                total: course.workload_total,
+            }
+            setTotalWorkload(totalWorkLoadObject);
+            setDoneWorkload(() => {
+                const data = getDoneWorkload(subjects, complementary, false, totalWorkLoadObject);
+                setCourseProgress(parseFloat(((data.total / totalWorkload.total) * 100).toFixed(2)));
+                return data;
+            });
+        }
+
+    }, [course, complementary]);
+
     return (
         <GridItem
             bg={'white'}
@@ -33,7 +64,7 @@ function Status() {
                         fontWeight={'400'}
                         mb={'1rem'}
                     >
-                        Sistemas de Informação - Seropédica - Bacharelado - Presencial - T
+                        {toCapitalize(course.name)}
                     </Text>
                     <Box
                         borderWidth={'1px'}
@@ -44,12 +75,24 @@ function Status() {
                         }}
                     >
                         <Flex
-                            justifyContent={'end'}
+                            justifyContent={'space-between'}
+                            alignItems={'center'}
                             mb={2}
                         >
+                            <VisuallyHidden position={'initial'}></VisuallyHidden>
+                            <Text
+                                fontSize={{
+                                    base: '1rem',
+                                    md: '1.25rem',
+                                }}
+                                fontWeight={'400'}
+                            >
+                                {viewType === 'done' ? 'Horas realizadas' : 'Horas restantes'}
+                            </Text>
                             <Button
                                 variant={'blue-800'}
                                 size='xs'
+                                onClick={() => setViewType(viewType === 'done' ? 'remains' : 'done')}
                             >
                                 <RiArrowLeftRightLine />
                             </Button>
@@ -73,19 +116,19 @@ function Status() {
 
                                             </Tooltip>
                                         </Th>
-                                        <Td>10  horas</Td>
+                                        <Td>{viewType === 'done' ? doneWorkload.obrigatory : totalWorkload.obrigatory - doneWorkload.obrigatory} horas</Td>
                                     </Tr>
                                     <Tr>
                                         <Th>CH. optativa</Th>
-                                        <Td>10 horas</Td>
+                                        <Td>{viewType === 'done' ? doneWorkload.optional : totalWorkload.optional - doneWorkload.optional} horas</Td>
                                     </Tr>
                                     <Tr>
                                         <Th>CH. complementar</Th>
-                                        <Td>10  horas</Td>
+                                        <Td>{viewType === 'done' ? doneWorkload.complementary : totalWorkload.complementary - doneWorkload.complementary} horas</Td>
                                     </Tr>
                                     <Tr>
                                         <Th>CH. total</Th>
-                                        <Td>10  horas</Td>
+                                        <Td>{viewType === 'done' ? doneWorkload.total : totalWorkload.total - doneWorkload.total} horas</Td>
                                     </Tr>
                                 </Tbody>
                             </Table>
@@ -96,12 +139,12 @@ function Status() {
                             fontWeight={600}
                             textAlign={'center'}
                         >
-                            10% do curso
+                            {viewType === 'done' ? `Você já fez ${courseProgress}` : `Falta você fazer ${(100 - courseProgress).toFixed(2)}`}% do curso
                         </Text>
                         <Progress
                             colorScheme='whatsapp'
                             size='md'
-                            value={10}
+                            value={courseProgress}
                             hasStripe
                             isAnimated
                             mb={3}

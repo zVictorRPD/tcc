@@ -9,12 +9,12 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     const toast = useToast();
     const { data } = useSession();
     const [userId, setUserId] = useState(0);
-    const [onLoad, setOnLoad] = useState(false);
+    const [onLoad, setOnLoad] = useState(true);
     const [hasCurriculum, setHasCurriculum] = useState(false);
     const [course, setCourse] = useState<ICourse>({} as ICourse);
     const [subjects, setSubjects] = useState<ISubject[]>({} as ISubject[]);
     const [timetable, setTimetable] = useState<ITimeTable>({} as ITimeTable);
-    const [complementary, setComplementary] = useState<object[]>([]);
+    const [complementary, setComplementary] = useState<IComplementary[]>([]);
     const [events, setEvents] = useState<IEvent[]>([]);
     const [eventData, setEventData] = useState<IEvent>({} as IEvent);
     const {
@@ -41,6 +41,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     };
 
     const getDashboard = async (userId: number) => {
+        setOnLoad(true);
         try {
             const response = await api.get('/dashboard/getInfo', {
                 params: {
@@ -58,14 +59,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                 course: ICourse,
                 subjects: ISubject[],
                 timetable: ITimeTable,
-                complementary: object[],
+                complementary: IComplementary[],
             } = response.data;
             if (course) setCourse(course);
             if (subjects) setSubjects(subjects);
             if (timetable) setTimetable(timetable);
             if (complementary) setComplementary(complementary);
-            console.log(subjects);
-            
+
         } catch (err) {
             toast({
                 title: "Erro ao carregar o dashboard",
@@ -75,6 +75,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                 isClosable: true,
                 position: "top-right",
             });
+        }finally{
+            setOnLoad(false);
         }
     };
     
@@ -102,10 +104,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         if (typeof data?.id === 'number') {
             setUserId(data?.id);
-            setOnLoad(true);
             getDashboard(data.id);
             getEvents(data.id);
-            setOnLoad(false);
         }
     }, [data]);
 
