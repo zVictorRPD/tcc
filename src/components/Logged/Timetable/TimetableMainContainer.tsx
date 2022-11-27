@@ -13,7 +13,7 @@ function TimetableMainContainer() {
     const { ExcelDownloder, Type } = useExcelDownloder();
     useEffect(() => {
         if (subjects !== undefined && timetableSubjects !== undefined) {
-            setExcelData(getExcelData(timetableSubjects, subjects));
+            setExcelData(getExcelData(timetableSubjects, subjects));        
         }
     }, [timetableSubjects, subjects]);
     return (

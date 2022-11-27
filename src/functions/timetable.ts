@@ -210,3 +210,44 @@ export const getExcelData = (timetable: ITimeTable, subjects: ISubjects) => {
     return finalObj;
 };
 
+//DASHBOARD
+
+export const timeNumberTranslation: any = {
+    '1-0': 7,
+    '2-1': 8,
+    '3-2': 9,
+    '4-3': 10,
+    '5-4': 11,
+    '1-5': 12,
+    '2-6': 13,
+    '3-7': 14,
+    '4-8': 15,
+    '5-9': 16,
+    '1-10': 17,
+    '2-11': 18,
+    '3-12': 19,
+    '4-13': 20,
+    '5-14': 21,
+}
+
+export const getDashbordData = (timetable: ITimeTable, subjects: ISubject[]) => {
+    let finalObject: any = {};
+    Object.values(timetable).forEach((day: any, i) => {
+        let obj: any = {};
+        let dayObj: any = {};
+        timeTableSchedule.forEach((time, index) => {
+            const key = timeNumberTranslation[`${time}-${index}`];
+            if (index < 5) {
+                typeof day.m[time] !== "object" ? "" : dayObj[key] = subjects.find(subject => subject.id.toString() === day.m[time].id);
+            } else if (index < 10) {
+                typeof day.t[time] !== "object" ? "" : dayObj[key] = subjects.find(subject => subject.id.toString() === day.t[time].id);
+            } else {
+                typeof day.n[time] !== "object" ? "" : dayObj[key] = subjects.find(subject => subject.id.toString() === day.n[time].id);
+            }
+        });
+        obj[weekDays[i]] = dayObj;
+        finalObject = { ...finalObject, ...obj };
+    });
+    return finalObject;
+};
+

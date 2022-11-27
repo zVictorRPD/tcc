@@ -15,6 +15,12 @@ interface IDashboardContext {
     eventModalOnClose: () => void;
 }
 
+interface INextClass {
+    subject: ISubject;
+    hour: string;
+    day: string;
+};
+
 
 interface ITimeTable {
     [key: string]: {
