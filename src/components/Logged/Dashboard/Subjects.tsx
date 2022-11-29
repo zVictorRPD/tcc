@@ -3,37 +3,7 @@ import { Badge, Box, Button, Flex, GridItem, Popover, PopoverArrow, PopoverBody,
 import { DashboardContext } from './DashboardContext';
 
 export default function Subjects() {
-    const { onLoad } = useContext(DashboardContext);
-    const subjects = [
-        {
-            name: 'a África Central Atlântica e a Presença Luso-brasileira',
-            code: 'MAT',
-            time: '23T45',
-            type: 'optativa',
-
-        },
-        {
-            name: 'a África Central Atlântica e a Presença Luso-brasileira',
-            code: 'MAT',
-            time: '23T45',
-            type: 'optativa'
-
-        },
-        {
-            name: 'a África Central Atlântica e a Presença Luso-brasileira',
-            code: 'MAT',
-            time: '23T45',
-            type: 'optativa'
-
-        },
-        {
-            name: 'a África Central Atlântica e a Presença Luso-brasileira',
-            code: 'MAT',
-            time: '23T45',
-            type: 'optativa'
-
-        },
-    ]
+    const { onLoad, subjects, setSelectedSubject, subjectModalOnOpen } = useContext(DashboardContext);
     return (
         <GridItem
             bg={'white'}
@@ -58,17 +28,21 @@ export default function Subjects() {
                 fontWeight={'400'}
                 mb={'1rem'}
             >
-                Matérias
+                Matérias sendo feitas
             </Text>
             {!onLoad ? (
                 <Box
-                    maxH={'680px'}
+                    maxH={{
+                        base: '680px',
+                        lg: '290px',
+                    }}
                     overflowY={'auto'}
                 >
-                    {subjects.map((subject, index) => {
+                    {Object.values(subjects).map((subject, index) => {
+                        if(subject.status !== 'doing') return;
                         return (
                             <Flex
-                                key={index}
+                                key={subject.code}
                                 direction={{
                                     base: 'column',
                                     md: 'row',
@@ -78,10 +52,14 @@ export default function Subjects() {
                                 p={'.5rem'}
                                 borderBottom={'1px solid #E2E8F0'}
                                 cursor={'pointer'}
+                                gap={'1rem'}
+                                onClick={() => {
+                                    setSelectedSubject(subject);
+                                    subjectModalOnOpen();
+                                }}
                                 _hover={{
                                     bg: '#F7FAFC',
                                 }}
-                                gap={'1rem'}
                             >
                                 <Text
                                     fontSize={{
@@ -112,9 +90,9 @@ export default function Subjects() {
                                         md: 'auto',
                                     }}
                                 >
-                                    {subject.type}
+                                    {subject.isOptional ? 'Optativa' : 'Obrigatória'}
                                 </Badge>
-                                <Popover>
+                                {/* <Popover>
                                     <PopoverTrigger>
                                         <Button
                                             variant='blue-800'
@@ -131,7 +109,7 @@ export default function Subjects() {
                                             Sexta feita às 23:45
                                         </PopoverBody>
                                     </PopoverContent>
-                                </Popover>
+                                </Popover> */}
 
                             </Flex>
                         )

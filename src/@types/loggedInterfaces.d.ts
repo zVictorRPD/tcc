@@ -5,6 +5,8 @@ interface IDashboardContext {
     hasCurriculum: boolean;
     course: ICourse;
     subjects: ISubject[];
+    selectedSubject: ISubject;
+    setSelectedSubject: React.Dispatch<React.SetStateAction<ISubject>>;
     timetable: ITimeTable;
     complementary: IComplementary[];
     events: IEvent[];
@@ -13,6 +15,9 @@ interface IDashboardContext {
     eventModalIsOpen: boolean;
     eventModalOnOpen: () => void;
     eventModalOnClose: () => void;
+    subjectModalIsOpen: boolean;
+    subjectModalOnOpen: () => void;
+    subjectModalOnClose: () => void;
 }
 
 interface INextClass {

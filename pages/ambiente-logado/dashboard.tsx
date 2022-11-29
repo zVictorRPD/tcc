@@ -8,6 +8,7 @@ import Subjects from "../../src/components/Logged/Dashboard/Subjects";
 import Teachers from "../../src/components/Logged/Dashboard/Teachers";
 import { DashboardProvider } from "../../src/components/Logged/Dashboard/DashboardContext";
 import EventModal from "../../src/components/Logged/Dashboard/EventsModal";
+import SubjectModal from "../../src/components/Logged/Dashboard/SubjectModal/SubjectModal";
 
 const Dashboard: NextPage = () => {
     return (
@@ -38,6 +39,7 @@ const Dashboard: NextPage = () => {
                 <Teachers />
             </Grid>
             <EventModal />
+            <SubjectModal />
         </DashboardProvider>
     );
 };

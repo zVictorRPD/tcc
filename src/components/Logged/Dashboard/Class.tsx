@@ -73,7 +73,7 @@ function Class() {
                             <Flex>
                                 <Text display={'inline'} fontWeight={'600'}>Seus links: </Text>
                                 {nextClass.subject.links && nextClass.subject.links.length > 0 ? (
-                                    nextClass.subject.links.map((link, index) => {
+                                    nextClass.subject.links.map((link, index, array) => {
                                         return (
                                             <Text
                                                 key={link.url}
@@ -87,7 +87,7 @@ function Class() {
 
                                                 cursor={'pointer'}
                                             >
-                                                Link 1,
+                                                {link.name + (index !== array.length - 1 ? ', ' : '')}
                                             </Text>
                                         )
                                     })

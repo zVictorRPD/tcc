@@ -13,6 +13,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     const [hasCurriculum, setHasCurriculum] = useState(false);
     const [course, setCourse] = useState<ICourse>({} as ICourse);
     const [subjects, setSubjects] = useState<ISubject[]>({} as ISubject[]);
+    const [selectedSubject, setSelectedSubject] = useState<ISubject>({} as ISubject);
     const [timetable, setTimetable] = useState<ITimeTable>({} as ITimeTable);
     const [complementary, setComplementary] = useState<IComplementary[]>([]);
     const [events, setEvents] = useState<IEvent[]>([]);
@@ -22,6 +23,11 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         onOpen: eventModalOnOpen,
         onClose: eventModalOnClose
     } = useDisclosure();
+    const {
+        isOpen: subjectModalIsOpen,
+        onOpen: subjectModalOnOpen,
+        onClose: subjectModalOnClose
+    } = useDisclosure();
 
     const DashboardContextData = {
         userId,
@@ -30,6 +36,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         hasCurriculum,
         course,
         subjects,
+        selectedSubject,
+        setSelectedSubject,
         timetable,
         complementary,
         events,
@@ -38,6 +46,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         eventModalIsOpen,
         eventModalOnOpen,
         eventModalOnClose,
+        subjectModalIsOpen,
+        subjectModalOnOpen,
+        subjectModalOnClose
     };
 
     const getDashboard = async (userId: number) => {
@@ -75,11 +86,11 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                 isClosable: true,
                 position: "top-right",
             });
-        }finally{
+        } finally {
             setOnLoad(false);
         }
     };
-    
+
     const getEvents = async (userId: number) => {
         try {
             const response = await api.get('dashboard/events', {

@@ -57,6 +57,7 @@ export async function getDashboardData(id: number) {
         userSubjects = subjects.map((subject: any) => {
             const newSubject = {
                 ...subject,
+                links: JSON.parse(subject.links),
                 ...subject.subject,
             }
             delete newSubject.subject;

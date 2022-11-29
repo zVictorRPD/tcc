@@ -31,7 +31,7 @@ function Status() {
             setTotalWorkload(totalWorkLoadObject);
             setDoneWorkload(() => {
                 const data = getDoneWorkload(subjects, complementary, false, totalWorkLoadObject);
-                setCourseProgress(parseFloat(((data.total / totalWorkload.total) * 100).toFixed(2)));
+                setCourseProgress(parseFloat(((data.total / totalWorkLoadObject.total) * 100).toFixed(2)));
                 return data;
             });
         }
