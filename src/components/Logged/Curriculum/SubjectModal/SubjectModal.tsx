@@ -4,6 +4,7 @@ import { api } from '../../../../services/api';
 import { CurriculumContext } from '../curriculumContext';
 import Informations from './Informations';
 import Notes from './Notes';
+import Rating from './Rating';
 
 function SubjectModal() {
     const { subjectModalIsOpen, subjectModalOnClose, selectedSubject, subjects, setSubjects, periods, setPeriods } = useContext(CurriculumContext);
@@ -67,11 +68,17 @@ function SubjectModal() {
             >
                 <ModalHeader>{selectedSubject.name}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody
+                    px={{
+                        base: '0',
+                        md: '4'
+                    }}
+                >
                     <Tabs>
                         <TabList>
                             <Tab>Informações</Tab>
                             <Tab>Anotações</Tab>
+                            <Tab>Avaliações</Tab>
                         </TabList>
 
                         <TabPanels>
@@ -84,6 +91,9 @@ function SubjectModal() {
                             </TabPanel>
                             <TabPanel>
                                 <Notes />
+                            </TabPanel>
+                            <TabPanel>
+                                <Rating />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
