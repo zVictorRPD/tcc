@@ -45,7 +45,6 @@ function EventModal(props: IEventModalProps) {
     }
 
     const handleSubmitEvent = async () => {
-        setOnLoad(true);
         if (eventData.title === '') {
             createToast('O título não pode ser vazio');
             return;
@@ -60,6 +59,7 @@ function EventModal(props: IEventModalProps) {
             createToast('A data de início não pode ser maior que a data de fim');
             return;
         }
+        setOnLoad(true);
 
         try {
             let params = {
@@ -103,7 +103,7 @@ function EventModal(props: IEventModalProps) {
                 description: '',
             });
         } catch {
-            console.log(`Erro ao ${isEdit ? 'editar' : 'adicionar'} evento`);
+            createToast(`Erro ao ${isEdit ? 'editar' : 'adicionar'} evento`);
         }
 
         eventModalOnClose();
