@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaEdit, FaEllipsisV, FaTrash } from 'react-icons/fa';
 import Subject from './Subject';
 import { Droppable } from 'react-beautiful-dnd';
@@ -14,7 +14,8 @@ interface IPeriodColumnProps {
 
 function PeriodColumn(props: IPeriodColumnProps) {
     const toast = useToast();
-    const cancelRef: any = React.useRef()
+    const cancelRef: any = React.useRef();
+    const focusField: any = React.useRef(null);
     const { period } = props;
     const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects, userId } = useContext(CurriculumContext);
     const [onLoading, setOnLoading] = useState(false);
@@ -27,6 +28,16 @@ function PeriodColumn(props: IPeriodColumnProps) {
     } = useDisclosure()
 
     const handleEditPeriod = async () => {
+        if (periodName === '') {
+            toast({
+                title: 'Insira um nome para o período.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+            return;
+        }
         setOnLoading(true);
         const newPeriods = {
             ...periods,
@@ -115,6 +126,12 @@ function PeriodColumn(props: IPeriodColumnProps) {
 
     }
 
+    useEffect(() => {
+        if (editingPeriod && focusField.current) {
+            focusField.current.focus();
+        }
+    }, [editingPeriod]);
+
     return (
         <>
             <Stack
@@ -159,7 +176,10 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                     variant='outline'
                                 />
                                 <MenuList>
-                                    <MenuItem icon={<FaEdit />} onClick={() => setEditingPeriod(true)}>
+                                    <MenuItem icon={<FaEdit />} onClick={() => {
+                                        setEditingPeriod(true);
+                                        setPeriodName(period.name);
+                                    }}>
                                         Editar nome
                                     </MenuItem>
                                     <MenuItem icon={<FaTrash />} onClick={alertOnOpen}>
@@ -174,6 +194,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                 placeholder="Nome do período"
                                 value={periodName}
                                 onChange={(e) => setPeriodName(e.target.value)}
+                                ref={focusField}
                             />
                             <HStack
                                 mt={2}

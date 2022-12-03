@@ -18,6 +18,7 @@ function Informations(props: IInformationsProps) {
 	const { isOpen, onClose, onOpen } = props;
 	const toast = useToast();
 	const [onLoad, setOnLoad] = useState(false);
+	const [onLoadDrawer, setOnLoadDrawer] = useState(false);
 	const [teachers, setTeachers] = useState<ITeacher[]>([]);
 	const [departaments, setDepartaments] = useState<IDepartament[]>([]);
 	const [filterCamps, setFilterCamps] = useState({
@@ -53,7 +54,7 @@ function Informations(props: IInformationsProps) {
 			});
 			return;
 		}
-		setOnLoad(true);
+		setOnLoadDrawer(true);
 		try {
 			const response = await api.get('/teacher/getTeacher', {
 				params: {
@@ -92,12 +93,12 @@ function Informations(props: IInformationsProps) {
 				position: "top-right",
 			});
 		} finally {
-			setOnLoad(false);
+			setOnLoadDrawer(false);
 		}
 	};
 
 	const handleCreateTeacher = async (teacherId: number) => {
-		setOnLoad(true);
+		setOnLoadDrawer(true);
 		try {
 			const response = await api.post('/curriculum/subject/createTeacher', {
 				subjectId: selectedSubject.id,
@@ -140,7 +141,7 @@ function Informations(props: IInformationsProps) {
 				position: "top-right",
 			});
 		} finally {
-			setOnLoad(false);
+			setOnLoadDrawer(false);
 		}
 	};
 
@@ -360,7 +361,7 @@ function Informations(props: IInformationsProps) {
 							</Select>
 						</FormControl>
 						<HStack justifyContent={'flex-end'} columnGap={'8px'}>
-							<Button variant={'blue-800'} isLoading={onLoad} onClick={getTeachers}>Filtrar</Button>
+							<Button variant={'blue-800'} isLoading={onLoadDrawer} onClick={getTeachers}>Filtrar</Button>
 						</HStack>
 						<Divider my={'.5rem'} />
 						<Box
@@ -377,7 +378,7 @@ function Informations(props: IInformationsProps) {
 										<Button
 											variant={'blue-800'}
 											size={'xs'}
-											isLoading={onLoad}
+											isDisabled={onLoadDrawer}
 											onClick={() => handleCreateTeacher(teacher.id)}
 											mr={'.5rem !important'}
 											ml={'auto !important'}
