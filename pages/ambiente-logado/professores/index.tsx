@@ -225,19 +225,21 @@ const Teachers: NextPage = () => {
                                                             }
                                                             {
                                                                 teacher.lattes && (
-                                                                    <Button
-                                                                        variant={'outline'}
-                                                                        leftIcon={
-                                                                            <Image src="/assets/images/logged/svgs/lattes.svg"
-                                                                                alt="Lattes"
-                                                                                w={'15px'}
-                                                                                h={'18px'}
-                                                                            />}
-                                                                    >
-                                                                        <a href={teacher.lattes} target={'_blank'} rel="noreferrer">
+                                                                    <a href={teacher.lattes} target={'_blank'} rel="noreferrer">
+                                                                        <Button
+                                                                            variant={'outline'}
+                                                                            leftIcon={
+                                                                                <Image src="/assets/images/logged/svgs/lattes.svg"
+                                                                                    alt="Lattes"
+                                                                                    w={'15px'}
+                                                                                    h={'18px'}
+                                                                                />}
+                                                                        >
+
                                                                             Lattes
-                                                                        </a>
-                                                                    </Button>
+
+                                                                        </Button>
+                                                                    </a>
                                                                 )
                                                             }
                                                         </HStack>
