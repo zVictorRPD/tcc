@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { NextPage } from "next";
 import { Calendar as ReactCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import { Box, useDisclosure } from "@chakra-ui/react";
+import { Box, useDisclosure, useToast } from "@chakra-ui/react";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/pt-br';
 import EventModal from "../../../src/components/Logged/Calendar/EventModal";
@@ -33,6 +33,7 @@ const lang = {
 
 const Calendar: NextPage = () => {
     const { data } = useSession();
+    const toast = useToast();
     const [userId, setUserId] = useState(0);
     const [events, setEvents] = useState<IEvent[]>([]);
     const [onLoad, setOnLoad] = useState(false);
@@ -65,7 +66,14 @@ const Calendar: NextPage = () => {
             });
             setEvents(newEvents);
         } catch {
-            console.log("Erro ao buscar eventos");
+            toast({
+                title: isEdit ? "Evento editado" : "Evento criado",
+                position: "top-right",
+                description: isEdit ? "O evento foi editado com sucesso" : "O evento foi criado com sucesso",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
         } finally {
             setOnLoad(false);
         }

@@ -10,7 +10,6 @@ function SelectCurriculumModal() {
     const toast = useToast();
 
     const handleSelectCourse = async () => {
-        setOnLoad(true);
         if (selectedCourse === "") {
             toast({
                 title: 'Selecione um curso.',
@@ -21,6 +20,7 @@ function SelectCurriculumModal() {
             });
             return;
         }
+        setOnLoad(true);
         try {
             const response = await api.post('/curriculum/createCurriculum', {
                 userId,

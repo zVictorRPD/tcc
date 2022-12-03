@@ -43,7 +43,6 @@ function Informations(props: IInformationsProps) {
 		}
 	};
 	const getTeachers = async () => {
-		setOnLoad(true);
 		if (filterCamps.name === "" && filterCamps.departament === "") {
 			toast({
 				title: "Preencha pelo menos um campo",
@@ -52,9 +51,9 @@ function Informations(props: IInformationsProps) {
 				isClosable: true,
 				position: "top-right",
 			});
-			setOnLoad(false);
 			return;
 		}
+		setOnLoad(true);
 		try {
 			const response = await api.get('/teacher/getTeacher', {
 				params: {

@@ -13,7 +13,6 @@ function AddPeriodColumn() {
     const { setPeriods, periods, periodOrder, setPeriodOrder, userId } = useContext(CurriculumContext);
 
     const handleAddPeriod = async () => {
-        setOnLoad(true);
         if (periodName === '') {
             toast({
                 title: 'Insira um nome para o período.',
@@ -24,6 +23,7 @@ function AddPeriodColumn() {
             });
             return;
         }
+        setOnLoad(true);
         try {
             const response = await api.post('/curriculum/period/createPeriod', {
                 userId,

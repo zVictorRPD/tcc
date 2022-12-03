@@ -14,7 +14,6 @@ function AddSubjectModal() {
     const toast = useToast();
 
     const handleAddSubject = async () => {
-        setOnLoad(true);
         if (code === "" || selectedPeriod === "" || subjectType === "") {
             toast({
                 title: 'Insira um código e selecione um período.',
@@ -36,7 +35,7 @@ function AddSubjectModal() {
             });
             return;
         }
-
+        setOnLoad(true);
         try {
             const response = await api.post('/curriculum/subject/createSubject', {
                 userId,
@@ -155,7 +154,13 @@ function AddSubjectModal() {
                     <Button variant='outline' mr={3} onClick={addSubjectModalOnClose}>
                         Cancelar
                     </Button>
-                    <Button variant='blue-800' onClick={handleAddSubject}>Adicionar</Button>
+                    <Button
+                        variant='blue-800'
+                        onClick={handleAddSubject}
+                        isLoading={onLoad}
+                    >
+                        Adicionar
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
