@@ -11,7 +11,12 @@ function EventModal() {
             <ModalContent>
                 <ModalHeader>Visualizar {eventData.title}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody
+                    px={{
+                        base: '0',
+                        md: '4'
+                    }}
+                >
 
                     <FormControl mb={3}>
                         <FormLabel>Título</FormLabel>

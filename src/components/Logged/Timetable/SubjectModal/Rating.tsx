@@ -3,11 +3,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa';
 import { subjectCalculateRatings } from '../../../../functions/rating';
 import { api } from '../../../../services/api';
-import { CurriculumContext } from '../curriculumContext';
+import { TimetableContext } from '../TimetableContext';
 
 function Rating() {
     const toast = useToast();
-    const { selectedSubject, userId } = useContext(CurriculumContext);
+    const { selectedSubject, userId } = useContext(TimetableContext);
     const [addingRating, setAddingRating] = useState(false);
     const [onLoad, setOnLoad] = useState(true);
     const [complexity, setComplexity] = useState(0);

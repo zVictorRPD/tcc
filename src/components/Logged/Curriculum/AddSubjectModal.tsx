@@ -90,7 +90,12 @@ function AddSubjectModal() {
             <ModalContent>
                 <ModalHeader>Adicionar matéria</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody
+                    px={{
+                        base: '0',
+                        md: '4'
+                    }}
+                >
 
                     <FormControl mb={3}>
                         <FormLabel

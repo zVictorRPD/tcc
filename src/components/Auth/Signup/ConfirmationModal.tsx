@@ -35,7 +35,12 @@ export default function ConfirmationModal(props: ConfirmationModalProps) {
             <ModalContent>
                 <ModalHeader></ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody
+                    px={{
+                        base: '0',
+                        md: '4'
+                    }}
+                >
                     <Stack
                         alignItems={"center"}
                         justifyContent={"center"}

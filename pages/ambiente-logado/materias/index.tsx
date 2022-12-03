@@ -26,16 +26,27 @@ import {
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
-import { FaChevronLeft, FaChevronRight, FaFilter } from "react-icons/fa";
+
+import { FaChevronLeft, FaChevronRight, FaChevronDown, FaFilter, FaEye } from "react-icons/fa";
 import { api } from "../../../src/services/api";
 import { toCapitalize } from "../../../src/functions/toCapitalize";
 import { validateSubjectCode } from "../../../src/functions/validation";
+import SubjectModal from "../../../src/components/Logged/Subject/SubjectModal/SubjectModal";
+import { useSession } from "next-auth/react";
 const Subjects: NextPage = () => {
+    const { data } = useSession();
+    const [userId, setUserId] = useState(0);
     const [subjects, setSubjects] = useState<ISubjectList[]>([]);
+    const [selectedSubject, setSelectedSubject] = useState<ISubjectList>({} as ISubjectList);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [onLoad, setOnLoad] = useState(false);
     const { isOpen, onToggle, onClose } = useDisclosure();
+    const {
+        isOpen: modalIsOpen,
+        onOpen: modalOnOpen,
+        onClose: modalOnClose
+    } = useDisclosure();
     const toast = useToast();
     const [filterCamps, setFilterCamps] = useState({
         code: "",
@@ -110,6 +121,12 @@ const Subjects: NextPage = () => {
     useEffect(() => {
         getSubjects();
     }, [page]);
+
+    useEffect(() => {
+        if (typeof data?.id === 'number') {
+            setUserId(data?.id);
+        }
+    }, [data]);
 
     return (
         <>
@@ -208,7 +225,16 @@ const Subjects: NextPage = () => {
                                                     <td>{toCapitalize(subject.name)}</td>
                                                     <td>{subject.time !== 0 ? `${subject.time} Horas` : 'Desconhecida'}</td>
                                                     <td>
-
+                                                        <Button
+                                                            variant={'blue-800'}
+                                                            size={'sm'}
+                                                            onClick={() => {
+                                                                setSelectedSubject(subject);
+                                                                modalOnOpen();
+                                                            }}
+                                                        >
+                                                            Ver as avaliações
+                                                        </Button>
                                                     </td>
                                                 </tr>
                                             )
@@ -280,6 +306,12 @@ const Subjects: NextPage = () => {
 
                 </Box>
             </Box>
+            <SubjectModal modalProps={{
+                modalIsOpen,
+                modalOnClose,
+                selectedSubject,
+                userId
+            }} />
         </>
 
     );
