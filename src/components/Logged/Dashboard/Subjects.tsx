@@ -1,9 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Badge, Box, Button, Flex, GridItem, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, SkeletonText, Text } from '@chakra-ui/react'
 import { DashboardContext } from './DashboardContext';
 
 export default function Subjects() {
     const { onLoad, subjects, setSelectedSubject, subjectModalOnOpen } = useContext(DashboardContext);
+    const [doingSubjects, setDoingSubjects] = useState<ISubject[]>([]);
+    useEffect(() => {
+        setDoingSubjects(Object.values(subjects).filter(subject => subject.status === 'doing'));
+    }, [subjects]);
     return (
         <GridItem
             bg={'white'}
@@ -38,8 +42,7 @@ export default function Subjects() {
                     }}
                     overflowY={'auto'}
                 >
-                    {Object.values(subjects).map((subject, index) => {
-                        if(subject.status !== 'doing') return;
+                    {doingSubjects.length > 0 ? doingSubjects.map((subject, index) => {
                         return (
                             <Flex
                                 key={subject.code}
@@ -92,28 +95,16 @@ export default function Subjects() {
                                 >
                                     {subject.isOptional ? 'Optativa' : 'Obrigatória'}
                                 </Badge>
-                                {/* <Popover>
-                                    <PopoverTrigger>
-                                        <Button
-                                            variant='blue-800'
-                                            size={'xs'}
-                                        >
-                                            {subject.time}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent>
-                                        <PopoverArrow />
-                                        <PopoverCloseButton />
-                                        <PopoverHeader>Horário traduzido</PopoverHeader>
-                                        <PopoverBody>
-                                            Sexta feita às 23:45
-                                        </PopoverBody>
-                                    </PopoverContent>
-                                </Popover> */}
-
                             </Flex>
                         )
-                    })}
+                    }) : (
+                        <Text
+                            fontSize={'1rem'}
+                            fontWeight={'400'}
+                        >
+                            Você não tem matérias com o status de cursando.
+                        </Text>
+                    )}
                 </Box>
             ) : (
                 <SkeletonText mt='4' noOfLines={6} spacing='4' />
