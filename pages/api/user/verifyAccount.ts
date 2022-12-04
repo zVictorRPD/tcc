@@ -21,27 +21,27 @@ export default async function handler(
     const response = await getUserInfo(emailString);
 
     if (response.code === 404 || response.data === undefined) {
-      res.redirect("/login?message=invalidlink");
+      res.redirect("/auth/login?message=invalidlink");
     }
 
     if (response.data === undefined) return;
 
     if (response.data.emailVerified === true) {
-      res.redirect("/login?message=alreadyverified");
+      res.redirect("/auth/login?message=alreadyverified");
     }
 
     const msgToUnToken = response.data.email + response.data.name;
 
     if (!(await bcrypt.compare(msgToUnToken, tokenString))) {
-      res.redirect("/login?message=invalidlink");
+      res.redirect("/auth/login?message=invalidlink");
     }
 
     const updateResponse = await verifyUserEmail(emailString);
 
     if (updateResponse.code === 404) {
-      res.redirect("/login?message=invalidlink");
+      res.redirect("/auth/login?message=invalidlink");
     }
 
-    res.redirect("/login?message=verified");
+    res.redirect("/auth/login?message=verified");
   }
 }
