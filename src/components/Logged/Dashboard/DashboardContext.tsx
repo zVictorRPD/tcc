@@ -1,5 +1,6 @@
 import { useToast, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../../../services/api";
 
@@ -8,6 +9,7 @@ export const DashboardContext = createContext<IDashboardContext>({} as IDashboar
 export function DashboardProvider({ children }: { children: ReactNode }) {
     const toast = useToast();
     const { data } = useSession();
+    const router = useRouter();
     const [userId, setUserId] = useState(0);
     const [onLoad, setOnLoad] = useState(true);
     const [hasCurriculum, setHasCurriculum] = useState(false);
@@ -61,7 +63,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
             });
             if (typeof response.data.hasCurriculum === 'undefined') throw new Error('No curriculum');
             if (!response.data.hasCurriculum) {
-                window.location.href = '/ambiente-logado/grade-curricular';
+                router.push('/ambiente-logado/grade-curricular');
                 return;
             };
             const {
