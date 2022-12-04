@@ -28,6 +28,11 @@ export default async function handler(
             || isNaN(complexity)
             || isNaN(relevance)
             || typeof comment !== "string"
+            || complexity < 0
+            || complexity > 10
+            || relevance < 0
+            || relevance > 10
+            || comment.length > 1000
             ) return res.status(400).json({ error: "Bad request" });
 
         const response = await createRating(userId, subjectCode, complexity, relevance, comment);

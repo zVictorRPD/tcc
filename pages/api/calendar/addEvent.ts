@@ -16,14 +16,25 @@ export default async function handler(
             start,
             end,
             description,
-        } : {
+        }: {
             title: string,
             start: Date,
             end: Date,
             description: string,
         } = req.body;
-        
+
         const userId = token.id as number;
+
+        if (
+            !title
+            || !start
+            || !end
+            || typeof title !== "string"
+            || typeof start !== "object"
+            || typeof end !== "object"
+            || title.length > 100
+            || start > end
+            ) return res.status(400).json({ error: "Bad Request" });
 
         const response = await addEvent(userId, title, start, end, description);
 

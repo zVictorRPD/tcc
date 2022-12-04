@@ -12,6 +12,8 @@ export default async function handler(
     if (req.method === "POST") {
         const { email } = req.body;
 
+        if (!email || typeof email !== "string") return res.status(400).json({ error: "Bad request" });
+
         const checkEmail = await checkUserEmail(email);
 
         if (checkEmail?.code === 200) {

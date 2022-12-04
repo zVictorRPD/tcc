@@ -13,7 +13,7 @@ export default async function handler(
     if (req.method === "GET") {
         const { subjectCode } = req.query;
         const userId = token.id as number;
-        if (typeof subjectCode !== "string" ) return res.status(400).json({ error: "Bad request" });
+        if (!subjectCode || typeof subjectCode !== "string" ) return res.status(400).json({ error: "Bad request" });
 
         const response = await getSubjectRating(userId, subjectCode);
 

@@ -26,8 +26,18 @@ export default async function handler(
         } = req.body;
 
         const userId = token.id as number;
-        
-        if(isNaN(parseInt(id as string))) return res.status(400).json({ error: "Bad request" });
+
+        if (
+            !title
+            || isNaN(parseInt(id as string))
+            || !start
+            || !end
+            || typeof title !== "string"
+            || typeof start !== "object"
+            || typeof end !== "object"
+            || title.length > 100
+            || start > end
+            ) return res.status(400).json({ error: "Bad Request" });
 
         const response = await editEvent(userId, parseInt(id), title, start, end, description);
 

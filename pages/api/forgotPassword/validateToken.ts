@@ -8,6 +8,12 @@ export default async function handler(
 ) {
     if (req.method === "POST") {
         const { email, token }: { email: string; token: string } = req.body;
+        if (
+            !email
+            || !token
+            || typeof email !== "string"
+            || typeof token !== "string"
+        ) return res.status(400).json({ error: "Bad request" });
         const checkEmail = await checkUserEmail(email);
         const dbToken = await getToken(email);
 

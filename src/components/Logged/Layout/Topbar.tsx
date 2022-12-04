@@ -26,7 +26,7 @@ import {
 import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import Head from "next/head";
 import { FaInbox } from "react-icons/fa";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { getUserData } from "../../../functions/userData";
 import { pageNameObject } from "../../../functions/pageName";
@@ -44,19 +44,15 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
     const [name, setName] = useState("");
     const [avatar, setAvatar] = useState("");
     const router = useRouter();
-    const { status, data } = useSession();
-
-    const getData = async (id: string) => {
-        const { name, avatar } = await getUserData(id);
+    const getData = async () => {
+        const { name, avatar } = await getUserData();
         setName(name);
         setAvatar(avatar);
     }
 
     useEffect(() => {
-        if (data?.id !== undefined && data?.id) {
-            getData(data?.id.toString());
-        }
-    }, [data]);
+        getData();
+    }, []);
 
 
     return (

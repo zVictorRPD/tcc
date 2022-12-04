@@ -13,10 +13,18 @@ export default async function handler(
     if (req.method === "POST") {
         const { name, time } = req.body;
         const userId = token.id as number;
-        
-        if (typeof name !== "string" || typeof time !== "number") return res.status(400).json({ error: "Bad request" });
+        if(
+            !name
+            || !time
+            || typeof name !== "string"
+            || typeof time !== "number"
+            || name.length > 100
+            || time < 0
+        ) return res.status(400).json({ error: "Bad Request" });
 
-        const response = await createComplementary(userId, name, time);
+        const newTime = time > 1000 ? time : 1000;
+
+        const response = await createComplementary(userId, name, newTime);
 
         return res.status(200).json(response);
     }

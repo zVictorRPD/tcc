@@ -1,6 +1,6 @@
 import { prisma } from "../config/prisma.config";
 
-export async function getTeacher(page: number, name: string, departament: string, take:number = 8) {
+export async function getTeacher(page: number, name: string = '', departament: string = '', take:number = 8) {
     let filter = {};
     if(name.length > 0) {
         filter = {

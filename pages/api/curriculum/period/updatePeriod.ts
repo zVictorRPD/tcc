@@ -12,7 +12,7 @@ export default async function handler(
     if (req.method === "POST") {
         const { periodId, name } = req.body;
         const userId = token.id as number;
-        if (typeof periodId !== "string" || isNaN(parseInt(periodId as string)) || typeof name !== "string") return res.status(400).json({ error: "Bad request" });
+        if (!periodId || !name || typeof periodId !== "string" || isNaN(parseInt(periodId as string)) || typeof name !== "string" || name.length > 100) return res.status(400).json({ error: "Bad request" });
 
         const response = await updatePeriod(userId, parseInt(periodId), name);
 

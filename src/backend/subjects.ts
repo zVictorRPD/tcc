@@ -1,6 +1,6 @@
 import { prisma } from "../config/prisma.config";
 
-export async function getSubject(page: number, code: string, name: string, time: number) {
+export async function getSubject(page: number, code: string = '', name: string = '', time: number) {
     let filter = {};
     if (code.length > 0) {
         filter = {
