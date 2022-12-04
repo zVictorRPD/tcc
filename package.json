@@ -36,7 +36,8 @@
     "react-tag-input-component": "^1.1.2",
     "react-xls": "^0.1.1",
     "sass": "^1.55.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "vlibras-nextjs": "^1.1.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

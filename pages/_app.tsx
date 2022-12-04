@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import theme from "../theme";
 import LoggedContainer from "../src/components/Logged/Layout/LoggedContainer";
 import Head from "next/head";
+import VLibras from 'vlibras-nextjs';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
     const url = router.pathname;
@@ -26,6 +27,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
                     <Component {...pageProps} />
                 }
             </SessionProvider>
+            {process.env.NODE_ENV === "production" && <VLibras forceOnload />}
         </ChakraProvider>
     );
 }
