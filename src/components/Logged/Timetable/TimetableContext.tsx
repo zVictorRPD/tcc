@@ -60,26 +60,31 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
                     userId,
                 }
             });
-
-            if (response.data.hasCurriculum) {
-                const {
-                    periods,
-                    subjects,
-                    timetable
-                }: {
-                    periods: IPeriods,
-                    subjects: ISubjects,
-                    timetable: ITimeTable
-                } = response.data;
-
-                if (periods && subjects) {
-                    setHasCurriculum(true);
-                    setPeriods(periods);
-                    setSubjects(subjects);
-                    timetable === null ? setTimetableSubjects(TimetableObject) : setTimetableSubjects(timetable);
-                }
+            if (typeof response.data.hasCurriculum === 'undefined') throw new Error('No curriculum');
+            if (!response.data.hasCurriculum) {
+                window.location.href = '/ambiente-logado/grade-curricular';
                 return;
+            };
+            const {
+                periods,
+                subjects,
+                timetable
+            }: {
+                periods: IPeriods,
+                subjects: ISubjects,
+                timetable: ITimeTable
+            } = response.data;
+
+            if (periods && subjects) {
+                setHasCurriculum(true);
+                setPeriods(periods);
+                setSubjects(subjects);
+                timetable === null ? setTimetableSubjects(TimetableObject) : setTimetableSubjects(timetable);
             }
+            setTimeout(() => {
+                setOnLoad(false);
+            }, 200);
+            return;
         } catch (err) {
             toast({
                 title: "Erro ao carregar a grade horária",
@@ -89,11 +94,6 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
                 isClosable: true,
                 position: "top-right",
             });
-        } finally {
-            setTimeout(() => {
-                setOnLoad(false);
-            }, 200);
-            
         }
     };
 

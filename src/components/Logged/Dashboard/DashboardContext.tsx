@@ -60,7 +60,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                 }
             });
             if (typeof response.data.hasCurriculum === 'undefined') throw new Error('No curriculum');
-            if (!response.data.hasCurriculum) return;
+            if (!response.data.hasCurriculum) {
+                window.location.href = '/ambiente-logado/grade-curricular';
+                return;
+            };
             const {
                 course,
                 subjects,
@@ -76,6 +79,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
             if (subjects) setSubjects(subjects);
             if (timetable) setTimetable(timetable);
             if (complementary) setComplementary(complementary);
+            setOnLoad(false);
 
         } catch (err) {
             toast({
@@ -86,8 +90,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                 isClosable: true,
                 position: "top-right",
             });
-        } finally {
-            setOnLoad(false);
         }
     };
 

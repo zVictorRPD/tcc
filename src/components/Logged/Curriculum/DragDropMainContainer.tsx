@@ -107,7 +107,6 @@ function DragDropMainContainer() {
         <>
             {!onLoad ? (
                 <>
-
                     {hasCurriculum ? (
                         <DragDropContext
                             onDragEnd={onDragEnd}
