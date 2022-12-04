@@ -19,7 +19,6 @@ const Home: NextPage = () => {
                 <SignupShortcut />
                 <Footer />
             </Container>
-            {/* <VLibras forceOnload={true} /> */}
         </>
     );
 };

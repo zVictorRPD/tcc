@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getUserInfo } from "../../../src/backend/users";
 import bcrypt from "bcrypt";
 import { sendEmailFunction } from "../../../src/backend/nodemailer";
+import { generateConfirmationEmail } from "../../../src/components/Emails/confirmation";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -44,7 +45,7 @@ export default async function handler(
     await sendEmailFunction(
       [email],
       "Verificação de Email",
-      `<p>Clique no link para validar seu email: <a href="${link}">${link}</a></p>`
+      generateConfirmationEmail(link)
     );
 
     return res
