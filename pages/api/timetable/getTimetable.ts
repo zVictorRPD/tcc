@@ -1,18 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getTimetable } from "../../../src/backend/timetable";
 import { getCurriculum } from "../../../src/backend/curriculum";
+import { getToken } from "next-auth/jwt";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
 
+    const token = await getToken({ req })
+
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
     if (req.method === "GET") {
-        const { userId } = req.query;
+        const userId = token.id as number;
 
-        if (isNaN(parseInt(userId as string)) || typeof userId !== "string") return res.status(400).json({ error: "Bad request" });
-
-        const response = await getCurriculum(parseInt(userId));
+        const response = await getCurriculum(userId);
         const { curriculum, hasCurriculum } = response;
 
         if (!hasCurriculum) return res.status(200).json(response);
@@ -45,7 +48,7 @@ export default async function handler(
             });
         });
 
-        const timetable = await getTimetable(parseInt(userId));
+        const timetable = await getTimetable(userId);
         
         return res.status(200).json({
             periods: periodsData,

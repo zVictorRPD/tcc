@@ -7,7 +7,7 @@ import { api } from '../../../services/api';
 
 function AddSubjectModal() {
     const toast = useToast();
-    const { addSubjectModalIsOpen, addSubjectModalOnClose, subjects, periods, setTimetableSubjects, timetableSubjects, userId } = useContext(TimetableContext);
+    const { addSubjectModalIsOpen, addSubjectModalOnClose, subjects, periods, setTimetableSubjects, timetableSubjects } = useContext(TimetableContext);
     const [addSubjectModalData, setAddSubjectModalData] = useState<IAddSubjectModalTimetable>(
         {
             period: '',
@@ -173,7 +173,6 @@ function AddSubjectModal() {
         }
         try {
             const response = await api.post('/timetable/updateTimetable', {
-                userId,
                 timetable: timetableSubjects,
             });
             if (!response.data.success) throw new Error();

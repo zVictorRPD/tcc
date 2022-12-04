@@ -6,7 +6,7 @@ import { CurriculumContext } from '../curriculumContext';
 import style from '../style.module.scss';
 
 function PeriodTab() {
-    const { complementary, setComplementary, userId } = useContext(CurriculumContext);
+    const { complementary, setComplementary } = useContext(CurriculumContext);
     const [onLoad, setOnLoad] = useState(false);
     const toast = useToast();
     const [newComplementary, setNewComplementary] = useState({
@@ -20,7 +20,6 @@ function PeriodTab() {
             const response = await api.post('/curriculum/complementary/createComplementary', {
                 name: newComplementary.name,
                 time: newComplementary.time,
-                userId
             });
             if(!response.data.name) throw new Error('Erro ao adicionar complementar');
             setComplementary([...complementary, response.data]);

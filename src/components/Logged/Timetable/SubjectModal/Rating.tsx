@@ -7,7 +7,7 @@ import { TimetableContext } from '../TimetableContext';
 
 function Rating() {
     const toast = useToast();
-    const { selectedSubject, userId } = useContext(TimetableContext);
+    const { selectedSubject } = useContext(TimetableContext);
     const [addingRating, setAddingRating] = useState(false);
     const [onLoad, setOnLoad] = useState(true);
     const [complexity, setComplexity] = useState(0);
@@ -21,7 +21,6 @@ function Rating() {
         try {
             const response = await api.get(`/subject/getRatings`, {
                 params: {
-                    userId,
                     subjectCode: selectedSubject.code
                 }
             });
@@ -54,7 +53,6 @@ function Rating() {
         setOnLoad(true);
         try {
             const response = await api.post('/subject/createRating', {
-                userId,
                 subjectCode: selectedSubject.code,
                 complexity,
                 relevance,

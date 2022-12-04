@@ -6,7 +6,6 @@ import { Box, useDisclosure, useToast } from "@chakra-ui/react";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/pt-br';
 import EventModal from "../../../src/components/Logged/Calendar/EventModal";
-import { useSession } from "next-auth/react";
 import { api } from "../../../src/services/api";
 import styles from './style.module.scss'
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
@@ -32,9 +31,7 @@ const lang = {
 }
 
 const Calendar: NextPage = () => {
-    const { data } = useSession();
     const toast = useToast();
-    const [userId, setUserId] = useState(0);
     const [events, setEvents] = useState<IEvent[]>([]);
     const [onLoad, setOnLoad] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -49,14 +46,10 @@ const Calendar: NextPage = () => {
         onClose: eventModalOnClose
     } = useDisclosure();
 
-    const getEvents = async (id: number) => {
+    const getEvents = async () => {
         setOnLoad(true);
         try {
-            const response = await api.get('/calendar/getEvents', {
-                params: {
-                    id: id,
-                }
-            });
+            const response = await api.get('/calendar/getEvents');
             const newEvents = response.data.events.map((event: IEvent) => {
                 return {
                     ...event,
@@ -116,11 +109,8 @@ const Calendar: NextPage = () => {
     )
 
     useEffect(() => {
-        if (typeof data?.id === 'number') {
-            setUserId(data.id);
-            getEvents(data.id);
-        }
-    }, [data]);
+        getEvents();
+    }, []);
 
     return (
         <>
@@ -156,7 +146,6 @@ const Calendar: NextPage = () => {
                 eventData,
                 setEventData,
                 isEdit,
-                userId,
                 onLoad,
                 setOnLoad,
             }} />

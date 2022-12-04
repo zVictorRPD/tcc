@@ -1,5 +1,4 @@
 import { useToast, useDisclosure } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../../../services/api";
 import { TimetableObject } from "../../../functions/timetable";
@@ -9,9 +8,7 @@ export const TimetableContext = createContext<ITimetableContext>({} as ITimetabl
 
 export function TimetableProvider({ children }: { children: ReactNode }) {
     const toast = useToast();
-    const { data } = useSession();
     const router = useRouter();
-    const [userId, setUserId] = useState(0);
     const [onLoad, setOnLoad] = useState(false);
     const [timetableSubjects, setTimetableSubjects] = useState<ITimeTable>({} as ITimeTable);
     const [hasCurriculum, setHasCurriculum] = useState(false);
@@ -32,7 +29,6 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
     } = useDisclosure();
 
     const timetableContextData = {
-        userId,
         onLoad,
         setOnLoad,
         hasCurriculum,
@@ -54,14 +50,10 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
         subjectModalOnClose
     };
 
-    const getTimetable = async (userId: number) => {
+    const getTimetable = async () => {
         setOnLoad(true);
         try {
-            const response = await api.get('/timetable/getTimetable', {
-                params: {
-                    userId,
-                }
-            });
+            const response = await api.get('/timetable/getTimetable');
             if (typeof response.data.hasCurriculum === 'undefined') throw new Error('No curriculum');
             if (!response.data.hasCurriculum) {
                 router.push('/ambiente-logado/grade-curricular');
@@ -100,11 +92,8 @@ export function TimetableProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        if (typeof data?.id === 'number') {
-            setUserId(data?.id);
-            getTimetable(data.id);
-        }
-    }, [data, hasCurriculum]);
+        getTimetable();
+    }, [hasCurriculum]);
 
     return (
         <TimetableContext.Provider value={timetableContextData}>

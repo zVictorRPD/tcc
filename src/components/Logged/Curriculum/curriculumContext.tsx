@@ -1,15 +1,12 @@
 import { useDisclosure } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../../../services/api";
 
 export const CurriculumContext = createContext<ICurriculumContext>({} as ICurriculumContext);
 
 export function CurriculumProvider({ children }: { children: ReactNode }) {
-    const { data } = useSession();
     const [onLoad, setOnLoad] = useState(false);
     const [hasCurriculum, setHasCurriculum] = useState(false);
-    const [userId, setUserId] = useState(0);
     const [course, setCourse] = useState<ICourse>({} as ICourse);
     const [courses, setCourses] = useState<Object[]>([]);
     const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
@@ -42,7 +39,6 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     } = useDisclosure();
 
     const curriculumContextData = {
-        userId,
         hasCurriculum,
         setHasCurriculum,
         course,
@@ -75,14 +71,10 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         setOnLoad,
     }
 
-    const getCurriculum = async (userId: number) => {
+    const getCurriculum = async () => {
         setOnLoad(true);
         try {
-            const response = await api.get('/curriculum/getCurriculum', {
-                params: {
-                    userId,
-                }
-            });
+            const response = await api.get('/curriculum/getCurriculum');
 
             if (response.data.hasCurriculum) {
                 const {
@@ -120,11 +112,8 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        if (typeof data?.id === 'number') {
-            setUserId(data?.id)
-            getCurriculum(data.id);
-        }
-    }, [data, hasCurriculum]);
+        getCurriculum();
+    }, [hasCurriculum]);
 
     return (
         <CurriculumContext.Provider value={curriculumContextData}>

@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
 import { updatePasswordId, updateUser } from "../../../src/backend/users";
 import {
     validateName,
@@ -10,18 +11,23 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+
+    const token = await getToken({ req })
+
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
     if (req.method === "POST") {
         const {
             name,
-            id,
             password,
             avatar,
         }: {
             name: string;
-            id: string;
             password: string;
             avatar: string;
         } = req.body;
+
+        const id = token.id as number;
 
         if (!validateName(name)) {
             return res.status(200).json({
@@ -30,7 +36,7 @@ export default async function handler(
             });
         }
 
-        const updateUserResponse = await updateUser(name, avatar, parseInt(id));
+        const updateUserResponse = await updateUser(name, avatar, id);
 
         if (password === "") {
             return res.status(200).json(updateUserResponse);
@@ -43,7 +49,7 @@ export default async function handler(
             });
         }
 
-        const updatePasswordResponse = await updatePasswordId(parseInt(id), password);
+        const updatePasswordResponse = await updatePasswordId(id, password);
         return res.status(200).json(updatePasswordResponse);
     }
 }

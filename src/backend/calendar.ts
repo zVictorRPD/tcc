@@ -36,10 +36,11 @@ export async function addEvent(userId: number, title: string, start: Date, end: 
     return { event };
 }
 
-export async function editEvent(id: number, title: string, start: Date, end: Date, description: string) {
-    const event = await prisma.calendarEvents.update({
+export async function editEvent(userId: number, id: number, title: string, start: Date, end: Date, description: string) {
+    const update = await prisma.calendarEvents.updateMany({
         where: {
-            id
+            id,
+            userId
         },
         data: {
             title,
@@ -51,13 +52,22 @@ export async function editEvent(id: number, title: string, start: Date, end: Dat
         return err;
     });
 
+    const event = await prisma.calendarEvents.findUnique({
+        where: {
+            id
+        }
+    }).catch((err) => {
+        return err;
+    });
+
     return { event };
 }
 
-export async function deleteEvent(id: number) {
-    const event = await prisma.calendarEvents.delete({
+export async function deleteEvent(userId:number, id: number) {
+    const event = await prisma.calendarEvents.deleteMany({
         where: {
-            id
+            id: id,
+            userId: userId
         }
     }).catch((err) => {
         return err;

@@ -11,7 +11,6 @@ interface IEventModalProps {
         eventData: IEvent,
         setEventData: React.Dispatch<React.SetStateAction<IEvent>>,
         isEdit: boolean,
-        userId: number,
         onLoad: boolean,
         setOnLoad: React.Dispatch<React.SetStateAction<boolean>>,
     }
@@ -27,7 +26,6 @@ function EventModal(props: IEventModalProps) {
         eventData,
         setEventData,
         isEdit,
-        userId,
         onLoad,
         setOnLoad,
     } = props.eventModal
@@ -63,7 +61,6 @@ function EventModal(props: IEventModalProps) {
 
         try {
             let params = {
-                userId,
                 title: eventData.title,
                 start: eventData.start,
                 end: eventData.end,

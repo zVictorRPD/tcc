@@ -126,7 +126,6 @@ const EditProfile: NextPage = () => {
 
         const response = await api.post("/user/editUser", {
             ...formCamps,
-            id: data?.id,
             avatar: userImage,
         });
 
@@ -150,8 +149,8 @@ const EditProfile: NextPage = () => {
         setOnLoading(false);
     };
 
-    const getData = async (id: string) => {
-        const { name, avatar } = await getUserData(id);
+    const getData = async () => {
+        const { name, avatar } = await getUserData();
         setUserImage(avatar);
         setFormCamps({
             ...formCamps,
@@ -161,8 +160,6 @@ const EditProfile: NextPage = () => {
 
     useEffect(() => {
         if (
-            data?.id !== undefined &&
-            data?.id &&
             data?.user?.name !== undefined &&
             data?.user?.name
         ) {
@@ -170,7 +167,7 @@ const EditProfile: NextPage = () => {
                 ...formCamps,
                 name: data.user.name,
             });
-            getData(data?.id.toString());
+            getData();
         }
     }, [data]);
 

@@ -1,5 +1,4 @@
 interface IDashboardContext {
-    userId: number;
     onLoad: boolean;
     setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
     hasCurriculum: boolean;
@@ -66,7 +65,6 @@ interface ITimeTableTranslation {
 }
 
 interface ITimetableContext {
-    userId: number;
     hasCurriculum: boolean;
     timetableSubjects: ITimeTable;
     periods: IPeriods;
@@ -132,7 +130,6 @@ interface ISelectedSubject extends ISubject {
 }
 
 interface ICurriculumContext {
-    userId: number;
     hasCurriculum: boolean;
     setHasCurriculum: React.Dispatch<React.SetStateAction<boolean>>;
     course: ICourse;

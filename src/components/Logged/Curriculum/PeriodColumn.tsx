@@ -17,7 +17,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
     const cancelRef: any = React.useRef();
     const focusField: any = React.useRef(null);
     const { period } = props;
-    const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects, userId } = useContext(CurriculumContext);
+    const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects } = useContext(CurriculumContext);
     const [onLoading, setOnLoading] = useState(false);
     const [editingPeriod, setEditingPeriod] = useState(false);
     const [periodName, setPeriodName] = useState(period.name);
@@ -79,7 +79,6 @@ function PeriodColumn(props: IPeriodColumnProps) {
         setOnLoading(true);
         try {
             const response = await api.post('/curriculum/period/deletePeriod', {
-                userId: userId,
                 periodId: period.id,
             });
             if (!response.data.courseCode) throw new Error('Erro ao deletar período');

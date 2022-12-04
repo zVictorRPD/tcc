@@ -1,11 +1,11 @@
 import { prisma } from "../config/prisma.config";
 
-export async function getEvents(id: number) {
+export async function getEvents(userId: number) {
 
     const events = await prisma.calendarEvents.findMany({
         take: 6,
         where: {
-            userId: id,
+            userId,
             start: {
                 gte: new Date()
             }

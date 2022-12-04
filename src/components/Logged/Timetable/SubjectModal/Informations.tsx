@@ -15,7 +15,7 @@ interface IInformationsProps {
 
 
 function Informations(props: IInformationsProps) {
-	const { setSelectedSubject, selectedSubject, subjects, setSubjects, setTimetableSubjects, selectedColor, timetableSubjects, onLoad, setOnLoad,  userId } = useContext(TimetableContext);
+	const { setSelectedSubject, selectedSubject, subjects, setSubjects, setTimetableSubjects, selectedColor, timetableSubjects, onLoad, setOnLoad } = useContext(TimetableContext);
 	const { isOpen, onClose, onOpen } = props;
 	const toast = useToast();
 	const [teachers, setTeachers] = useState<ITeacher[]>([]);
@@ -194,7 +194,6 @@ function Informations(props: IInformationsProps) {
 		const newTimetable = updateSubjectColor(selectedSubject.id, color, timetableSubjects);
 		try {
 			await api.post('timetable/updateTimetable', {
-				userId,
 				timetable: newTimetable
 			});
 			setTimetableSubjects(newTimetable);

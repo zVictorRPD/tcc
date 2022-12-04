@@ -5,7 +5,7 @@ import { api } from '../../../services/api';
 import { CurriculumContext } from './curriculumContext';
 
 function SelectCurriculumModal() {
-    const { selectCurriculumModalIsOpen, selectCurriculumModalOnClose, courses, onLoad, setOnLoad, userId, setHasCurriculum } = useContext(CurriculumContext);
+    const { selectCurriculumModalIsOpen, selectCurriculumModalOnClose, courses, onLoad, setOnLoad, setHasCurriculum } = useContext(CurriculumContext);
     const [selectedCourse, setSelectedCourse] = useState("");
     const toast = useToast();
 
@@ -23,7 +23,6 @@ function SelectCurriculumModal() {
         setOnLoad(true);
         try {
             const response = await api.post('/curriculum/createCurriculum', {
-                userId,
                 courseCode: selectedCourse
             });
             if (response.status === 201) {

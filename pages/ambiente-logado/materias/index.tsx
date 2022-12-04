@@ -32,10 +32,8 @@ import { api } from "../../../src/services/api";
 import { toCapitalize } from "../../../src/functions/toCapitalize";
 import { validateSubjectCode } from "../../../src/functions/validation";
 import SubjectModal from "../../../src/components/Logged/Subject/SubjectModal/SubjectModal";
-import { useSession } from "next-auth/react";
+
 const Subjects: NextPage = () => {
-    const { data } = useSession();
-    const [userId, setUserId] = useState(0);
     const [subjects, setSubjects] = useState<ISubjectList[]>([]);
     const [selectedSubject, setSelectedSubject] = useState<ISubjectList>({} as ISubjectList);
     const [page, setPage] = useState(1);
@@ -121,12 +119,6 @@ const Subjects: NextPage = () => {
     useEffect(() => {
         getSubjects();
     }, [page]);
-
-    useEffect(() => {
-        if (typeof data?.id === 'number') {
-            setUserId(data?.id);
-        }
-    }, [data]);
 
     return (
         <>
@@ -310,7 +302,6 @@ const Subjects: NextPage = () => {
                 modalIsOpen,
                 modalOnClose,
                 selectedSubject,
-                userId
             }} />
         </>
 

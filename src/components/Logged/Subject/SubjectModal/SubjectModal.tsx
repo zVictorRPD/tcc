@@ -9,13 +9,12 @@ interface SubjectModalProps {
         modalIsOpen: boolean;
         modalOnClose: () => void;
         selectedSubject: ISubjectList;
-        userId: number;
     }
 }
 
 function SubjectModal(props: SubjectModalProps) {
     const toast = useToast();
-    const { modalIsOpen, modalOnClose, selectedSubject, userId } = props.modalProps;
+    const { modalIsOpen, modalOnClose, selectedSubject } = props.modalProps;
     const [addingRating, setAddingRating] = useState(false);
     const [onLoad, setOnLoad] = useState(true);
     const [complexity, setComplexity] = useState(0);
@@ -32,7 +31,6 @@ function SubjectModal(props: SubjectModalProps) {
         try {
             const response = await api.get(`/subject/getRatings`, {
                 params: {
-                    userId,
                     subjectCode: selectedSubject.code
                 }
             });
@@ -65,7 +63,6 @@ function SubjectModal(props: SubjectModalProps) {
         setOnLoad(true);
         try {
             const response = await api.post('/subject/createRating', {
-                userId,
                 subjectCode: selectedSubject.code,
                 complexity,
                 relevance,

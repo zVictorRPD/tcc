@@ -8,7 +8,7 @@ import Notes from './Notes';
 import Rating from './Rating';
 
 function SubjectModal() {
-    const { subjectModalIsOpen, subjectModalOnClose, selectedSubject, setTimetableSubjects, timetableSubjects, userId } = useContext(TimetableContext);
+    const { subjectModalIsOpen, subjectModalOnClose, selectedSubject, setTimetableSubjects, timetableSubjects } = useContext(TimetableContext);
     const [onLoad, setOnLoad] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -23,7 +23,6 @@ function SubjectModal() {
         const newTimetable = removeSubject(selectedSubject.id, timetableSubjects);
         try {
             await api.post('timetable/updateTimetable', {
-                userId,
                 timetable: newTimetable
             });
             toast({

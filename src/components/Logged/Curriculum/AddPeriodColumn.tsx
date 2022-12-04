@@ -10,7 +10,7 @@ function AddPeriodColumn() {
     const [periodName, setPeriodName] = useState('');
     const [onLoad, setOnLoad] = useState(false);
     const toast = useToast();
-    const { setPeriods, periods, periodOrder, setPeriodOrder, userId } = useContext(CurriculumContext);
+    const { setPeriods, periods, periodOrder, setPeriodOrder } = useContext(CurriculumContext);
 
     const handleAddPeriod = async () => {
         if (periodName === '') {
@@ -26,7 +26,6 @@ function AddPeriodColumn() {
         setOnLoad(true);
         try {
             const response = await api.post('/curriculum/period/createPeriod', {
-                userId,
                 periodName
             });
             if (!response.data.id) throw new Error('Erro ao criar período.');

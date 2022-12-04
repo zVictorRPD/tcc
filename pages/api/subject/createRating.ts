@@ -1,29 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
 import { createRating } from "../../../src/backend/ratings";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    const token = await getToken({ req })
+
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
 
     if (req.method === "POST") {
         const {
-            userId,
             subjectCode,
             complexity,
             relevance,
             comment
         }: {
-            userId: number,
             subjectCode: string,
             complexity: number,
             relevance: number,
             comment: string,
         } = req.body;
-
+        const userId = token.id as number;
         if (
-            isNaN(userId)
-            || typeof subjectCode !== "string"
+            typeof subjectCode !== "string"
             || isNaN(complexity)
             || isNaN(relevance)
             || typeof comment !== "string"

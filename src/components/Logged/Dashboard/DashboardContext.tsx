@@ -1,5 +1,4 @@
 import { useToast, useDisclosure } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { api } from "../../../services/api";
@@ -8,9 +7,7 @@ export const DashboardContext = createContext<IDashboardContext>({} as IDashboar
 
 export function DashboardProvider({ children }: { children: ReactNode }) {
     const toast = useToast();
-    const { data } = useSession();
     const router = useRouter();
-    const [userId, setUserId] = useState(0);
     const [onLoad, setOnLoad] = useState(true);
     const [hasCurriculum, setHasCurriculum] = useState(false);
     const [course, setCourse] = useState<ICourse>({} as ICourse);
@@ -32,7 +29,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     } = useDisclosure();
 
     const DashboardContextData = {
-        userId,
         onLoad,
         setOnLoad,
         hasCurriculum,
@@ -53,14 +49,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         subjectModalOnClose
     };
 
-    const getDashboard = async (userId: number) => {
+    const getDashboard = async () => {
         setOnLoad(true);
         try {
-            const response = await api.get('/dashboard/getInfo', {
-                params: {
-                    userId,
-                }
-            });
+            const response = await api.get('/dashboard/getInfo');
             if (typeof response.data.hasCurriculum === 'undefined') throw new Error('No curriculum');
             if (!response.data.hasCurriculum) {
                 router.push('/ambiente-logado/grade-curricular');
@@ -95,13 +87,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const getEvents = async (userId: number) => {
+    const getEvents = async () => {
         try {
-            const response = await api.get('dashboard/events', {
-                params: {
-                    id: userId
-                }
-            });
+            const response = await api.get('dashboard/events');
             if (!response.data) throw new Error();
             setEvents(response.data);
         } catch (err) {
@@ -117,12 +105,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     }
 
     useEffect(() => {
-        if (typeof data?.id === 'number') {
-            setUserId(data?.id);
-            getDashboard(data.id);
-            getEvents(data.id);
-        }
-    }, [data]);
+        getDashboard();
+        getEvents();
+    }, []);
 
     return (
         <DashboardContext.Provider value={DashboardContextData}>

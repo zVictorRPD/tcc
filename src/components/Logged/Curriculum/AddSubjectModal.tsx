@@ -6,7 +6,7 @@ import { api } from '../../../services/api';
 import { CurriculumContext } from './curriculumContext';
 
 function AddSubjectModal() {
-    const { addSubjectModalIsOpen, addSubjectModalOnClose, periods, setPeriods, subjects, setSubjects, userId, curriculumDrawerOnClose } = useContext(CurriculumContext);
+    const { addSubjectModalIsOpen, addSubjectModalOnClose, periods, setPeriods, subjects, setSubjects, curriculumDrawerOnClose } = useContext(CurriculumContext);
     const [code, setCode] = useState("");
     const [onLoad, setOnLoad] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState("");
@@ -38,7 +38,6 @@ function AddSubjectModal() {
         setOnLoad(true);
         try {
             const response = await api.post('/curriculum/subject/createSubject', {
-                userId,
                 subjectCode: code,
                 periodId: selectedPeriod,
                 subjectType
