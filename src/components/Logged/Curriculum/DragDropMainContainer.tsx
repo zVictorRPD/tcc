@@ -46,8 +46,8 @@ function DragDropMainContainer() {
                     subjectIds: newSubjectIds,
                     subjectId: draggableId,
                     type: 'samePeriod'
-                });
-                if (!response.data.subjectsOrder) throw new Error('Erro ao atualizar período');
+                });     
+                if (!response.data.count) throw new Error('Erro ao atualizar período');
             } catch (error) {
                 toast({
                     title: "Erro ao atualizar",
