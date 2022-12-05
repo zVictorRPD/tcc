@@ -43,7 +43,8 @@ function Informations(props: IInformationsProps) {
 			});
 		}
 	};
-	const getTeachers = async () => {
+	const getTeachers = async (e:any) => {
+		e.preventDefault();
 		if (filterCamps.name === "" && filterCamps.departament === "") {
 			toast({
 				title: "Preencha pelo menos um campo",
@@ -145,7 +146,8 @@ function Informations(props: IInformationsProps) {
 		}
 	};
 
-	const handleSaveGrade = async () => {
+	const handleSaveGrade = async (e: any) => {
+		e.preventDefault();
 		setOnLoad(true);
 		try {
 			const response = await api.post('/curriculum/subject/updateGrade', {
@@ -194,42 +196,44 @@ function Informations(props: IInformationsProps) {
 
 	return (
 		<>
-			<Flex flexDirection={'row'} alignItems={'center'}>
-				<Text fontSize={'xl'} fontWeight={600}>
-					Nota final:
-				</Text>
-				<NumberInput
-					defaultValue={selectedSubject.grade || 0}
-					precision={1}
-					step={0.1}
-					min={0}
-					max={10}
-					size={'sm'}
-					ml={'.5rem'}
-					maxW={'75px'}
-					allowMouseWheel={true}
-					onChange={(valueAsString: string, valueAsNumber: number) => setGrade(valueAsNumber)}
-				>
-					<NumberInputField value={grade} />
-					<NumberInputStepper>
-						<NumberIncrementStepper />
-						<NumberDecrementStepper />
-					</NumberInputStepper>
-				</NumberInput>
-				{
-					editingGrade && (
-						<Button
-							isLoading={onLoad}
-							variant={'blue-800'}
-							size={'sm'}
-							onClick={handleSaveGrade}
-							ml={'.5rem'}
-						>
-							Salvar nota
-						</Button>
-					)
-				}
-			</Flex>
+			<form onSubmit={(e) => handleSaveGrade(e)}>
+				<Flex flexDirection={'row'} alignItems={'center'}>
+					<Text fontSize={'xl'} fontWeight={600}>
+						Nota final:
+					</Text>
+					<NumberInput
+						defaultValue={selectedSubject.grade || 0}
+						precision={1}
+						step={0.1}
+						min={0}
+						max={10}
+						size={'sm'}
+						ml={'.5rem'}
+						maxW={'75px'}
+						allowMouseWheel={true}
+						onChange={(valueAsString: string, valueAsNumber: number) => setGrade(valueAsNumber)}
+					>
+						<NumberInputField value={grade} />
+						<NumberInputStepper>
+							<NumberIncrementStepper />
+							<NumberDecrementStepper />
+						</NumberInputStepper>
+					</NumberInput>
+					{
+						editingGrade && (
+							<Button
+								isLoading={onLoad}
+								variant={'blue-800'}
+								size={'sm'}
+								type={'submit'}
+								ml={'.5rem'}
+							>
+								Salvar nota
+							</Button>
+						)
+					}
+				</Flex>
+			</form>
 			<Divider my={'.5rem'} />
 
 
@@ -334,35 +338,37 @@ function Informations(props: IInformationsProps) {
 					</DrawerHeader>
 
 					<DrawerBody>
-						<FormControl mb={"1rem"}>
-							<FormLabel fontWeight={500}>Nome</FormLabel>
-							<Input
-								type="text"
-								placeholder="Victor"
-								value={filterCamps.name}
-								onChange={(e) => setFilterCamps({ ...filterCamps, name: e.target.value })}
-							/>
-						</FormControl>
-						<FormControl mb={"1.5rem"}>
-							<FormLabel fontWeight={500}>Departamento</FormLabel>
-							<Select
-								value={filterCamps.departament}
-								onChange={(e) => setFilterCamps({ ...filterCamps, departament: e.target.value })}
-							>
-								<option value=''>Selecione um departamento</option>
-								{departaments.map((departament) => (
-									<option
-										key={departament.departament_code}
-										value={departament.departament_code}
-									>
-										{toCapitalize(departament.departament_name)}
-									</option>
-								))}
-							</Select>
-						</FormControl>
-						<HStack justifyContent={'flex-end'} columnGap={'8px'}>
-							<Button variant={'blue-800'} isLoading={onLoadDrawer} onClick={getTeachers}>Filtrar</Button>
-						</HStack>
+						<form onSubmit={(e) => { getTeachers(e) }}>
+							<FormControl mb={"1rem"}>
+								<FormLabel fontWeight={500}>Nome</FormLabel>
+								<Input
+									type="text"
+									placeholder="Victor"
+									value={filterCamps.name}
+									onChange={(e) => setFilterCamps({ ...filterCamps, name: e.target.value })}
+								/>
+							</FormControl>
+							<FormControl mb={"1.5rem"}>
+								<FormLabel fontWeight={500}>Departamento</FormLabel>
+								<Select
+									value={filterCamps.departament}
+									onChange={(e) => setFilterCamps({ ...filterCamps, departament: e.target.value })}
+								>
+									<option value=''>Selecione um departamento</option>
+									{departaments.map((departament) => (
+										<option
+											key={departament.departament_code}
+											value={departament.departament_code}
+										>
+											{toCapitalize(departament.departament_name)}
+										</option>
+									))}
+								</Select>
+							</FormControl>
+							<HStack justifyContent={'flex-end'} columnGap={'8px'}>
+								<Button variant={'blue-800'} isLoading={onLoadDrawer} type='submit'>Filtrar</Button>
+							</HStack>
+						</form>
 						<Divider my={'.5rem'} />
 						<Box
 							h={'55vh'}

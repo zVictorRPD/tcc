@@ -28,7 +28,7 @@ function AddSubjectModal() {
             isClosable: true,
         });
     }
-    
+
     const getSubjectsOptions = () => {
         if (Object.keys(periods[addSubjectModalData.period].subjectIds).length > 0) {
             return periods[addSubjectModalData.period].subjectIds.map((subjectId, index) => <option key={index} value={subjectId}>{toCapitalize(subjects[subjectId].name)}</option>)
@@ -150,7 +150,7 @@ function AddSubjectModal() {
                         bgColor: addSubjectModalData.color,
                     };
                 });
-            });           
+            });
             setTimetableSubjects(newTimetableSubjects);
             return true;
         } catch (err) {
@@ -160,7 +160,8 @@ function AddSubjectModal() {
 
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e:any) => {
+        e.preventDefault();
         setOnLoad(true);
         if (addSubjectModalData.period === "" || addSubjectModalData.subject === "" || addSubjectModalData.color === "") {
             createToast("Preencha todos os campos");
@@ -192,7 +193,7 @@ function AddSubjectModal() {
             });
             addSubjectModalOnClose();
         } catch (err) {
-            
+
             createToast("Erro ao adicionar horário");
         } finally {
             setOnLoad(false);
@@ -204,102 +205,104 @@ function AddSubjectModal() {
         <Modal isOpen={addSubjectModalIsOpen} onClose={addSubjectModalOnClose} size={"lg"}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Adicionar horário</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody
-                    px={{
-                        base: '0',
-                        md: '4'
-                    }}
-                >
-
-                    <FormControl mb={3}>
-                        <FormLabel>Período</FormLabel>
-                        <Select onChange={e => setAddSubjectModalData({ ...addSubjectModalData, period: e.target.value })}>
-                            <option value={''}>Selecione o período</option>
-                            {Object.keys(periods).length > 0 && Object.keys(periods).map((id, index) => {
-                                return (
-                                    <option key={index} value={id}>{periods[id].name}</option>
-                                )
-                            })}
-                        </Select>
-                    </FormControl>
-                    <FormControl mb={3}>
-                        <FormLabel>Matéria</FormLabel>
-                        <Select
-                            onChange={e => setAddSubjectModalData({ ...addSubjectModalData, subject: e.target.value })}
-                            disabled={addSubjectModalData.period === ''}
-                        >
-                            <option value={''}>Selecione a matéria</option>
-                            {addSubjectModalData.period !== '' && getSubjectsOptions()}
-                        </Select>
-                    </FormControl>
-
-                    <FormControl mb={3}>
-                        <FormLabel
-                            display={'flex'}
-                            alignItems={'center'}
-                        >
-                            Cor da matéria
-                            <Tooltip label='A cor de fundo que sua matéria terá na grade' placement='top' hasArrow>
-                                <span style={{ marginLeft: '.375rem' }}>
-                                    <FaRegQuestionCircle />
-                                </span>
-                            </Tooltip>
-                        </FormLabel>
-                        <Select
-
-                            onChange={e => setAddSubjectModalData({ ...addSubjectModalData, color: e.target.value })}
-                        >
-                            <option value="blackAlpha.900">Preto</option>
-                            <option value="red.500">Vermelho</option>
-                            <option value="red.700">Vinho</option>
-                            <option value="orange.500">Laranja</option>
-                            <option value="green.500">Verde</option>
-                            <option value="blue.500">Azul</option>
-                            <option value="blue.800">Azul escuro</option>
-                            <option value="cyan.600">Ciano</option>
-                            <option value="purple.500">Roxo</option>
-                            <option value="pink.500">Rosa</option>
-                        </Select>
-                    </FormControl>
-
-                    <FormControl mb={3}>
-                        <FormLabel
-                            display={'flex'}
-                            alignItems={'center'}
-                        >
-                            Horário
-                            <Tooltip label='Clique para visualizar o modelo' placement='top' hasArrow>
-                                <a
-                                    style={{ marginLeft: '.375rem' }}
-                                    href={'/assets/images/logged/timetable-translator.jpeg'}
-                                    target={'_blank'}
-                                    rel="noreferrer"
-                                >
-                                    <FaRegQuestionCircle />
-                                </a>
-                            </Tooltip>
-                        </FormLabel>
-                        <Input
-                            value={addSubjectModalData.time}
-                            onChange={e => setAddSubjectModalData({ ...addSubjectModalData, time: e.target.value.toUpperCase() })}
-                            placeholder="234567T12345"
-                        />
-                    </FormControl>
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant='outline' mr={3} onClick={addSubjectModalOnClose}>
-                        Cancelar
-                    </Button>
-                    <Button
-                        variant='blue-800'
-                        onClick={handleSubmit}
-                        isLoading={onLoad}
+                <form onSubmit={(e) => { handleSubmit(e) }}>
+                    <ModalHeader>Adicionar horário</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody
+                        px={{
+                            base: '0',
+                            md: '4'
+                        }}
                     >
-                        Adicionar
-                    </Button>
-                </ModalFooter>
+
+                        <FormControl mb={3}>
+                            <FormLabel>Período</FormLabel>
+                            <Select onChange={e => setAddSubjectModalData({ ...addSubjectModalData, period: e.target.value })}>
+                                <option value={''}>Selecione o período</option>
+                                {Object.keys(periods).length > 0 && Object.keys(periods).map((id, index) => {
+                                    return (
+                                        <option key={index} value={id}>{periods[id].name}</option>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                        <FormControl mb={3}>
+                            <FormLabel>Matéria</FormLabel>
+                            <Select
+                                onChange={e => setAddSubjectModalData({ ...addSubjectModalData, subject: e.target.value })}
+                                disabled={addSubjectModalData.period === ''}
+                            >
+                                <option value={''}>Selecione a matéria</option>
+                                {addSubjectModalData.period !== '' && getSubjectsOptions()}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl mb={3}>
+                            <FormLabel
+                                display={'flex'}
+                                alignItems={'center'}
+                            >
+                                Cor da matéria
+                                <Tooltip label='A cor de fundo que sua matéria terá na grade' placement='top' hasArrow>
+                                    <span style={{ marginLeft: '.375rem' }}>
+                                        <FaRegQuestionCircle />
+                                    </span>
+                                </Tooltip>
+                            </FormLabel>
+                            <Select
+
+                                onChange={e => setAddSubjectModalData({ ...addSubjectModalData, color: e.target.value })}
+                            >
+                                <option value="blackAlpha.900">Preto</option>
+                                <option value="red.500">Vermelho</option>
+                                <option value="red.700">Vinho</option>
+                                <option value="orange.500">Laranja</option>
+                                <option value="green.500">Verde</option>
+                                <option value="blue.500">Azul</option>
+                                <option value="blue.800">Azul escuro</option>
+                                <option value="cyan.600">Ciano</option>
+                                <option value="purple.500">Roxo</option>
+                                <option value="pink.500">Rosa</option>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl mb={3}>
+                            <FormLabel
+                                display={'flex'}
+                                alignItems={'center'}
+                            >
+                                Horário
+                                <Tooltip label='Clique para visualizar o modelo' placement='top' hasArrow>
+                                    <a
+                                        style={{ marginLeft: '.375rem' }}
+                                        href={'/assets/images/logged/timetable-translator.jpeg'}
+                                        target={'_blank'}
+                                        rel="noreferrer"
+                                    >
+                                        <FaRegQuestionCircle />
+                                    </a>
+                                </Tooltip>
+                            </FormLabel>
+                            <Input
+                                value={addSubjectModalData.time}
+                                onChange={e => setAddSubjectModalData({ ...addSubjectModalData, time: e.target.value.toUpperCase() })}
+                                placeholder="234567T12345"
+                            />
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant='outline' mr={3} onClick={addSubjectModalOnClose}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            variant='blue-800'
+                            type='submit'
+                            isLoading={onLoad}
+                        >
+                            Adicionar
+                        </Button>
+                    </ModalFooter>
+                </form>
             </ModalContent>
         </Modal>
     )

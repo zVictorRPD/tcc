@@ -13,7 +13,8 @@ function AddSubjectModal() {
     const [subjectType, setSubjectType] = useState<string>("");
     const toast = useToast();
 
-    const handleAddSubject = async () => {
+    const handleAddSubject = async (e: any) => {
+        e.preventDefault();
         if (code === "" || selectedPeriod === "" || subjectType === "") {
             toast({
                 title: 'Insira um código e selecione um período.',
@@ -86,81 +87,83 @@ function AddSubjectModal() {
         <Modal isOpen={addSubjectModalIsOpen} onClose={addSubjectModalOnClose} size={"lg"}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Adicionar matéria</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody
-                    px={{
-                        base: '0',
-                        md: '4'
-                    }}
-                >
-
-                    <FormControl mb={3}>
-                        <FormLabel
-                            display={'flex'}
-                            alignItems={'center'}
-                        >
-                            Código da matéria
-                            <Tooltip
-                                label='Caso não saiba o código, clique aqui para pesquisar.'
-                                placement='top'
-                                hasArrow
-
-                            >
-                                <a
-                                    style={{ marginLeft: '.375rem' }}
-                                    href={'/ambiente-logado/materias'}
-                                    target={'_blank'}
-                                    rel="noreferrer"
-                                >
-                                    <FaRegQuestionCircle />
-                                </a>
-                            </Tooltip>
-                        </FormLabel>
-                        <Input
-                            placeholder='XX999'
-                            value={code}
-                            onChange={e => setCode(e.target.value.toUpperCase())}
-                            maxLength={5}
-                        />
-                    </FormControl>
-                    <FormControl mb={3}>
-                        <FormLabel>Tipo de matéria</FormLabel>
-                        <Select
-                            value={subjectType}
-                            onChange={e => setSubjectType(e.target.value)}
-                        >
-                            <option value={''}>Selecione o tipo</option>
-                            <option value={'false'}>Obrigatória</option>
-                            <option value={'true'}>Optativa</option>
-
-                        </Select>
-                    </FormControl>
-                    <FormControl mb={3}>
-                        <FormLabel>Período</FormLabel>
-                        <Select
-                            value={selectedPeriod}
-                            onChange={e => setSelectedPeriod(e.target.value)}
-                        >
-                            <option value={''}>Selecione o período</option>
-                            {periods && Object.values(periods).map(period =>
-                                <option key={period.id} value={period.id}>{period.name}</option>
-                            )}
-                        </Select>
-                    </FormControl>
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant='outline' mr={3} onClick={addSubjectModalOnClose}>
-                        Cancelar
-                    </Button>
-                    <Button
-                        variant='blue-800'
-                        onClick={handleAddSubject}
-                        isLoading={onLoad}
+                <form onSubmit={(e) => handleAddSubject(e)}>
+                    <ModalHeader>Adicionar matéria</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody
+                        px={{
+                            base: '0',
+                            md: '4'
+                        }}
                     >
-                        Adicionar
-                    </Button>
-                </ModalFooter>
+
+                        <FormControl mb={3}>
+                            <FormLabel
+                                display={'flex'}
+                                alignItems={'center'}
+                            >
+                                Código da matéria
+                                <Tooltip
+                                    label='Caso não saiba o código, clique aqui para pesquisar.'
+                                    placement='top'
+                                    hasArrow
+
+                                >
+                                    <a
+                                        style={{ marginLeft: '.375rem' }}
+                                        href={'/ambiente-logado/materias'}
+                                        target={'_blank'}
+                                        rel="noreferrer"
+                                    >
+                                        <FaRegQuestionCircle />
+                                    </a>
+                                </Tooltip>
+                            </FormLabel>
+                            <Input
+                                placeholder='XX999'
+                                value={code}
+                                onChange={e => setCode(e.target.value.toUpperCase())}
+                                maxLength={5}
+                            />
+                        </FormControl>
+                        <FormControl mb={3}>
+                            <FormLabel>Tipo de matéria</FormLabel>
+                            <Select
+                                value={subjectType}
+                                onChange={e => setSubjectType(e.target.value)}
+                            >
+                                <option value={''}>Selecione o tipo</option>
+                                <option value={'false'}>Obrigatória</option>
+                                <option value={'true'}>Optativa</option>
+
+                            </Select>
+                        </FormControl>
+                        <FormControl mb={3}>
+                            <FormLabel>Período</FormLabel>
+                            <Select
+                                value={selectedPeriod}
+                                onChange={e => setSelectedPeriod(e.target.value)}
+                            >
+                                <option value={''}>Selecione o período</option>
+                                {periods && Object.values(periods).map(period =>
+                                    <option key={period.id} value={period.id}>{period.name}</option>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant='outline' mr={3} onClick={addSubjectModalOnClose}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            variant='blue-800'
+                            type='submit'
+                            isLoading={onLoad}
+                        >
+                            Adicionar
+                        </Button>
+                    </ModalFooter>
+                </form>
             </ModalContent>
         </Modal>
     )

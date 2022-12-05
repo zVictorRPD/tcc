@@ -14,14 +14,15 @@ function PeriodTab() {
         time: 0
     });
     const [addingComplementary, setAddingComplementary] = useState(false);
-    const handleAddComplementary = async () => {
+    const handleAddComplementary = async (e: any) => {
+        e.preventDefault();
         setOnLoad(true);
         try {
             const response = await api.post('/curriculum/complementary/createComplementary', {
                 name: newComplementary.name,
                 time: newComplementary.time,
             });
-            if(!response.data.name) throw new Error('Erro ao adicionar complementar');
+            if (!response.data.name) throw new Error('Erro ao adicionar complementar');
             setComplementary([...complementary, response.data]);
             toast({
                 title: "Atividade complementar adicionada com sucesso.",
@@ -50,10 +51,10 @@ function PeriodTab() {
     const handleDeleteComplementary = async (id: number) => {
         setOnLoad(true);
         try {
-            const response = await api.post('/curriculum/complementary/deleteComplementary',{
+            const response = await api.post('/curriculum/complementary/deleteComplementary', {
                 id,
             });
-            if(!response.data.id) throw new Error('Erro ao deletar atividade complementar');
+            if (!response.data.id) throw new Error('Erro ao deletar atividade complementar');
             setComplementary(complementary.filter(complementary => complementary.id !== id));
             toast({
                 title: "Atividade complementar deletada com sucesso.",
@@ -127,55 +128,57 @@ function PeriodTab() {
                 </TableContainer>
                 {addingComplementary ? (
                     <>
-                        <Flex>
-                            <Input
-                                placeholder="Curso da Udemy"
-                                type={'text'}
-                                value={newComplementary.name}
-                                onChange={(e) => setNewComplementary({ ...newComplementary, name: e.target.value })}
-                                my={'.5rem'}
-                            />
-                            <NumberInput
-                                defaultValue={0}
-                                precision={0}
-                                step={1}
-                                min={0}
-                                max={1000}
-                                size={'md'}
-                                ml={'.5rem'}
-                                my={'.5rem'}
-                                allowMouseWheel={true}
-                                onChange={(valueAsString: string, valueAsNumber: number) => setNewComplementary({ ...newComplementary, time: valueAsNumber })}
+                        <form onSubmit={(e) => handleAddComplementary(e)}>
+                            <Flex>
+                                <Input
+                                    placeholder="Curso da Udemy"
+                                    type={'text'}
+                                    value={newComplementary.name}
+                                    onChange={(e) => setNewComplementary({ ...newComplementary, name: e.target.value })}
+                                    my={'.5rem'}
+                                />
+                                <NumberInput
+                                    defaultValue={0}
+                                    precision={0}
+                                    step={1}
+                                    min={0}
+                                    max={1000}
+                                    size={'md'}
+                                    ml={'.5rem'}
+                                    my={'.5rem'}
+                                    allowMouseWheel={true}
+                                    onChange={(valueAsString: string, valueAsNumber: number) => setNewComplementary({ ...newComplementary, time: valueAsNumber })}
+                                >
+                                    <NumberInputField value={newComplementary.time} />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
+                            </Flex>
+                            <HStack
+                                mt={2}
+                                w={'100%'}
+                                justifyContent={'end'}
                             >
-                                <NumberInputField value={newComplementary.time} />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </Flex>
-                        <HStack
-                            mt={2}
-                            w={'100%'}
-                            justifyContent={'end'}
-                        >
-                            <Button
-                                size={'sm'}
-                                variant='outline'
-                                mr={1}
-                                onClick={() => setAddingComplementary(false)}
-                            >
-                                Cancelar
-                            </Button>
+                                <Button
+                                    size={'sm'}
+                                    variant='outline'
+                                    mr={1}
+                                    onClick={() => setAddingComplementary(false)}
+                                >
+                                    Cancelar
+                                </Button>
 
-                            <Button
-                                size={'sm'}
-                                variant='blue-800'
-                                onClick={handleAddComplementary}
-                            >
-                                Salvar
-                            </Button>
-                        </HStack>
+                                <Button
+                                    size={'sm'}
+                                    variant='blue-800'
+                                    type='submit'
+                                >
+                                    Salvar
+                                </Button>
+                            </HStack>
+                        </form>
                     </>
                 ) : (
                     <Flex

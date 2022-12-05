@@ -35,7 +35,8 @@ export default function Notes() {
         }
     }
 
-    const handleAddLink = () => {
+    const handleAddLink = (e:any) => {
+        e.preventDefault();
         //regex to check if the url is valid
         const regex = new RegExp('^(https?:\\/\\/)?' + // protocol
             '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -167,7 +168,7 @@ export default function Notes() {
             <Editable
                 defaultValue={selectedSubject?.note || ''}
                 isPreviewFocusable={false}
-                placeholder='Digite aqui...'
+                placeholder='Salve suas informações sobre a matéria'
                 onChange={(value) => setNote(value)}
                 onSubmit={handleSaveNote}
             >
@@ -205,40 +206,42 @@ export default function Notes() {
 
             {addingLink ? (
                 <>
-                    <Input
-                        placeholder="Artigo científico"
-                        type={'text'}
-                        value={link.name}
-                        onChange={(e) => setLink({ ...link, name: e.target.value })}
-                        my={'.5rem'}
-                    />
-                    <Input
-                        type={'url'}
-                        placeholder="www.universidade.com/artigo"
-                        value={link.url}
-                        onChange={(e) => setLink({ ...link, url: e.target.value })}
-                    />
-                    <HStack
-                        mt={2}
-                        w={'100%'}
-                    >
-                        <Button
-                            size={'sm'}
-                            variant='outline'
-                            mr={1}
-                            onClick={() => setAddingLink(false)}
+                    <form onSubmit={(e) => handleAddLink(e)}>
+                        <Input
+                            placeholder="Artigo científico"
+                            type={'text'}
+                            value={link.name}
+                            onChange={(e) => setLink({ ...link, name: e.target.value })}
+                            my={'.5rem'}
+                        />
+                        <Input
+                            type={'text'}
+                            placeholder="www.universidade.com/artigo"
+                            value={link.url}
+                            onChange={(e) => setLink({ ...link, url: e.target.value })}
+                        />
+                        <HStack
+                            mt={2}
+                            w={'100%'}
                         >
-                            Cancelar
-                        </Button>
+                            <Button
+                                size={'sm'}
+                                variant='outline'
+                                mr={1}
+                                onClick={() => setAddingLink(false)}
+                            >
+                                Cancelar
+                            </Button>
 
-                        <Button
-                            size={'sm'}
-                            variant='blue-800'
-                            onClick={handleAddLink}
-                        >
-                            Adicionar
-                        </Button>
-                    </HStack>
+                            <Button
+                                size={'sm'}
+                                variant='blue-800'
+                                type='submit'
+                            >
+                                Adicionar
+                            </Button>
+                        </HStack>
+                    </form>
                 </>
             ) : (
                 <Flex

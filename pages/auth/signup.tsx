@@ -122,7 +122,8 @@ const SignUp: NextPage = () => {
         }
     }, [email_home]);
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
         setOnLoading(true);
         const formCampsValidation = {
             email: validateEmail(formCamps.email as string),
@@ -197,8 +198,8 @@ const SignUp: NextPage = () => {
                 status: "error",
                 isClosable: true,
             });
-            if(response.data.code === "401") router.push("/auth/login");
-            
+            if (response.data.code === "401") router.push("/auth/login");
+
         }
     };
 
@@ -208,229 +209,233 @@ const SignUp: NextPage = () => {
                 <title>Cadastro</title>
             </Head>
             <AuthContainer>
-                <Box p={[".5rem", ".5rem", "1rem"]}>
-                    <Text
-                        textAlign={"center"}
-                        fontSize={["3xl", "4xl", "5xl"]}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
-                        Crie sua conta
-                    </Text>
-                    <HStack justifyContent={"center"}>
-                        <Box position={"relative"}>
-                            <Avatar
-                                size={"xl"}
-                                onClick={handleFileClick}
-                                src={userImage}
-                                cursor={"pointer"}
-                            />
-
-                            <Stack
-                                bg={"blue.800"}
-                                w={"1.5rem"}
-                                h={"1.5rem"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                borderRadius={"full"}
-                                position={"absolute"}
-                                style={pencilPosition}
-                                onClick={handleFileClick}
-                            >
-                                <FiEdit2
-                                    color={"#EDF2F7"}
-                                    fontSize={".875rem"}
+                <form onSubmit={(e) => handleSubmit(e)}>
+                    <Box p={[".5rem", ".5rem", "1rem"]}>
+                        <Text
+                            textAlign={"center"}
+                            fontSize={["3xl", "4xl", "5xl"]}
+                            mb={["1rem", "1rem", "1.5rem"]}
+                        >
+                            Crie sua conta
+                        </Text>
+                        <HStack justifyContent={"center"}>
+                            <Box position={"relative"}>
+                                <Avatar
+                                    size={"xl"}
+                                    onClick={handleFileClick}
+                                    src={userImage}
+                                    cursor={"pointer"}
                                 />
-                            </Stack>
-                            {userImage && (
+
                                 <Stack
-                                    bg={"red.500"}
+                                    bg={"blue.800"}
                                     w={"1.5rem"}
                                     h={"1.5rem"}
                                     justifyContent={"center"}
                                     alignItems={"center"}
                                     borderRadius={"full"}
                                     position={"absolute"}
-                                    style={closePosition}
-                                    onClick={() => setUserImage("")}
+                                    style={pencilPosition}
+                                    onClick={handleFileClick}
                                 >
-                                    <IoMdClose
+                                    <FiEdit2
                                         color={"#EDF2F7"}
-                                        fontSize={"0.938rem"}
+                                        fontSize={".875rem"}
                                     />
                                 </Stack>
+                                {userImage && (
+                                    <Stack
+                                        bg={"red.500"}
+                                        w={"1.5rem"}
+                                        h={"1.5rem"}
+                                        justifyContent={"center"}
+                                        alignItems={"center"}
+                                        borderRadius={"full"}
+                                        position={"absolute"}
+                                        style={closePosition}
+                                        onClick={() => setUserImage("")}
+                                    >
+                                        <IoMdClose
+                                            color={"#EDF2F7"}
+                                            fontSize={"0.938rem"}
+                                        />
+                                    </Stack>
+                                )}
+                            </Box>
+                            <input
+                                ref={inputRef}
+                                type="file"
+                                onChange={handleFileChange}
+                                hidden
+                            />
+                        </HStack>
+                        <FormControl
+                            mb={"1rem"}
+                            isInvalid={!signupCampsValidation.name}
+                        >
+                            <FormLabel fontWeight={500}>Nome</FormLabel>
+                            <Input
+                                type="text"
+                                placeholder="Victor Martins"
+                                value={formCamps.name}
+                                onChange={(e) =>
+                                    setFormCamps({
+                                        ...formCamps,
+                                        name: e.target.value,
+                                    })
+                                }
+                            />
+                            {!signupCampsValidation.name && (
+                                <FormErrorMessage>
+                                    Insira um nome valido.
+                                </FormErrorMessage>
                             )}
-                        </Box>
-                        <input
-                            ref={inputRef}
-                            type="file"
-                            onChange={handleFileChange}
-                            hidden
-                        />
-                    </HStack>
-                    <FormControl
-                        mb={"1rem"}
-                        isInvalid={!signupCampsValidation.name}
-                    >
-                        <FormLabel fontWeight={500}>Nome</FormLabel>
-                        <Input
-                            type="text"
-                            placeholder="Victor Martins"
-                            value={formCamps.name}
-                            onChange={(e) =>
-                                setFormCamps({
-                                    ...formCamps,
-                                    name: e.target.value,
-                                })
-                            }
-                        />
-                        {!signupCampsValidation.name && (
-                            <FormErrorMessage>
-                                Insira um nome valido.
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
-                    <FormControl
-                        mb={"1rem"}
-                        isInvalid={!signupCampsValidation.email}
-                    >
-                        <FormLabel fontWeight={500}>Email</FormLabel>
-                        <Input
-                            type="email"
-                            placeholder="examplemail@example.com"
-                            value={formCamps.email}
-                            onChange={(e) =>
-                                setFormCamps({
-                                    ...formCamps,
-                                    email: e.target.value,
-                                })
-                            }
-                        />
-                        {!signupCampsValidation.email && (
-                            <FormErrorMessage>
-                                Insira um email valido.
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
-                    <FormControl
-                        mb={["1rem", "1rem", "1.5rem"]}
-                        isInvalid={!signupCampsValidation.password}
-                    >
-                        <FormLabel fontWeight={500}>Senha</FormLabel>
-                        <InputGroup size="md">
+                        </FormControl>
+                        <FormControl
+                            mb={"1rem"}
+                            isInvalid={!signupCampsValidation.email}
+                        >
+                            <FormLabel fontWeight={500}>Email</FormLabel>
                             <Input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="********"
-                                value={formCamps.password}
+                                type="email"
+                                placeholder="examplemail@example.com"
+                                value={formCamps.email}
                                 onChange={(e) =>
                                     setFormCamps({
                                         ...formCamps,
-                                        password: e.target.value,
+                                        email: e.target.value,
                                     })
                                 }
                             />
-                            <InputRightElement width="3rem">
-                                <Button
-                                    h="1.75rem"
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => {
-                                        setShowPassword(!showPassword);
-                                    }}
-                                >
-                                    {showPassword ? (
-                                        <AiOutlineEyeInvisible />
-                                    ) : (
-                                        <AiOutlineEye />
-                                    )}
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
-                        {!signupCampsValidation.password && (
-                            <FormErrorMessage>
-                                Insira uma senha valida.
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
-                    <FormControl
-                        mb={["1rem", "1rem", "1.5rem"]}
-                        isInvalid={!signupCampsValidation.confirmationPassword}
-                    >
-                        <FormLabel fontWeight={500}>
-                            Confirme sua senha
-                        </FormLabel>
-                        <InputGroup size="md">
-                            <Input
-                                type={
-                                    showConfirmationPassword
-                                        ? "text"
-                                        : "password"
-                                }
-                                placeholder="********"
-                                value={formCamps.confirmationPassword}
-                                onChange={(e) =>
-                                    setFormCamps({
-                                        ...formCamps,
-                                        confirmationPassword: e.target.value,
-                                    })
-                                }
-                            />
-                            <InputRightElement width="3rem">
-                                <Button
-                                    h="1.75rem"
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => {
-                                        setShowConfirmationPassword(
-                                            !showConfirmationPassword
-                                        );
-                                    }}
-                                >
-                                    {showConfirmationPassword ? (
-                                        <AiOutlineEyeInvisible />
-                                    ) : (
-                                        <AiOutlineEye />
-                                    )}
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
-                        {!signupCampsValidation.confirmationPassword && (
-                            <FormErrorMessage>
-                                A senha de confirmação está diferente da senha.
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
-                    <Button
-                        mb={["1rem", "1rem", "1.5rem"]}
-                        w={"100%"}
-                        variant={"blue-800"}
-                        onClick={handleSubmit}
-                        isLoading={onLoading}
-                        loadingText={"Criando conta..."}
-                    >
-                        Criar conta
-                    </Button>
-                    <HStack
-                        justifyContent={"center"}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
-                        <Text
-                            textAlign={"center"}
-                            fontWeight={500}
-                            fontSize={["sm", "sm", "md"]}
+                            {!signupCampsValidation.email && (
+                                <FormErrorMessage>
+                                    Insira um email valido.
+                                </FormErrorMessage>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            mb={["1rem", "1rem", "1.5rem"]}
+                            isInvalid={!signupCampsValidation.password}
                         >
-                            Já possui conta?
-                        </Text>
-                        <Text
-                            color={"blue.400"}
-                            cursor={"pointer"}
-                            fontSize={["sm", "sm", "md"]}
-                            _hover={{ textDecoration: "underline" }}
-                            onClick={() => router.push("/auth/login")}
+                            <FormLabel fontWeight={500}>Senha</FormLabel>
+                            <InputGroup size="md">
+                                <Input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="********"
+                                    value={formCamps.password}
+                                    onChange={(e) =>
+                                        setFormCamps({
+                                            ...formCamps,
+                                            password: e.target.value,
+                                        })
+                                    }
+                                    autoComplete="on"
+                                />
+                                <InputRightElement width="3rem">
+                                    <Button
+                                        h="1.75rem"
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => {
+                                            setShowPassword(!showPassword);
+                                        }}
+                                    >
+                                        {showPassword ? (
+                                            <AiOutlineEyeInvisible />
+                                        ) : (
+                                            <AiOutlineEye />
+                                        )}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            {!signupCampsValidation.password && (
+                                <FormErrorMessage>
+                                    Insira uma senha valida.
+                                </FormErrorMessage>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            mb={["1rem", "1rem", "1.5rem"]}
+                            isInvalid={!signupCampsValidation.confirmationPassword}
                         >
-                            Entre aqui
-                        </Text>
-                    </HStack>
-                </Box>
+                            <FormLabel fontWeight={500}>
+                                Confirme sua senha
+                            </FormLabel>
+                            <InputGroup size="md">
+                                <Input
+                                    type={
+                                        showConfirmationPassword
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    placeholder="********"
+                                    value={formCamps.confirmationPassword}
+                                    onChange={(e) =>
+                                        setFormCamps({
+                                            ...formCamps,
+                                            confirmationPassword: e.target.value,
+                                        })
+                                    }
+                                    autoComplete="on"
+                                />
+                                <InputRightElement width="3rem">
+                                    <Button
+                                        h="1.75rem"
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => {
+                                            setShowConfirmationPassword(
+                                                !showConfirmationPassword
+                                            );
+                                        }}
+                                    >
+                                        {showConfirmationPassword ? (
+                                            <AiOutlineEyeInvisible />
+                                        ) : (
+                                            <AiOutlineEye />
+                                        )}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            {!signupCampsValidation.confirmationPassword && (
+                                <FormErrorMessage>
+                                    A senha de confirmação está diferente da senha.
+                                </FormErrorMessage>
+                            )}
+                        </FormControl>
+                        <Button
+                            mb={["1rem", "1rem", "1.5rem"]}
+                            w={"100%"}
+                            variant={"blue-800"}
+                            isLoading={onLoading}
+                            loadingText={"Criando conta..."}
+                            type={"submit"}
+                        >
+                            Criar conta
+                        </Button>
+                        <HStack
+                            justifyContent={"center"}
+                            mb={["1rem", "1rem", "1.5rem"]}
+                        >
+                            <Text
+                                textAlign={"center"}
+                                fontWeight={500}
+                                fontSize={["sm", "sm", "md"]}
+                            >
+                                Já possui conta?
+                            </Text>
+                            <Text
+                                color={"blue.400"}
+                                cursor={"pointer"}
+                                fontSize={["sm", "sm", "md"]}
+                                _hover={{ textDecoration: "underline" }}
+                                onClick={() => router.push("/auth/login")}
+                            >
+                                Entre aqui
+                            </Text>
+                        </HStack>
+                    </Box>
+                </form>
             </AuthContainer>
             <ConfirmationModal
                 modalProps={{ isOpen, onClose, timeout, resendEmail }}

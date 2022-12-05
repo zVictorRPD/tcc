@@ -22,6 +22,10 @@ export default function SignupShortcut() {
         backgroundImage: "url(/assets/images/homepage/svgs/bg-yellow.svg)",
         backgroundRepeat: "no-repeat",
     };
+    const handleShortcut = (e: any) => {
+        e.preventDefault();
+        router.push(`/auth/signup/?email_home=${email}`)
+    }
     return (
         <Box borderTop={"2px"} borderColor={"gray.200"}>
             <Grid
@@ -38,7 +42,7 @@ export default function SignupShortcut() {
             >
                 <Hide below="md">
                     <GridItem>
-                        <Image src="/assets/images/homepage/svgs/mail.svg" alt="email svg"/>
+                        <Image src="/assets/images/homepage/svgs/mail.svg" alt="email svg" />
                     </GridItem>
                 </Hide>
                 <GridItem>
@@ -60,24 +64,26 @@ export default function SignupShortcut() {
                                 flexWrap={["wrap", "wrap", "nowrap"]}
                                 justifyContent={["center", "center", "flex-start"]}
                             >
-                                <Input
-                                    w={["100%", "100%", "60%"]}
-                                    bg={"white"}
-                                    placeholder="examplemail@example.com"
-                                    size="md"
-                                    mr={["0", "0", ".5em"]}
-                                    mb={["1rem", "1rem", "0"]}
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                                <Button
-                                    size={"md"}
-                                    rightIcon={<AiOutlineLogin />}
-                                    variant={"yellow-400"}
-                                    onClick={() => router.push(`/auth/signup/?email_home=${email}`)}
-                                >
-                                    Criar conta
-                                </Button>
+                                <form onSubmit={(e) => handleShortcut(e)}>
+                                    <Input
+                                        w={["100%", "100%", "60%"]}
+                                        bg={"white"}
+                                        placeholder="examplemail@example.com"
+                                        size="md"
+                                        mr={["0", "0", ".5em"]}
+                                        mb={["1rem", "1rem", "0"]}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                    <Button
+                                        size={"md"}
+                                        rightIcon={<AiOutlineLogin />}
+                                        variant={"yellow-400"}
+                                        type="submit"
+                                    >
+                                        Criar conta
+                                    </Button>
+                                </form>
                             </HStack>
                         </Box>
                     </Stack>

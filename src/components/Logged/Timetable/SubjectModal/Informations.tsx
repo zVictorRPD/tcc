@@ -15,9 +15,11 @@ interface IInformationsProps {
 
 
 function Informations(props: IInformationsProps) {
-	const { setSelectedSubject, selectedSubject, subjects, setSubjects, setTimetableSubjects, selectedColor, timetableSubjects, onLoad, setOnLoad } = useContext(TimetableContext);
+	const { setSelectedSubject, selectedSubject, subjects, setSubjects, setTimetableSubjects, selectedColor, timetableSubjects } = useContext(TimetableContext);
 	const { isOpen, onClose, onOpen } = props;
 	const toast = useToast();
+	const [onLoad, setOnLoad] = useState(false);
+	const [onLoadDrawer, setOnLoadDrawer] = useState(false);
 	const [teachers, setTeachers] = useState<ITeacher[]>([]);
 	const [departaments, setDepartaments] = useState<IDepartament[]>([]);
 	const [filterCamps, setFilterCamps] = useState({
@@ -26,7 +28,6 @@ function Informations(props: IInformationsProps) {
 	});
 	const [grade, setGrade] = useState<number>(selectedSubject.grade || 0);
 	const [editingGrade, setEditingGrade] = useState(false);
-	const [subjectColor, setSubjectColor] = useState(selectedColor);
 	const firstField = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
 	const getDepartaments = async () => {
@@ -43,7 +44,8 @@ function Informations(props: IInformationsProps) {
 			});
 		}
 	};
-	const getTeachers = async () => {
+	const getTeachers = async (e:any) => {
+		e.preventDefault();
 		if (filterCamps.name === "" && filterCamps.departament === "") {
 			toast({
 				title: "Preencha pelo menos um campo",
@@ -54,7 +56,7 @@ function Informations(props: IInformationsProps) {
 			});
 			return;
 		}
-		setOnLoad(true);
+		setOnLoadDrawer(true);
 		try {
 			const response = await api.get('/teacher/getTeacher', {
 				params: {
@@ -93,12 +95,12 @@ function Informations(props: IInformationsProps) {
 				position: "top-right",
 			});
 		} finally {
-			setOnLoad(false);
+			setOnLoadDrawer(false);
 		}
 	};
 
 	const handleCreateTeacher = async (teacherId: number) => {
-		setOnLoad(true);
+		setOnLoadDrawer(true);
 		try {
 			const response = await api.post('/curriculum/subject/createTeacher', {
 				subjectId: selectedSubject.id,
@@ -141,40 +143,32 @@ function Informations(props: IInformationsProps) {
 				position: "top-right",
 			});
 		} finally {
-			setOnLoad(false);
+			setOnLoadDrawer(false);
 		}
 	};
 
-	const handleSaveGrade = async () => {
+	const handleSaveGrade = async (e: any) => {
+		e.preventDefault();
 		setOnLoad(true);
 		try {
 			const response = await api.post('/curriculum/subject/updateGrade', {
 				subjectId: selectedSubject.id,
 				grade,
 			});
-			if (response.data.grade) {
-				toast({
-					title: "Professor adicionado com sucesso",
-					status: "success",
-					duration: 3000,
-					isClosable: true,
-					position: "top-right",
-				});
-				setSubjects({
-					...subjects,
-					[selectedSubject.id]: {
-						...subjects[selectedSubject.id],
-						grade: response.data.grade
-					}
-				});
-				setSelectedSubject({
-					...selectedSubject,
+			if (!response.data.id) throw new Error();
+			setSubjects({
+				...subjects,
+				[selectedSubject.id]: {
+					...subjects[selectedSubject.id],
 					grade: response.data.grade
-				});
-				setEditingGrade(false);
-			} else {
-				throw new Error();
-			}
+				}
+			});
+			setSelectedSubject({
+				...selectedSubject,
+				grade: response.data.grade
+			});
+			setEditingGrade(false);
+
 		} catch (err) {
 			toast({
 				title: "Não foi possível editar a nota",
@@ -182,29 +176,6 @@ function Informations(props: IInformationsProps) {
 				duration: 3000,
 				isClosable: true,
 				position: "top-right",
-			})
-		} finally {
-			setOnLoad(false);
-		}
-	}
-
-	const changeColor = async (color: string) => {
-		setOnLoad(true);
-		setSubjectColor(color);
-		const newTimetable = updateSubjectColor(selectedSubject.id, color, timetableSubjects);
-		try {
-			await api.post('timetable/updateTimetable', {
-				timetable: newTimetable
-			});
-			setTimetableSubjects(newTimetable);
-		} catch (error) {
-			toast({
-				title: 'Erro ao remover matéria',
-				description: 'Tente novamente mais tarde',
-				status: 'error',
-				position: 'top-right',
-				duration: 3000,
-				isClosable: true
 			})
 		} finally {
 			setOnLoad(false);
@@ -226,42 +197,44 @@ function Informations(props: IInformationsProps) {
 
 	return (
 		<>
-			<Flex flexDirection={'row'} alignItems={'center'}>
-				<Text fontSize={'xl'} fontWeight={600}>
-					Nota final:
-				</Text>
-				<NumberInput
-					defaultValue={selectedSubject.grade || 0}
-					precision={1}
-					step={0.1}
-					min={0}
-					max={10}
-					size={'sm'}
-					ml={'.5rem'}
-					maxW={'75px'}
-					allowMouseWheel={true}
-					onChange={(valueAsString: string, valueAsNumber: number) => setGrade(valueAsNumber)}
-				>
-					<NumberInputField value={grade} />
-					<NumberInputStepper>
-						<NumberIncrementStepper />
-						<NumberDecrementStepper />
-					</NumberInputStepper>
-				</NumberInput>
-				{
-					editingGrade && (
-						<Button
-							isLoading={onLoad}
-							variant={'blue-800'}
-							size={'sm'}
-							onClick={handleSaveGrade}
-							ml={'.5rem'}
-						>
-							Salvar nota
-						</Button>
-					)
-				}
-			</Flex>
+			<form onSubmit={(e) => handleSaveGrade(e)}>
+				<Flex flexDirection={'row'} alignItems={'center'}>
+					<Text fontSize={'xl'} fontWeight={600}>
+						Nota final:
+					</Text>
+					<NumberInput
+						defaultValue={selectedSubject.grade || 0}
+						precision={1}
+						step={0.1}
+						min={0}
+						max={10}
+						size={'sm'}
+						ml={'.5rem'}
+						maxW={'75px'}
+						allowMouseWheel={true}
+						onChange={(valueAsString: string, valueAsNumber: number) => setGrade(valueAsNumber)}
+					>
+						<NumberInputField value={grade} />
+						<NumberInputStepper>
+							<NumberIncrementStepper />
+							<NumberDecrementStepper />
+						</NumberInputStepper>
+					</NumberInput>
+					{
+						editingGrade && (
+							<Button
+								isLoading={onLoad}
+								variant={'blue-800'}
+								size={'sm'}
+								type={'submit'}
+								ml={'.5rem'}
+							>
+								Salvar nota
+							</Button>
+						)
+					}
+				</Flex>
+			</form>
 			<Divider my={'.5rem'} />
 
 
@@ -350,36 +323,6 @@ function Informations(props: IInformationsProps) {
 					{selectedSubject.teacher ? 'Alterar professor' : 'Adicionar professor'}
 				</Button>
 			</Flex >
-			<Divider my={'.5rem'} />
-			<FormControl mb={3}>
-				<FormLabel
-					display={'flex'}
-					alignItems={'center'}
-				>
-					Cor da matéria
-					<Tooltip label='A cor de fundo que sua matéria terá na grade' placement='top' hasArrow>
-						<span style={{ marginLeft: '.375rem' }}>
-							<FaRegQuestionCircle />
-						</span>
-					</Tooltip>
-				</FormLabel>
-				<Select
-					onChange={e => changeColor(e.target.value)}
-					value={subjectColor}
-					isDisabled={onLoad}
-				>
-					<option value="blackAlpha.900">Preto</option>
-					<option value="red.500">Vermelho</option>
-					<option value="red.700">Vinho</option>
-					<option value="orange.500">Laranja</option>
-					<option value="green.500">Verde</option>
-					<option value="blue.500">Azul</option>
-					<option value="blue.800">Azul escuro</option>
-					<option value="cyan.600">Ciano</option>
-					<option value="purple.500">Roxo</option>
-					<option value="pink.500">Rosa</option>
-				</Select>
-			</FormControl>
 
 			<Drawer
 				isOpen={isOpen}
@@ -396,35 +339,37 @@ function Informations(props: IInformationsProps) {
 					</DrawerHeader>
 
 					<DrawerBody>
-						<FormControl mb={"1rem"}>
-							<FormLabel fontWeight={500}>Nome</FormLabel>
-							<Input
-								type="text"
-								placeholder="Victor"
-								value={filterCamps.name}
-								onChange={(e) => setFilterCamps({ ...filterCamps, name: e.target.value })}
-							/>
-						</FormControl>
-						<FormControl mb={"1.5rem"}>
-							<FormLabel fontWeight={500}>Departamento</FormLabel>
-							<Select
-								value={filterCamps.departament}
-								onChange={(e) => setFilterCamps({ ...filterCamps, departament: e.target.value })}
-							>
-								<option value=''>Selecione um departamento</option>
-								{departaments.map((departament) => (
-									<option
-										key={departament.departament_code}
-										value={departament.departament_code}
-									>
-										{toCapitalize(departament.departament_name)}
-									</option>
-								))}
-							</Select>
-						</FormControl>
-						<HStack justifyContent={'flex-end'} columnGap={'8px'}>
-							<Button variant={'blue-800'} isLoading={onLoad} onClick={getTeachers}>Filtrar</Button>
-						</HStack>
+						<form onSubmit={(e) => { getTeachers(e) }}>
+							<FormControl mb={"1rem"}>
+								<FormLabel fontWeight={500}>Nome</FormLabel>
+								<Input
+									type="text"
+									placeholder="Victor"
+									value={filterCamps.name}
+									onChange={(e) => setFilterCamps({ ...filterCamps, name: e.target.value })}
+								/>
+							</FormControl>
+							<FormControl mb={"1.5rem"}>
+								<FormLabel fontWeight={500}>Departamento</FormLabel>
+								<Select
+									value={filterCamps.departament}
+									onChange={(e) => setFilterCamps({ ...filterCamps, departament: e.target.value })}
+								>
+									<option value=''>Selecione um departamento</option>
+									{departaments.map((departament) => (
+										<option
+											key={departament.departament_code}
+											value={departament.departament_code}
+										>
+											{toCapitalize(departament.departament_name)}
+										</option>
+									))}
+								</Select>
+							</FormControl>
+							<HStack justifyContent={'flex-end'} columnGap={'8px'}>
+								<Button variant={'blue-800'} isLoading={onLoadDrawer} type='submit'>Filtrar</Button>
+							</HStack>
+						</form>
 						<Divider my={'.5rem'} />
 						<Box
 							h={'55vh'}
@@ -440,7 +385,7 @@ function Informations(props: IInformationsProps) {
 										<Button
 											variant={'blue-800'}
 											size={'xs'}
-											isLoading={onLoad}
+											isDisabled={onLoadDrawer}
 											onClick={() => handleCreateTeacher(teacher.id)}
 											mr={'.5rem !important'}
 											ml={'auto !important'}

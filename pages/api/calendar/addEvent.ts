@@ -24,17 +24,16 @@ export default async function handler(
         } = req.body;
 
         const userId = token.id as number;
+        const startDate = new Date(start);
+        const endDate = new Date(end);
 
         if (
-            !title
-            || !start
-            || !end
-            || typeof title !== "string"
-            || typeof start !== "object"
-            || typeof end !== "object"
+            typeof title !== "string"
+            || isNaN(startDate.getTime())
+            || isNaN(endDate.getTime())
             || title.length > 100
-            || start > end
-            ) return res.status(400).json({ error: "Bad Request" });
+            || startDate.getTime() > endDate.getTime()
+        ) return res.status(400).json({ error: "Bad Request" });
 
         const response = await addEvent(userId, title, start, end, description);
 

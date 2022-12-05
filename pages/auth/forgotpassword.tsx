@@ -38,7 +38,8 @@ const Login: NextPage = () => {
         confirmationPassword: "",
     });
 
-    const handleNextStep = async () => {
+    const handleNextStep = async (e: any) => {
+        e.preventDefault();
         setOnLoading(true);
         if (step === 1) {
             if (validateEmail(formFields.email)) {
@@ -156,76 +157,79 @@ const Login: NextPage = () => {
                 <title>Esqueci a senha</title>
             </Head>
             <AuthContainer>
-                <Box p={[".5rem", ".5rem", "1rem"]}>
-                    <Text
-                        textAlign={"center"}
-                        fontSize={"5xl"}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
-                        Esqueci a senha
-                    </Text>
-
-                    {step === 1 && (
-                        <FirstStep
-                            firstStepProps={{
-                                formFields,
-                                setFormFields,
-                                forgotCampsValidation,
-                            }}
-                        />
-                    )}
-                    {step === 2 && (
-                        <SecondStep
-                            secondStepProps={{
-                                formFields,
-                                setFormFields,
-                                forgotCampsValidation,
-                            }}
-                        />
-                    )}
-                    {step === 3 && (
-                        <ThirdStep
-                            thirdStepProps={{
-                                formFields,
-                                setFormFields,
-                                forgotCampsValidation,
-                            }}
-                        />
-                    )}
-
-                    <Button
-                        mb={["1rem", "1rem", "1.5rem"]}
-                        w={"100%"}
-                        variant={"blue-800"}
-                        onClick={handleNextStep}
-                        isLoading={onLoading}
-                        loadingText="Enviando"
-                    >
-                        Enviar
-                    </Button>
-
-                    <HStack
-                        justifyContent={"center"}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
+                <form onSubmit={(e) => handleNextStep(e)}>
+                    <Box p={[".5rem", ".5rem", "1rem"]}>
                         <Text
                             textAlign={"center"}
-                            fontWeight={500}
-                            fontSize={["sm", "sm", "md"]}
+                            fontSize={"5xl"}
+                            mb={["1rem", "1rem", "1.5rem"]}
                         >
-                            Lembrou sua senha?
+                            Esqueci a senha
                         </Text>
-                        <Text
-                            color={"blue.400"}
-                            cursor={"pointer"}
-                            fontSize={["sm", "sm", "md"]}
-                            _hover={{ textDecoration: "underline" }}
-                            onClick={() => router.push("/auth/login")}
+
+                        {step === 1 && (
+                            <FirstStep
+                                firstStepProps={{
+                                    formFields,
+                                    setFormFields,
+                                    forgotCampsValidation,
+                                }}
+                            />
+                        )}
+                        {step === 2 && (
+                            <SecondStep
+                                secondStepProps={{
+                                    formFields,
+                                    setFormFields,
+                                    forgotCampsValidation,
+                                }}
+                            />
+                        )}
+                        {step === 3 && (
+                            <ThirdStep
+                                thirdStepProps={{
+                                    formFields,
+                                    setFormFields,
+                                    forgotCampsValidation,
+                                }}
+                            />
+                        )}
+
+                        <Button
+                            mb={["1rem", "1rem", "1.5rem"]}
+                            w={"100%"}
+                            variant={"blue-800"}
+                            isLoading={onLoading}
+                            loadingText="Enviando"
+                            type="submit"
                         >
-                            Entre aqui
-                        </Text>
-                    </HStack>
-                </Box>
+                            Enviar
+                        </Button>
+
+
+                        <HStack
+                            justifyContent={"center"}
+                            mb={["1rem", "1rem", "1.5rem"]}
+                        >
+                            <Text
+                                textAlign={"center"}
+                                fontWeight={500}
+                                fontSize={["sm", "sm", "md"]}
+                            >
+                                Lembrou sua senha?
+                            </Text>
+                            <Text
+                                color={"blue.400"}
+                                cursor={"pointer"}
+                                fontSize={["sm", "sm", "md"]}
+                                _hover={{ textDecoration: "underline" }}
+                                onClick={() => router.push("/auth/login")}
+                            >
+                                Entre aqui
+                            </Text>
+                        </HStack>
+                    </Box>
+                </form>
             </AuthContainer>
             {/* <VLibras forceOnload={true} /> */}
         </>

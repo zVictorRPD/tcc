@@ -61,7 +61,7 @@ function Subject(props: ISubjectProps) {
                 catch (error) {
                     console.log(error);
                 }
-            }, 2000)
+            }, 1200)
         );
     }
 
@@ -85,6 +85,7 @@ function Subject(props: ISubjectProps) {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                     shadow={snapshot.isDragging ? 'outline' : 'none'}
+                    userSelect={'none'}
                 >
                     {/* header */}
                     <Box

@@ -12,10 +12,21 @@ function AddPeriodColumn() {
     const toast = useToast();
     const { setPeriods, periods, periodOrder, setPeriodOrder } = useContext(CurriculumContext);
 
-    const handleAddPeriod = async () => {
+    const handleAddPeriod = async (e: any) => {
+        e.preventDefault();
         if (periodName === '') {
             toast({
                 title: 'Insira um nome para o período.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+            return;
+        }
+        if (periodName.length > 100) {
+            toast({
+                title: 'O nome do período deve ter no máximo 100 caracteres.',
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
@@ -29,6 +40,7 @@ function AddPeriodColumn() {
                 periodName
             });
             if (!response.data.id) throw new Error('Erro ao criar período.');
+
             const newPeriods = {
                 ...periods,
                 [response.data.id]: response.data
@@ -98,47 +110,49 @@ function AddPeriodColumn() {
                     </Text>
                 </Box>
             ) : (
-                <Box
-                    w={'100%'}
-                    py={2}
-                    px={4}
-                    bg={'white'}
-                    borderRadius={'1rem'}
-                    cursor={'pointer'}
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                    flexDirection={'column'}
-                >
-                    <Input
-                        placeholder="Nome do período"
-                        value={periodName}
-                        onChange={(e) => setPeriodName(e.target.value)}
-                    />
-                    <HStack
-                        mt={2}
+                <form onSubmit={(e) => handleAddPeriod(e)}>
+                    <Box
                         w={'100%'}
+                        py={2}
+                        px={4}
+                        bg={'white'}
+                        borderRadius={'1rem'}
+                        cursor={'pointer'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        flexDirection={'column'}
                     >
-                        <Button
-                            size={'sm'}
-                            variant='outline'
-                            mr={1}
-                            onClick={() => setAddingPeriod(false)}
+                        <Input
+                            placeholder="Nome do período"
+                            value={periodName}
+                            onChange={(e) => setPeriodName(e.target.value)}
+                        />
+                        <HStack
+                            mt={2}
+                            w={'100%'}
                         >
-                            Cancelar
-                        </Button>
+                            <Button
+                                size={'sm'}
+                                variant='outline'
+                                mr={1}
+                                onClick={() => setAddingPeriod(false)}
+                            >
+                                Cancelar
+                            </Button>
 
-                        <Button
-                            size={'sm'}
-                            variant='blue-800'
-                            onClick={handleAddPeriod}
-                            isLoading={onLoad}
-                        >
-                            Adicionar
-                        </Button>
-                    </HStack>
+                            <Button
+                                size={'sm'}
+                                variant='blue-800'
+                                type='submit'
+                                isLoading={onLoad}
+                            >
+                                Adicionar
+                            </Button>
+                        </HStack>
 
-                </Box>
+                    </Box>
+                </form>
             )}
 
         </Stack>

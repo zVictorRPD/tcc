@@ -27,10 +27,21 @@ function PeriodColumn(props: IPeriodColumnProps) {
         onClose: alertOnClose
     } = useDisclosure()
 
-    const handleEditPeriod = async () => {
+    const handleEditPeriod = async (e:any) => {
+        e.preventDefault();
         if (periodName === '') {
             toast({
                 title: 'Insira um nome para o período.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right'
+            });
+            return;
+        }
+        if(periodName.length > 100){
+            toast({
+                title: 'O nome do período deve ter no máximo 100 caracteres.',
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
@@ -163,6 +174,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                 color='gray.800'
                                 fontSize={'2xl'}
                                 textAlign={'center'}
+                                wordBreak={'break-all'}
                             >
                                 {period.name}
                             </Text>
@@ -188,7 +200,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             </Menu>
                         </>
                     ) : (
-                        <>
+                        <form onSubmit={(e) => handleEditPeriod(e)} style={{ width: '100%' }}>
                             <Input
                                 placeholder="Nome do período"
                                 value={periodName}
@@ -211,13 +223,13 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                 <Button
                                     size={'sm'}
                                     variant='blue-800'
-                                    onClick={handleEditPeriod}
+                                    type='submit'
                                     isLoading={onLoading}
                                 >
                                     Editar
                                 </Button>
                             </HStack>
-                        </>
+                        </form>
                     )}
                 </Box>
                 {/* Body */}
@@ -240,9 +252,8 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             {
                                 props.subjects.length > 0 &&
                                 Object.keys(props.subjects).map((key: any, index) => {
-                                    return <Subject key={index} index={index} subjectData={props.subjects[key]} periodId={period.id} />
+                                    return props.subjects[key] && <Subject key={index} index={index} subjectData={props.subjects[key]} periodId={period.id} /> 
                                 })
-
                             }
                             {provided.placeholder}
                         </Stack>

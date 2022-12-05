@@ -25,6 +25,7 @@ export async function createPeriod(userId: number, name: string) {
         select: {
             id: true,
             name: true,
+            visible: true,
         }
     }).catch((err) => {
         return err;
@@ -46,6 +47,7 @@ export async function createPeriod(userId: number, name: string) {
     return {
         id: newPeriod.id.toString(),
         name: newPeriod.name,
+        visible: newPeriod.visible,
         subjectIds: []
     }
 }

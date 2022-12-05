@@ -26,17 +26,15 @@ export default async function handler(
         } = req.body;
 
         const userId = token.id as number;
-
-        if (
-            !title
-            || isNaN(parseInt(id as string))
-            || !start
-            || !end
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        if (    
+            isNaN(parseInt(id as string))
             || typeof title !== "string"
-            || typeof start !== "object"
-            || typeof end !== "object"
+            || isNaN(startDate.getTime())
+            || isNaN(endDate.getTime())
             || title.length > 100
-            || start > end
+            || startDate.getTime() > endDate.getTime()
             ) return res.status(400).json({ error: "Bad Request" });
 
         const response = await editEvent(userId, parseInt(id), title, start, end, description);

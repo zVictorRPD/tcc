@@ -22,7 +22,10 @@ export default async function handler(
             || time < 0
         ) return res.status(400).json({ error: "Bad Request" });
 
-        const newTime = time > 1000 ? time : 1000;
+        console.log(time);
+        
+
+        const newTime = time < 1000 ? time : 1000;
 
         const response = await createComplementary(userId, name, newTime);
 

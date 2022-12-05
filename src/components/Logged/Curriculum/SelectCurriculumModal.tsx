@@ -9,7 +9,8 @@ function SelectCurriculumModal() {
     const [selectedCourse, setSelectedCourse] = useState("");
     const toast = useToast();
 
-    const handleSelectCourse = async () => {
+    const handleSelectCourse = async (e:any) => {
+        e.preventDefault();
         if (selectedCourse === "") {
             toast({
                 title: 'Selecione um curso.',
@@ -35,7 +36,7 @@ function SelectCurriculumModal() {
                 });
                 setHasCurriculum(true);
                 selectCurriculumModalOnClose();
-            }else {
+            } else {
                 toast({
                     title: 'Erro ao criar grade.',
                     status: 'error',
@@ -55,44 +56,46 @@ function SelectCurriculumModal() {
         <Modal isOpen={selectCurriculumModalIsOpen} onClose={selectCurriculumModalOnClose} size={"lg"}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Selecione seu curso</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody
-                    px={{
-                        base: '0',
-                        md: '4'
-                    }}
-                >
-                    <FormControl mb={3}>
-                        <FormLabel>Curso</FormLabel>
-                        <Select
-                            value={selectedCourse}
-                            onChange={e => setSelectedCourse(e.target.value)}
-                        >
-                            <option value={''}>Selecione o curso</option>
-                            {
-                                courses.map((course: any) => (
-                                    <option key={course.code} value={course.code}>
-                                        {abbreviateCourseName(course.name)}
-                                    </option>
-                                ))
-                            }
-                        </Select>
-                    </FormControl>
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant='outline' mr={3} onClick={selectCurriculumModalOnClose}>
-                        Cancelar
-                    </Button>
-                    <Button
-                        variant='blue-800'
-                        onClick={handleSelectCourse}
-                        isLoading={onLoad}
-                        loadingText='Enviando'
+                <form onSubmit={(e) => handleSelectCourse(e)}>
+                    <ModalHeader>Selecione seu curso</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody
+                        px={{
+                            base: '0',
+                            md: '4'
+                        }}
                     >
-                        Enviar
-                    </Button>
-                </ModalFooter>
+                        <FormControl mb={3}>
+                            <FormLabel>Curso</FormLabel>
+                            <Select
+                                value={selectedCourse}
+                                onChange={e => setSelectedCourse(e.target.value)}
+                            >
+                                <option value={''}>Selecione o curso</option>
+                                {
+                                    courses.map((course: any) => (
+                                        <option key={course.code} value={course.code}>
+                                            {abbreviateCourseName(course.name)}
+                                        </option>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant='outline' mr={3} onClick={selectCurriculumModalOnClose}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            variant='blue-800'
+                            type='submit'
+                            isLoading={onLoad}
+                            loadingText='Enviando'
+                        >
+                            Enviar
+                        </Button>
+                    </ModalFooter>
+                </form>
             </ModalContent>
         </Modal>
     )

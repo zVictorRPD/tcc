@@ -46,9 +46,9 @@ const Login: NextPage = () => {
 
     //função para lidar com a verificação de email
     const handleVerifyEmail = (urlMessage: string | string[]) => {
-        
+
         const url = urlMessage.toString();
-        if(!url.includes('?') && !url.includes('=')) return;
+        if (!url.includes('?') && !url.includes('=')) return;
         const message = url.split("?")[1].split("=")[1]
 
         if (message === "invalidlink") {
@@ -86,7 +86,8 @@ const Login: NextPage = () => {
         }
     }, [callbackUrl]);
 
-    const handleLogin = async () => {
+    const handleLogin = async (e: any) => {
+        e.preventDefault();
         setOnLoading(true);
         const emailValidation = validateEmail(email);
         const passwordValidation = validatePassword(password);
@@ -169,113 +170,116 @@ const Login: NextPage = () => {
                 <title>Login</title>
             </Head>
             <AuthContainer>
-                <Box p={[".5rem", ".5rem", "1rem"]}>
-                    <Text
-                        textAlign={"center"}
-                        fontSize={"5xl"}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
-                        Faça login
-                    </Text>
-                    <FormControl
-                        mb={"1rem"}
-                        isInvalid={!loginCampsValidation.email}
-                    >
-                        <FormLabel fontWeight={500}>Email</FormLabel>
-                        <Input
-                            type="email"
-                            placeholder="examplemail@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        {!loginCampsValidation.email && (
-                            <FormErrorMessage>
-                                Insira um email valido.
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
-                    <FormControl
-                        mb={["1rem", "1rem", "1.5rem"]}
-                        isInvalid={!loginCampsValidation.password}
-                    >
-                        <FormLabel fontWeight={500}>Senha</FormLabel>
-                        <InputGroup size="md">
-                            <Input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="********"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <InputRightElement width="3rem">
-                                <Button
-                                    h="1.75rem"
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => {
-                                        setShowPassword(!showPassword);
-                                    }}
-                                >
-                                    {showPassword ? (
-                                        <AiOutlineEyeInvisible />
-                                    ) : (
-                                        <AiOutlineEye />
-                                    )}
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
-                        {!loginCampsValidation.password && (
-                            <FormErrorMessage>
-                                Insira uma senha com 8 ou mais caracteres.
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
-                    <HStack
-                        justifyContent={"flex-end"}
-                        flexWrap={"wrap"}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
-                        <Text
-                            color={"blue.400"}
-                            cursor={"pointer"}
-                            _hover={{ textDecoration: "underline" }}
-                            onClick={() => router.push("/auth/forgotpassword")}
-                            style={{ marginLeft: "0" }}
-                        >
-                            Recuperar senha
-                        </Text>
-                    </HStack>
-                    <Button
-                        mb={["1rem", "1rem", "1.5rem"]}
-                        w={"100%"}
-                        variant={"blue-800"}
-                        onClick={handleLogin}
-                        isLoading={onLoading}
-                        loadingText="Enviando"
-                    >
-                        Entrar
-                    </Button>
-                    <HStack
-                        justifyContent={"center"}
-                        mb={["1rem", "1rem", "1.5rem"]}
-                    >
+                <form onSubmit={(e) => handleLogin(e)}>
+                    <Box p={[".5rem", ".5rem", "1rem"]}>
                         <Text
                             textAlign={"center"}
-                            fontWeight={500}
-                            fontSize={["sm", "sm", "md"]}
+                            fontSize={"5xl"}
+                            mb={["1rem", "1rem", "1.5rem"]}
                         >
-                            Não tem uma conta?
+                            Faça login
                         </Text>
-                        <Text
-                            color={"blue.400"}
-                            cursor={"pointer"}
-                            fontSize={["sm", "sm", "md"]}
-                            _hover={{ textDecoration: "underline" }}
-                            onClick={() => router.push("/auth/signup")}
+                        <FormControl
+                            mb={"1rem"}
+                            isInvalid={!loginCampsValidation.email}
                         >
-                            Crie a sua aqui
-                        </Text>
-                    </HStack>
-                </Box>
+                            <FormLabel fontWeight={500}>Email</FormLabel>
+                            <Input
+                                type="email"
+                                placeholder="examplemail@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            {!loginCampsValidation.email && (
+                                <FormErrorMessage>
+                                    Insira um email valido.
+                                </FormErrorMessage>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            mb={["1rem", "1rem", "1.5rem"]}
+                            isInvalid={!loginCampsValidation.password}
+                        >
+                            <FormLabel fontWeight={500}>Senha</FormLabel>
+                            <InputGroup size="md">
+                                <Input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="********"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    autoComplete="on"
+                                />
+                                <InputRightElement width="3rem">
+                                    <Button
+                                        h="1.75rem"
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => {
+                                            setShowPassword(!showPassword);
+                                        }}
+                                    >
+                                        {showPassword ? (
+                                            <AiOutlineEyeInvisible />
+                                        ) : (
+                                            <AiOutlineEye />
+                                        )}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            {!loginCampsValidation.password && (
+                                <FormErrorMessage>
+                                    Insira uma senha com 8 ou mais caracteres.
+                                </FormErrorMessage>
+                            )}
+                        </FormControl>
+                        <HStack
+                            justifyContent={"flex-end"}
+                            flexWrap={"wrap"}
+                            mb={["1rem", "1rem", "1.5rem"]}
+                        >
+                            <Text
+                                color={"blue.400"}
+                                cursor={"pointer"}
+                                _hover={{ textDecoration: "underline" }}
+                                onClick={() => router.push("/auth/forgotpassword")}
+                                style={{ marginLeft: "0" }}
+                            >
+                                Recuperar senha
+                            </Text>
+                        </HStack>
+                        <Button
+                            mb={["1rem", "1rem", "1.5rem"]}
+                            w={"100%"}
+                            variant={"blue-800"}
+                            isLoading={onLoading}
+                            loadingText="Enviando"
+                            type="submit"
+                        >
+                            Entrar
+                        </Button>
+                        <HStack
+                            justifyContent={"center"}
+                            mb={["1rem", "1rem", "1.5rem"]}
+                        >
+                            <Text
+                                textAlign={"center"}
+                                fontWeight={500}
+                                fontSize={["sm", "sm", "md"]}
+                            >
+                                Não tem uma conta?
+                            </Text>
+                            <Text
+                                color={"blue.400"}
+                                cursor={"pointer"}
+                                fontSize={["sm", "sm", "md"]}
+                                _hover={{ textDecoration: "underline" }}
+                                onClick={() => router.push("/auth/signup")}
+                            >
+                                Crie a sua aqui
+                            </Text>
+                        </HStack>
+                    </Box>
+                </form>
             </AuthContainer>
             <ConfirmationModal
                 modalProps={{ isOpen, onClose, timeout, resendEmail }}

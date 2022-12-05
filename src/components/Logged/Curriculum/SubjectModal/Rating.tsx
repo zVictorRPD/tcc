@@ -49,7 +49,8 @@ function Rating() {
         }
     };
 
-    const handleSubmitRating = async () => {
+    const handleSubmitRating = async (e:any) => {
+        e.preventDefault();
         setOnLoad(true);
         try {
             const response = await api.post('/subject/createRating', {

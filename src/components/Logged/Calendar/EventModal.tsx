@@ -42,7 +42,8 @@ function EventModal(props: IEventModalProps) {
         });
     }
 
-    const handleSubmitEvent = async () => {
+    const handleSubmitEvent = async (e: any) => {
+        e.preventDefault()
         if (eventData.title === '') {
             createToast('O título não pode ser vazio');
             return;
@@ -148,62 +149,64 @@ function EventModal(props: IEventModalProps) {
         <Modal isOpen={eventModalIsOpen} onClose={handleCloseModal} size={"lg"}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>
-                    {isEdit ? 'Editar evento' : 'Adicionar evento'}
-                </ModalHeader>
-                <ModalCloseButton />
-                <ModalBody
-                    px={{
-                        base: '0',
-                        md: '4'
-                    }}
-                >
-
-                    <FormControl mb={3}>
-                        <FormLabel>Título</FormLabel>
-                        <Input value={eventData.title} onChange={e => setEventData({ ...eventData, title: e.target.value })} />
-                    </FormControl>
-                    <FormControl mb={3}>
-                        <FormLabel>Inicio</FormLabel>
-                        <Input
-                            type="datetime-local"
-                            value={moment(eventData.start).format('YYYY-MM-DDTHH:mm:ss')}
-                            onChange={e => setEventData({ ...eventData, start: new Date(e.target.value) })}
-                        />
-                    </FormControl>
-                    <FormControl mb={3}>
-                        <FormLabel>Fim</FormLabel>
-                        <Input
-                            type="datetime-local"
-                            value={moment(eventData.end).format('YYYY-MM-DDTHH:mm:ss')}
-                            onChange={e => setEventData({ ...eventData, end: new Date(e.target.value) })}
-                        />
-                    </FormControl>
-                    <FormControl mb={3}>
-                        <FormLabel>Descrição</FormLabel>
-                        <Textarea placeholder='Descrição' value={eventData.description} resize={'none'} onChange={e => setEventData({ ...eventData, description: e.target.value })} />
-                    </FormControl>
-                </ModalBody>
-                <ModalFooter>
-                    {
-                        isEdit && (
-                            <Button colorScheme="red" mr={'auto'} onClick={handleDeleteEvent}>
-                                Excluir
-                            </Button>
-                        )
-                    }
-                    <Button variant='outline' mr={3} onClick={handleCloseModal}>
-                        Cancelar
-                    </Button>
-                    <Button
-                        variant='blue-800'
-                        onClick={handleSubmitEvent}
-                        isLoading={onLoad}
-                        loadingText={isEdit ? 'Editando' : 'Adicionando'}
+                <form onSubmit={(e) => handleSubmitEvent(e)}>
+                    <ModalHeader>
+                        {isEdit ? 'Editar evento' : 'Adicionar evento'}
+                    </ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody
+                        px={{
+                            base: '0',
+                            md: '4'
+                        }}
                     >
-                        {isEdit ? 'Editar' : 'Adicionar'}
-                    </Button>
-                </ModalFooter>
+
+                        <FormControl mb={3}>
+                            <FormLabel>Título</FormLabel>
+                            <Input value={eventData.title} onChange={e => setEventData({ ...eventData, title: e.target.value })} />
+                        </FormControl>
+                        <FormControl mb={3}>
+                            <FormLabel>Inicio</FormLabel>
+                            <Input
+                                type="datetime-local"
+                                value={moment(eventData.start).format('YYYY-MM-DDTHH:mm:ss')}
+                                onChange={e => setEventData({ ...eventData, start: new Date(e.target.value) })}
+                            />
+                        </FormControl>
+                        <FormControl mb={3}>
+                            <FormLabel>Fim</FormLabel>
+                            <Input
+                                type="datetime-local"
+                                value={moment(eventData.end).format('YYYY-MM-DDTHH:mm:ss')}
+                                onChange={e => setEventData({ ...eventData, end: new Date(e.target.value) })}
+                            />
+                        </FormControl>
+                        <FormControl mb={3}>
+                            <FormLabel>Descrição</FormLabel>
+                            <Textarea placeholder='Descrição' value={eventData.description} resize={'none'} onChange={e => setEventData({ ...eventData, description: e.target.value })} />
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        {
+                            isEdit && (
+                                <Button colorScheme="red" mr={'auto'} onClick={handleDeleteEvent}>
+                                    Excluir
+                                </Button>
+                            )
+                        }
+                        <Button variant='outline' mr={3} onClick={handleCloseModal}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            variant='blue-800'
+                            type='submit'
+                            isLoading={onLoad}
+                            loadingText={isEdit ? 'Editando' : 'Adicionando'}
+                        >
+                            {isEdit ? 'Editar' : 'Adicionar'}
+                        </Button>
+                    </ModalFooter>
+                </form>
             </ModalContent>
         </Modal>
     )
