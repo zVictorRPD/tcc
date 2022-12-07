@@ -51,7 +51,24 @@ export async function createSubject(userId: number, periodId: number, subjectCod
     };
 }
 
-export async function deleteSubject(subjectId: number, periodId: number) {
+export async function deleteSubject(userId: number, subjectId: number, periodId: number) {
+    const curriculum = await prisma.curriculum.findUnique({
+        where: {
+            userId: userId
+        },
+        select: {
+            curriculumPeriods: true
+        }
+    }).catch((err) => {
+        return err;
+    });
+
+    if (!curriculum || !curriculum.curriculumPeriods) return { error: "Unauthorized" };
+
+    const periodToEdit = curriculum.curriculumPeriods.find((period: any) => period.id === periodId);
+
+    if (!periodToEdit || periodToEdit.length === 0) return { error: "Unauthorized" };
+
     const period = await prisma.curriculumPeriods.findUnique({
         where: {
             id: periodId
@@ -84,10 +101,11 @@ export async function deleteSubject(subjectId: number, periodId: number) {
     return deletedSubject;
 }
 
-export async function updateSubjectStatus(subjectId: number, status: string) {
-    const subject = await prisma.userSubjects.update({
+export async function updateSubjectStatus(userId: number, subjectId: number, status: string) {
+    const subjectEdited = await prisma.userSubjects.updateMany({
         where: {
-            id: subjectId
+            id: subjectId,
+            userId: userId
         },
         data: {
             status: status
@@ -95,13 +113,21 @@ export async function updateSubjectStatus(subjectId: number, status: string) {
     }).catch((err) => {
         return err;
     });
+    const subject = await prisma.userSubjects.findUnique({
+        where: {
+            id: subjectId
+        },
+    }).catch((err) => {
+        return err;
+    });
     return subject;
 }
 
-export async function updateSubjectNote(subjectId: number, text: string) {
-    const subject = await prisma.userSubjects.update({
+export async function updateSubjectNote(userId: number, subjectId: number, text: string) {
+    const subjectEdited = await prisma.userSubjects.updateMany({
         where: {
-            id: subjectId
+            id: subjectId,
+            userId: userId
         },
         data: {
             note: text
@@ -109,13 +135,21 @@ export async function updateSubjectNote(subjectId: number, text: string) {
     }).catch((err) => {
         return err;
     });
+    const subject = await prisma.userSubjects.findUnique({
+        where: {
+            id: subjectId
+        },
+    }).catch((err) => {
+        return err;
+    });
     return subject;
 }
 
-export async function updateSubjectLink(subjectId: number, links: string) {
-    const subject = await prisma.userSubjects.update({
+export async function updateSubjectLink(userId: number, subjectId: number, links: string) {
+    const subjectEdited = await prisma.userSubjects.updateMany({
         where: {
-            id: subjectId
+            id: subjectId,
+            userId: userId
         },
         data: {
             links: JSON.stringify(links)
@@ -123,12 +157,21 @@ export async function updateSubjectLink(subjectId: number, links: string) {
     }).catch((err) => {
         return err;
     });
+
+    const subject = await prisma.userSubjects.findUnique({
+        where: {
+            id: subjectId
+        },
+    }).catch((err) => {
+        return err;
+    });
     return subject;
 }
 
-export async function updateSubjectGrade(subjectId: number, grade: number) {
-    const subject = await prisma.userSubjects.update({
+export async function updateSubjectGrade(userId: number, subjectId: number, grade: number) {
+    const subjectEdited = await prisma.userSubjects.updateMany({
         where: {
+            userId: userId,
             id: subjectId
         },
         data: {
@@ -137,18 +180,33 @@ export async function updateSubjectGrade(subjectId: number, grade: number) {
     }).catch((err) => {
         return err;
     });
-    return subject;
-}
-
-
-export async function createTeacher(subjectId: number, teacherId: number) {
-
-    const subject = await prisma.userSubjects.update({
+    const subject = await prisma.userSubjects.findUnique({
         where: {
             id: subjectId
         },
+    }).catch((err) => {
+        return err;
+    });
+    return subject;
+}
+
+export async function createTeacher(userId: number, subjectId: number, teacherId: number) {
+
+    const update = await prisma.userSubjects.updateMany({
+        where: {
+            id: subjectId,
+            userId: userId
+        },
         data: {
             teacherId: teacherId
+        }
+    }).catch((err) => {
+        return err;
+    });
+
+    const subject = await prisma.userSubjects.findUnique({
+        where: {
+            id: subjectId
         },
         include: {
             teacher: true
@@ -160,3 +218,19 @@ export async function createTeacher(subjectId: number, teacherId: number) {
     return subject;
 }
 
+export async function updateAllSubjectStatus(userId: number, periodId: number, status: string) {
+    const subjects = await prisma.userSubjects.updateMany({
+        where: {
+            userId: userId,
+            periodId: periodId
+        },
+        data: {
+            status: status
+        }
+    }).catch((err) => {
+        return err;
+    });
+    return {
+        changed: true,
+    };
+}

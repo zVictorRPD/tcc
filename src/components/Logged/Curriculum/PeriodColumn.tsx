@@ -1,6 +1,6 @@
-import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure, Tooltip } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react'
-import { FaEdit, FaEllipsisV, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaEllipsisV, FaSync, FaTrash } from 'react-icons/fa';
 import Subject from './Subject';
 import { Droppable } from 'react-beautiful-dnd';
 import styles from './style.module.scss';
@@ -27,7 +27,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
         onClose: alertOnClose
     } = useDisclosure()
 
-    const handleEditPeriod = async (e:any) => {
+    const handleEditPeriod = async (e: any) => {
         e.preventDefault();
         if (periodName === '') {
             toast({
@@ -39,7 +39,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
             });
             return;
         }
-        if(periodName.length > 100){
+        if (periodName.length > 100) {
             toast({
                 title: 'O nome do período deve ter no máximo 100 caracteres.',
                 status: 'error',
@@ -136,6 +136,43 @@ function PeriodColumn(props: IPeriodColumnProps) {
 
     }
 
+    const changeAllStatus = async (type: string) => {
+        setOnLoading(true);
+        try {
+            const response = await api.post('/curriculum/subject/changeAllStatus', {
+                periodId: period.id,
+                type
+            });
+            if (!response.data.changed) throw new Error('Erro ao alterar status das matérias');
+
+            const newSubjects = {
+                ...subjects
+            }
+            period.subjectIds.forEach(subjectId => {
+                newSubjects[subjectId].status = type;
+            });
+            setSubjects(newSubjects);
+            toast({
+                title: "Status alterado com sucesso!",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            });
+        } catch (error) {
+            toast({
+                title: "Erro ao alterar status das matérias",
+                description: "Não foi possível alterar o status das matérias",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            })
+        } finally {
+            setOnLoading(false);
+        }
+    }
+
     useEffect(() => {
         if (editingPeriod && focusField.current) {
             focusField.current.focus();
@@ -193,6 +230,44 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                     }}>
                                         Editar nome
                                     </MenuItem>
+                                    <Tooltip
+                                        placement='top'
+                                        hasArrow
+                                        label='Colocar todas as matérias com o estado de pendente?'
+                                    >
+                                        <MenuItem 
+                                        icon={<FaSync color='#718096' />}
+                                            onClick={() => changeAllStatus('todo')}
+                                        >
+                                            Pendente
+                                        </MenuItem>
+                                    </Tooltip>
+                                    <Tooltip
+                                        placement='top'
+                                        hasArrow
+                                        label='Colocar todas as matérias com o estado de cursando?'
+                                    >
+                                        <MenuItem 
+                                        icon={<FaSync color='#3182ce' />}
+                                            onClick={() => changeAllStatus('doing')}
+                                        >
+                                            Cursando
+                                        </MenuItem>
+                                    </Tooltip>
+
+                                    <Tooltip
+                                        placement='top'
+                                        hasArrow
+                                        label='Colocar todas as matérias com o estado de aprovado?'
+                                    >
+                                        <MenuItem 
+                                        icon={<FaSync color='#38A169' />}
+                                            onClick={() => changeAllStatus('done')}
+                                        >
+                                            Aprovado
+                                        </MenuItem>
+                                    </Tooltip>
+
                                     <MenuItem icon={<FaTrash />} onClick={alertOnOpen}>
                                         Excluir
                                     </MenuItem>
@@ -252,7 +327,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             {
                                 props.subjects.length > 0 &&
                                 Object.keys(props.subjects).map((key: any, index) => {
-                                    return props.subjects[key] && <Subject key={index} index={index} subjectData={props.subjects[key]} periodId={period.id} /> 
+                                    return props.subjects[key] && <Subject key={index} index={index} subjectData={props.subjects[key]} periodId={period.id} />
                                 })
                             }
                             {provided.placeholder}

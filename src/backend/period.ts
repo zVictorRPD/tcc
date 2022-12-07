@@ -94,8 +94,6 @@ export async function deletePeriod(userId: number, periodId: number) {
         return err;
     });
 
-
-
     const periodDeleted = await prisma.curriculumPeriods.delete({
         where: {
             id: periodId

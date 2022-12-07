@@ -109,7 +109,7 @@ function Subject(props: ISubjectProps) {
                         </Text>
                     </Box>
                     {/* body */}
-                    <Box px={'.5rem'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexGrow={1}>
+                    <Box minH={'53px'} px={'.5rem'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexGrow={1}>
                         <Text fontSize={'1rem'} fontWeight={'500'} textAlign={'center'}>{toCapitalize(subjectData.name)}</Text>
                     </Box>
                     {/* Footer */}

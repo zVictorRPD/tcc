@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
-import { updateSubjectLink } from "../../../../src/backend/userSubject";
+import { updateAllSubjectStatus } from "../../../../src/backend/userSubject";
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,11 +11,12 @@ export default async function handler(
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
     if (req.method === "POST") {
-        const { subjectId, links } = req.body;
+        const { periodId, type } = req.body;
+        const types = ['todo', 'doing', 'done']
         const userId = token.id as number;
-        if (typeof subjectId !== "string" || isNaN(parseInt(subjectId as string)) || typeof links !== 'object') return res.status(400).json({ error: "Bad request" });
+        if (typeof periodId !== "string" || isNaN(parseInt(periodId as string)) || !types.includes(type)) return res.status(400).json({ error: "Bad request" });
 
-        const response = await updateSubjectLink(userId, parseInt(subjectId), links);
+        const response = await updateAllSubjectStatus(userId, parseInt(periodId), type);
 
         return res.status(200).json(response);
     }
