@@ -1,13 +1,42 @@
-import { TableContainer, Table, Tbody, Tr, Th, Td, Tooltip, Box, Text } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import { TableContainer, Table, Tbody, Tr, Th, Td, Tooltip, Box, Text, Switch, useToast } from '@chakra-ui/react'
+import React, { useContext, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import style from '../style.module.scss';
 import { CurriculumContext } from '../curriculumContext';
 import { handleMainTeacher, handleNumberLinks, handleNumberNotes, handleSubjectCount, handleSubjectGrade } from '../../../../functions/curriculum';
+import { api } from '../../../../services/api';
 
 function SubjectTab() {
-	const { subjects } = useContext(CurriculumContext);
+	const { subjects, subjectsFilter, setSubjectsFilter } = useContext(CurriculumContext);
+	const toast = useToast();
+	const [onLoad, setOnLoad] = useState(false);
 
+	
+	const handleFilter = async (filter: string) => {
+		const newFilter = {
+			...subjectsFilter,
+			[filter]: !subjectsFilter[filter]
+		}
+		try {
+			setOnLoad(true);
+			const response = await api.post('/curriculum/updateFilter', {
+				filter: newFilter
+			});
+			if (!response.data.id) throw new Error('Erro ao atualizar o filtro de matérias');
+			setSubjectsFilter(newFilter);
+		} catch (err) {
+			toast({
+				title: "Erro ao atualizar",
+				description: "Não foi possível atualizar o filtro de matérias",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+				position: "top-right"
+			});
+		} finally {
+			setOnLoad(false);
+		}
+	}
 	return (
 		<>
 			<Text
@@ -91,6 +120,84 @@ function SubjectTab() {
 							<Tr>
 								<Th>Número de links</Th>
 								<Td isNumeric>{handleNumberLinks(subjects)}</Td>
+							</Tr>
+						</Tbody>
+					</Table>
+				</TableContainer>
+			</Box>
+			<Text
+				fontSize={'lg'}
+				fontWeight={600}
+				textAlign={'center'}
+				my={3}
+			>
+				Exibir as matérias
+			</Text>
+			<Box
+				borderWidth={'1px'}
+				borderRadius={'lg'}
+				padding={3}
+				className={`${style.drawer_table_scrollbar} ${onLoad ? style.on_load : ''}`}
+			>
+				<TableContainer
+					className={style.drawer_table_scrollbar}
+				>
+					<Table size='sm'>
+						<Tbody>
+							<Tr>
+								<Th py={'7px'}>
+									<Switch
+										isChecked={subjectsFilter.obligatory}
+										size='sm'
+										mr={3}
+										onChange={() => handleFilter('obligatory')}
+									/>
+									<Text display={'inline'}>Obrigatórias</Text>
+								</Th>
+							</Tr>
+							<Tr>
+								<Th py={'7px'}>
+									<Switch
+										isChecked={subjectsFilter.optional}
+										size='sm'
+										mr={3}
+										onChange={() => handleFilter('optional')}
+									/>
+									<Text display={'inline'}>Optativas</Text>
+								</Th>
+							</Tr>
+							<Tr>
+								<Th py={'7px'}>
+									<Switch
+										isChecked={subjectsFilter.todo}
+										size='sm'
+										mr={3}
+										onChange={() => handleFilter('todo')}
+									/>
+									<Text display={'inline'}>Pendentes</Text>
+								</Th>
+							</Tr>
+							<Tr>
+								<Th py={'7px'}>
+									<Switch
+										isChecked={subjectsFilter.doing}
+										size='sm'
+										mr={3}
+										onChange={() => handleFilter('doing')}
+									/>
+									<Text display={'inline'}>Cursando</Text>
+								</Th>
+							</Tr>
+							<Tr>
+								<Th py={'7px'}>
+									<Switch
+										isChecked={subjectsFilter.done}
+										size='sm'
+										mr={3}
+										onChange={() => handleFilter('done')}
+									/>
+									<Text display={'inline'}>Aprovadas</Text>
+								</Th>
 							</Tr>
 						</Tbody>
 					</Table>

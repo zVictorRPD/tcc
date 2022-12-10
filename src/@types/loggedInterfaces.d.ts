@@ -138,10 +138,12 @@ interface ICurriculumContext {
     setCourses: React.Dispatch<React.SetStateAction<Object[]>>;
     periods: IPeriods;
     subjects: ISubjects;
+    subjectsFilter: ISubjectFilter;
     complementary: IComplementary[];
     periodOrder: string[];
     setPeriods: React.Dispatch<React.SetStateAction<IPeriods>>;
     setSubjects: React.Dispatch<React.SetStateAction<ISubjects>>;
+    setSubjectsFilter: React.Dispatch<React.SetStateAction<ISubjectFilter>>;
     setComplementary: React.Dispatch<React.SetStateAction<IComplementary[]>>;
     setPeriodOrder: React.Dispatch<React.SetStateAction<string[]>>;
     selectedSubject: ISelectedSubject;
@@ -160,6 +162,14 @@ interface ICurriculumContext {
     curriculumDrawerOnClose: () => void;
     onLoad: boolean;
     setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface ISubjectsFilter {
+    obligatory: boolean;
+    optional: boolean;
+    todo: boolean;
+    doing: boolean;
+    done: boolean;
 }
 
 /* SUBJECTS */

@@ -109,6 +109,7 @@ model Curriculum {
   courseCode             String
   curriculumPeriods      CurriculumPeriods[]
   curriculumPeriodsOrder String?             @db.LongText
+  subjectsFilter         String?
 }
 
 model CurriculumPeriods {

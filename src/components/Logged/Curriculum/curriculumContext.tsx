@@ -11,6 +11,7 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
     const [courses, setCourses] = useState<Object[]>([]);
     const [periods, setPeriods] = useState<IPeriods>({} as IPeriods);
     const [subjects, setSubjects] = useState<ISubjects>({} as ISubjects);
+    const [subjectsFilter, setSubjectsFilter] = useState<ISubjectsFilter>({} as ISubjectsFilter);
     const [complementary, setComplementary] = useState<IComplementary[]>([]);
     const [periodOrder, setPeriodOrder] = useState<string[]>([]);
     const [selectedSubject, setSelectedSubject] = useState<ISelectedSubject>({} as ISelectedSubject);
@@ -49,6 +50,8 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
         setPeriods,
         subjects,
         setSubjects,
+        subjectsFilter,
+        setSubjectsFilter,
         complementary,
         setComplementary,
         periodOrder,
@@ -81,21 +84,24 @@ export function CurriculumProvider({ children }: { children: ReactNode }) {
                     course,
                     periods,
                     subjects,
+                    subjectsFilter,
                     periodsOrder,
                     complementary
                 }: {
                     course: ICourse,
                     periods: IPeriods,
                     subjects: ISubjects,
+                    subjectsFilter: ISubjectsFilter,
                     periodsOrder: string[],
                     complementary: IComplementary[]
                 } = response.data;
 
-                if (course && periods && subjects && periodsOrder && complementary) {
+                if (course && periods && subjects && periodsOrder && complementary && subjectsFilter) {
                     setHasCurriculum(true);
                     setCourse(course);
                     setPeriods(periods);
                     setSubjects(subjects);
+                    setSubjectsFilter(subjectsFilter);
                     setPeriodOrder(periodsOrder);
                     setComplementary(complementary);
                 }

@@ -6,6 +6,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import styles from './style.module.scss';
 import { CurriculumContext } from './curriculumContext';
 import { api } from '../../../services/api';
+import { filterSubject } from '../../../functions/curriculum';
 
 interface IPeriodColumnProps {
     period: IPeriods[number];
@@ -17,7 +18,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
     const cancelRef: any = React.useRef();
     const focusField: any = React.useRef(null);
     const { period } = props;
-    const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects } = useContext(CurriculumContext);
+    const { setPeriods, periods, setPeriodOrder, periodOrder, setSubjects, subjects, subjectsFilter } = useContext(CurriculumContext);
     const [onLoading, setOnLoading] = useState(false);
     const [editingPeriod, setEditingPeriod] = useState(false);
     const [periodName, setPeriodName] = useState(period.name);
@@ -327,7 +328,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             {
                                 props.subjects.length > 0 &&
                                 Object.keys(props.subjects).map((key: any, index) => {
-                                    return props.subjects[key] && <Subject key={index} index={index} subjectData={props.subjects[key]} periodId={period.id} />
+                                    return props.subjects[key] && filterSubject(props.subjects[key], subjectsFilter) && <Subject key={index} index={index} subjectData={props.subjects[key]} periodId={period.id} />
                                 })
                             }
                             {provided.placeholder}

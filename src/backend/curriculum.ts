@@ -194,3 +194,17 @@ export async function updatePeriod(periodId: number, name: string) {
     });
     return period;
 }
+
+export async function updateFilter(userId: number, filter: ISubjectsFilter) {
+    const curriculum = await prisma.curriculum.update({
+        where: {
+            userId
+        },
+        data: {
+            subjectsFilter: JSON.stringify(filter)
+        }
+    }).catch((err) => {
+        return err;
+    });
+    return curriculum;
+}

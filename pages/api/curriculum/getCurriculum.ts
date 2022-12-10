@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getComplementary } from "../../../src/backend/complementary";
 import { getCurriculum } from "../../../src/backend/curriculum";
 import { getToken } from "next-auth/jwt"
+import { defaultFilter } from "../../../src/functions/curriculum";
 
 export default async function handler(
     req: NextApiRequest,
@@ -18,11 +19,14 @@ export default async function handler(
         const { curriculum, hasCurriculum } = response;
 
         if (!hasCurriculum) return res.status(200).json(response);
-
+        
+        
         const periodsOrderData = JSON.parse(curriculum.curriculumPeriodsOrder).map((periodId: number) => periodId.toString());
         
         let periodsData: IPeriods = {};
         let subjectsData: ISubjects = {};
+
+        const subjectsFilter = curriculum.subjectsFilter !== null ? JSON.parse(curriculum.subjectsFilter) : defaultFilter;
 
         curriculum.curriculumPeriods.forEach((period: any) => {
 
@@ -55,6 +59,7 @@ export default async function handler(
             course: curriculum.course,
             periods: periodsData,
             subjects: subjectsData,
+            subjectsFilter,
             periodsOrder: periodsOrderData,
             hasCurriculum,
             complementary
