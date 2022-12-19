@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { AiOutlineLogin } from "react-icons/ai";
 import { Image } from "@chakra-ui/react";
+import Link from "next/link";
 
 export default function Header() {
     const router = useRouter();
@@ -22,8 +23,8 @@ export default function Header() {
             borderColor={"gray.200"}
         >
             <HStack justifyContent={"space-between"} alignItems={"center"}>
-                <a
-                    onClick={() => router.push("/#")}
+                <Link
+                    href={"/#"}
                     style={{ cursor: "pointer" }}
                 >
                     <Image
@@ -31,7 +32,7 @@ export default function Header() {
                         height={"34px"}
                         alt="Logo"
                     />
-                </a>
+                </Link>
 
                 <Button
                     size={"md"}

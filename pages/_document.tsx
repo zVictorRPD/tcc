@@ -6,6 +6,7 @@ export default function Document() {
     return (
         <Html lang="pt-br">
             <Head>
+                
                 <meta name="application-name" content="Facilita Rural" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -17,7 +18,6 @@ export default function Document() {
                 <meta name="msapplication-TileColor" content="#2A4365" />
                 <meta name="msapplication-tap-highlight" content="no" />
                 <meta name="theme-color" content="#000000" />
-
                 <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
                 <link rel="apple-touch-icon" sizes="152x152" href="/icons/touch-icon-ipad.png" />
                 <link rel="apple-touch-icon" sizes="180x180" href="/icons/touch-icon-iphone-retina.png" />
@@ -30,7 +30,7 @@ export default function Document() {
                 <link rel="shortcut icon" href="/favicon.ico" />
 
                 <meta name="twitter:card" content="summary" />
-                <meta name="twitter:url" content="https://tcc-zvictorrpd.vercel.app/" />
+                <meta name="twitter:url" content="https://facilita-rural.com/" />
                 <meta name="twitter:title" content="Facilita Rural" />
                 <meta name="twitter:description" content="Organize a sua vida acadêmica na lendária UFRRJ" />
                 <meta name="twitter:image" content="/api/og" />
@@ -39,7 +39,7 @@ export default function Document() {
                 <meta property="og:title" content="Facilita Rural" />
                 <meta property="og:description" content="Organize a sua vida acadêmica na lendária UFRRJ" />
                 <meta property="og:site_name" content="Facilita Rural" />
-                <meta property="og:url" content="https://tcc-zvictorrpd.vercel.app/" />
+                <meta property="og:url" content="https://facilita-rural.com/" />
                 <meta property="og:image" content="/api/og" />
                 {/* <link rel='apple-touch-startup-image' href='/images/apple_splash_2048.png' sizes='2048x2732' />
                 <link rel='apple-touch-startup-image' href='/images/apple_splash_1668.png' sizes='1668x2224' />

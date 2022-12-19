@@ -121,7 +121,7 @@ export const resetPasswordEmail = (token: string) => {
       <tr>
         <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
           
-          <img align="center" border="0" src="https://tcc-zvictorrpd.vercel.app/assets/images/email/image-5.png" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 240px;" width="240" class="v-src-width v-src-max-width"/>
+          <img align="center" border="0" src="https://facilita-rural.com/assets/images/email/image-5.png" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 240px;" width="240" class="v-src-width v-src-max-width"/>
           
         </td>
       </tr>
@@ -162,7 +162,7 @@ export const resetPasswordEmail = (token: string) => {
       <tr>
         <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
           
-          <img align="center" border="0" src="https://tcc-zvictorrpd.vercel.app/assets/images/email/image-4.png" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 554px;" width="554" class="v-src-width v-src-max-width"/>
+          <img align="center" border="0" src="https://facilita-rural.com/assets/images/email/image-4.png" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 554px;" width="554" class="v-src-width v-src-max-width"/>
           
         </td>
       </tr>
@@ -203,7 +203,7 @@ export const resetPasswordEmail = (token: string) => {
       <tr>
         <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
           
-          <img align="center" border="0" src="https://tcc-zvictorrpd.vercel.app/assets/images/email/image-3.png" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" class="v-src-width v-src-max-width"/>
+          <img align="center" border="0" src="https://facilita-rural.com/assets/images/email/image-3.png" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" class="v-src-width v-src-max-width"/>
           
         </td>
       </tr>
@@ -321,7 +321,7 @@ export const resetPasswordEmail = (token: string) => {
       <tr>
         <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
           
-          <img align="center" border="0" src="https://tcc-zvictorrpd.vercel.app/assets/images/email/image-2.png" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" class="v-src-width v-src-max-width"/>
+          <img align="center" border="0" src="https://facilita-rural.com/assets/images/email/image-2.png" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" class="v-src-width v-src-max-width"/>
           
         </td>
       </tr>
