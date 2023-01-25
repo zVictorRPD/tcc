@@ -6,7 +6,7 @@ export const funcitonalites:IFunctionalities[] = [
     {
         icon: <FaUserGraduate fontSize={'2.25rem'} color={'#2a4365'}/>,
         title: "Grade Curricular",
-        description: "Você seleciona o seu curso e a grade é montada automaticamente, com todos os períodos, matérias obrigatórias e optativas. Mas se você tá atrasado não se preocupe, você pode reorganizar a grade criando novos períodos e reordenando as matérias.",
+        description: "Você seleciona o seu curso e a grade é montada automaticamente, com todos os períodos, matérias obrigatórias e optativas. Mas se você está atrasado não se preocupe, você pode reorganizar a grade criando novos períodos e reordenando as matérias.",
     },
     {
         icon: <FaRegClock fontSize={'2.25rem'} color={'#2a4365'}/>,

@@ -15,11 +15,12 @@ interface IInformationsProps {
 
 
 function Informations(props: IInformationsProps) {
-	const { setSelectedSubject, selectedSubject, subjects, setSubjects, setTimetableSubjects, selectedColor, timetableSubjects } = useContext(TimetableContext);
+	const { subjectModalOnClose, setSelectedSubject, selectedSubject, subjects, setSubjects, setTimetableSubjects, selectedColor, timetableSubjects } = useContext(TimetableContext);
 	const { isOpen, onClose, onOpen } = props;
 	const toast = useToast();
 	const [onLoad, setOnLoad] = useState(false);
 	const [onLoadDrawer, setOnLoadDrawer] = useState(false);
+	const [subjectColor, setSubjectColor] = useState(selectedColor);
 	const [teachers, setTeachers] = useState<ITeacher[]>([]);
 	const [departaments, setDepartaments] = useState<IDepartament[]>([]);
 	const [filterCamps, setFilterCamps] = useState({
@@ -44,7 +45,7 @@ function Informations(props: IInformationsProps) {
 			});
 		}
 	};
-	const getTeachers = async (e:any) => {
+	const getTeachers = async (e: any) => {
 		e.preventDefault();
 		if (filterCamps.name === "" && filterCamps.departament === "") {
 			toast({
@@ -179,6 +180,30 @@ function Informations(props: IInformationsProps) {
 			})
 		} finally {
 			setOnLoad(false);
+		}
+	}
+
+	const changeColor = async (color: string) => {
+		setOnLoad(true);
+		setSubjectColor(color);
+		const newTimetable = updateSubjectColor(selectedSubject.id, color, timetableSubjects);
+		try {
+			await api.post('timetable/updateTimetable', {
+				timetable: newTimetable
+			});
+			setTimetableSubjects(newTimetable);
+		} catch (error) {
+			toast({
+				title: 'Erro ao remover matéria',
+				description: 'Tente novamente mais tarde',
+				status: 'error',
+				position: 'top-right',
+				duration: 3000,
+				isClosable: true
+			})
+		} finally {
+			setOnLoad(false);
+			subjectModalOnClose();
 		}
 	}
 
@@ -323,6 +348,36 @@ function Informations(props: IInformationsProps) {
 					{selectedSubject.teacher ? 'Alterar professor' : 'Adicionar professor'}
 				</Button>
 			</Flex >
+			<Divider my={'.5rem'} />
+			<FormControl mb={3}>
+				<FormLabel
+					display={'flex'}
+					alignItems={'center'}
+				>
+					Cor da matéria
+					<Tooltip label='A cor de fundo que sua matéria terá na grade' placement='top' hasArrow>
+						<span style={{ marginLeft: '.375rem' }}>
+							<FaRegQuestionCircle />
+						</span>
+					</Tooltip>
+				</FormLabel>
+				<Select
+					onChange={e => changeColor(e.target.value)}
+					value={subjectColor}
+					isDisabled={onLoad}
+				>
+					<option value="blackAlpha.900">Preto</option>
+					<option value="red.500">Vermelho</option>
+					<option value="red.700">Vinho</option>
+					<option value="orange.500">Laranja</option>
+					<option value="green.500">Verde</option>
+					<option value="blue.500">Azul</option>
+					<option value="blue.800">Azul escuro</option>
+					<option value="cyan.600">Ciano</option>
+					<option value="purple.500">Roxo</option>
+					<option value="pink.500">Rosa</option>
+				</Select>
+			</FormControl>
 
 			<Drawer
 				isOpen={isOpen}

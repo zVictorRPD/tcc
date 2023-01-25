@@ -47,8 +47,8 @@ export default function Apresentation() {
                                 Feito para você
                             </Heading>
                             <Text fontSize={"lg"} mb={"2rem"}>
-                                O objetivo do sistema é de forma ágil, fácil e objetiva, facilitar a vida
-                                acadêmica do estudante, trazendo para o mesmo informações de relevância e
+                                O objetivo do sistema é, de forma ágil, fácil e objetiva, facilitar a vida acadêmica do estudante,
+                                trazendo para o mesmo informações de relevância e
                                 ferramentas para projetar a sua trajetória na universidade da forma que o
                                 convém.
                             </Text>

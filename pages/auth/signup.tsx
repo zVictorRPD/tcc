@@ -15,6 +15,7 @@ import {
     InputRightElement,
     Stack,
     Text,
+    Tooltip,
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
@@ -39,6 +40,7 @@ import {
     validatePassword,
 } from "../../src/functions/validation";
 import { api } from "../../src/services/api";
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 const SignUp: NextPage = () => {
     const router = useRouter();
@@ -317,7 +319,22 @@ const SignUp: NextPage = () => {
                             mb={["1rem", "1rem", "1.5rem"]}
                             isInvalid={!signupCampsValidation.password}
                         >
-                            <FormLabel fontWeight={500}>Senha</FormLabel>
+                            <FormLabel
+                                fontWeight={500}
+                                display={'flex'}
+                                alignItems={'center'}
+                            >
+                                Senha
+                                <Tooltip
+                                    label='A senha precisa conter pelo menos 8 caracteres.'
+                                    placement='top'
+                                    hasArrow
+                                >
+                                    <span style={{ marginLeft: '.375rem' }}>
+                                        <FaRegQuestionCircle />
+                                    </span>
+                                </Tooltip>
+                            </FormLabel>
                             <InputGroup size="md">
                                 <Input
                                     type={showPassword ? "text" : "password"}

@@ -7,37 +7,28 @@ interface IUser {
     email: string;
     avatar: string;
 }
-export async function createUser(
-    name: string,
-    email: string,
-    password: string,
-    avatar: string
-) {
-    const newUser = await prisma.user
-        .create({
-            data: {
-                name,
-                email,
-                password: bcrypt.hashSync(password, 9) as string,
-                avatar,
-            },
-        })
-        .catch((err) => {
-            const error = {
-                code: 409,
-                message: "Houve um erro ao criar o usuário",
-            };
-        });
-
-        if(newUser?.id === undefined) return { code: 409, message: "Esse email já está cadastrado" }
-
+export async function createUser(name: string, email: string, password: string, avatar: string) {
+    const newUser = await prisma.user.create({
+        data: {
+            name,
+            email,
+            password: bcrypt.hashSync(password, 9) as string,
+            avatar,
+        },
+    }).catch((err) => {
+        const error = {
+            code: 500,
+            message: "Houve um erro ao criar o usuário",
+        };
+    });
+    if (newUser?.id === undefined) return { code: 409, message: "Esse email já está cadastrado" }
     return {
         code: 200,
         message: "Usuário criado com sucesso",
     };
 }
 
-export async function updateUser(name:string, avatar:string, id:number) {
+export async function updateUser(name: string, avatar: string, id: number) {
     const user = await prisma.user.update({
         where: { id },
         data: {
