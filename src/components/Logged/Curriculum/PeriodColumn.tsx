@@ -236,8 +236,8 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                         hasArrow
                                         label='Colocar todas as matérias com o estado de pendente?'
                                     >
-                                        <MenuItem 
-                                        icon={<FaSync color='#718096' />}
+                                        <MenuItem
+                                            icon={<FaSync color='#718096' />}
                                             onClick={() => changeAllStatus('todo')}
                                         >
                                             Pendente
@@ -248,8 +248,8 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                         hasArrow
                                         label='Colocar todas as matérias com o estado de cursando?'
                                     >
-                                        <MenuItem 
-                                        icon={<FaSync color='#3182ce' />}
+                                        <MenuItem
+                                            icon={<FaSync color='#3182ce' />}
                                             onClick={() => changeAllStatus('doing')}
                                         >
                                             Cursando
@@ -261,8 +261,8 @@ function PeriodColumn(props: IPeriodColumnProps) {
                                         hasArrow
                                         label='Colocar todas as matérias com o estado de aprovado?'
                                     >
-                                        <MenuItem 
-                                        icon={<FaSync color='#38A169' />}
+                                        <MenuItem
+                                            icon={<FaSync color='#38A169' />}
                                             onClick={() => changeAllStatus('done')}
                                         >
                                             Aprovado
@@ -309,7 +309,10 @@ function PeriodColumn(props: IPeriodColumnProps) {
                     )}
                 </Box>
                 {/* Body */}
-                <Droppable droppableId={period.id}>
+                <Droppable
+                    droppableId={period.id}
+                    
+                >
                     {(provided, snapshot) => (
                         <Stack
                             {...provided.droppableProps}

@@ -15,7 +15,7 @@ const theme = extendTheme({
     styles: {
         global: (props: StyleFunctionProps) => ({
             html: {
-                scrollBehavior: "smooth",
+                scrollBehavior: "auto",
             },
         }),
     },

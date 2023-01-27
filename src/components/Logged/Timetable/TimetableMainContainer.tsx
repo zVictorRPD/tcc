@@ -20,11 +20,11 @@ function TimetableMainContainer() {
         <>
             {!onLoad ? (
                 <Stack
-                    p={{ base: '.5rem', md: '2rem' }}
                     mx={{ base: '.5rem', md: '0' }}
                     h={'100%'}
                     overflow={'auto'}
                     position={'relative'}
+                    p=".25rem"
                 >
                     <WeekdaysGrid />
                     {timeTableSchedule.map((timeTable, index) => {
@@ -32,11 +32,9 @@ function TimetableMainContainer() {
                     })}
                     <Box
                         position={'absolute'}
-                        top={'.5rem'}
-                        left={{
-                            base: '.5rem',
-                            md: '2rem',
-                        }}
+                        top={'-8px'}
+                        left={'0'}
+                        zIndex={1}
                     >
                         <Button
                             variant='blue-800'

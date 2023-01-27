@@ -6,9 +6,7 @@ import { Box } from "@chakra-ui/react";
 const Map: NextPage = () => {
     return (
         <>
-            <Box
-                p={{ base: '.5rem', md: '2rem' }} h={'100%'}
-            >
+            <Box h={'100%'}>
                 <MapContainer />
             </Box>
         </>

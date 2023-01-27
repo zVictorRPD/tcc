@@ -46,7 +46,7 @@ function DragDropMainContainer() {
                     subjectIds: newSubjectIds,
                     subjectId: draggableId,
                     type: 'samePeriod'
-                });     
+                });
                 if (!response.data.count) throw new Error('Erro ao atualizar período');
             } catch (error) {
                 toast({
@@ -108,18 +108,16 @@ function DragDropMainContainer() {
             {!onLoad ? (
                 <>
                     {hasCurriculum ? (
-                        <DragDropContext
-                            onDragEnd={onDragEnd}
+                        <HStack
+                            h={'91.7vh'}
+                            gap={2}
+                            position={'relative'}
+                            // overflowX={'auto'}
+                            alignItems={'flex-start'}
+                            className={styles.main_container_scrollbar}
+                            
                         >
-                            <HStack
-                                p={{ base: '.5rem', md: '2rem' }}
-                                h={'91.7vh'}
-                                gap={2}
-                                position={'relative'}
-                                overflowX={'auto'}
-                                alignItems={'flex-start'}
-                                className={styles.main_container_scrollbar}
-                            >
+                            <DragDropContext  onDragEnd={onDragEnd}>
                                 {
                                     periodOrder.length > 0 &&
                                     periodOrder.map((order, index) => {
@@ -130,23 +128,24 @@ function DragDropMainContainer() {
                                     })
                                 }
                                 <AddPeriodColumn />
-                            </HStack>
-                            <Box
-                                position={'absolute'}
-                                bottom={'1rem'}
-                                right={'1rem'}
-                            >
-                                <Button
-                                    variant='blue-800'
-                                    size={{ base: 'sm', md: 'md' }}
-                                    onClick={() => {
-                                        curriculumDrawerOnOpen();
-                                    }}
+
+                                <Box
+                                    position={'fixed'}
+                                    bottom={'1rem'}
+                                    right={'1rem'}
                                 >
-                                    Informação sobre a grade
-                                </Button>
-                            </Box>
-                        </DragDropContext>
+                                    <Button
+                                        variant='blue-800'
+                                        size={{ base: 'sm', md: 'md' }}
+                                        onClick={() => {
+                                            curriculumDrawerOnOpen();
+                                        }}
+                                    >
+                                        Informação sobre a grade
+                                    </Button>
+                                </Box>
+                            </DragDropContext>
+                        </HStack>
                     ) : (
                         <NoCurriculum />
                     )}

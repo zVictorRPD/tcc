@@ -17,11 +17,20 @@ export default function LoggedContainer({
     children: ReactNode;
 }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const getMinWidth = () => {
+        if (pageName === "dashboard" || pageName === "grade-horaria") {
+            return "calc(100vw - 257px)";
+        } else {
+            return "calc(100vw - 240px)";
+        }
+    }
     return (
-        <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+        <Box minH="calc(100vh)" bg={useColorModeValue("gray.100", "gray.900")}>
             <SidebarContent
                 onClose={() => onClose}
                 display={{ base: "none", md: "block" }}
+                zIndex={2}
             />
             <Drawer
                 autoFocus={false}
@@ -40,8 +49,26 @@ export default function LoggedContainer({
             <TopBar
                 topBarProps={{ onOpen, pageName }}
             />
-            <Box ml={{ base: 0, md: 60 }} minH={'calc(100vh - 80px)'}>
-                {children}
+            <Box
+                ml={{ base: 0, md: 60 }}
+                pt={'80px'}
+                minH={'calc(100vh - 80px)'}
+                bg={useColorModeValue("gray.100", "gray.900")}
+                width={'min-content'}
+                minW={{
+                    base: "calc(100vw)",
+                    md: getMinWidth(),
+                }}
+            >
+                <Box
+                    p={{
+                        base: ".5rem",
+                        md: "1rem",
+                    }}
+                >
+                    {children}
+                </Box>
+
             </Box>
         </Box>
     );

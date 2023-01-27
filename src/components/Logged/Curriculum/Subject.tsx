@@ -70,6 +70,7 @@ function Subject(props: ISubjectProps) {
             draggableId={subjectData.id}
             index={index}
             key={subjectData.id}
+            
         >
             {(provided, snapshot) => (
                 <Box
@@ -103,7 +104,7 @@ function Subject(props: ISubjectProps) {
                             {`${subjectData.code} - ${subjectData.time} horas `}
                             {subjectData.isOptional && (
                                 <Tooltip label='Matéria optativa'>
-                                    <span style={{cursor: 'help'}}>- Opt</span>
+                                    <span style={{ cursor: 'help' }}>- Opt</span>
                                 </Tooltip>
                             )}
                         </Text>

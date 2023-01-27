@@ -114,7 +114,7 @@ const Calendar: NextPage = () => {
 
     return (
         <>
-            <Box p={{ base: '.5rem', md: '2rem' }}>
+            <Box>
                 <Box
                     p={{ base: '.5rem', md: '1rem' }}
                     h={'85vh'}

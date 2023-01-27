@@ -14,10 +14,7 @@ const Dashboard: NextPage = () => {
     return (
         <DashboardProvider>
             <Grid
-                p={{
-                    base: "1rem",
-                    xl: "1.5rem",
-                }}
+                
                 templateRows={{
                     base: "repeat(5, min-content)",
                     lg: "repeat(2, 1fr)",

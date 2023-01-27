@@ -61,6 +61,12 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                 <title>{pageNameObject[pageName]}</title>
             </Head>
             <Flex
+                position="fixed" 
+                width={{
+                    base: "calc(100vw)",
+                    md: "calc(100vw - 240px)"
+                }}
+                zIndex={2}
                 ml={{ base: 0, md: 60 }}
                 px={{ base: 4, md: 4 }}
                 height="20"
