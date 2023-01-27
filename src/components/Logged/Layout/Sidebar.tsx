@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import {
     Box,
     CloseButton,
@@ -15,7 +15,7 @@ import {
 } from "react-icons/fi";
 
 import { IconType } from "react-icons";
-import { FaGraduationCap, FaClock, FaChalkboardTeacher, FaBook, FaCalendarAlt, FaMapMarkedAlt } from "react-icons/fa";
+import { FaGraduationCap, FaClock, FaChalkboardTeacher, FaBook, FaCalendarAlt, FaMapMarkedAlt, FaDownload } from "react-icons/fa";
 
 import { useRouter } from "next/router";
 
@@ -40,6 +40,29 @@ interface SidebarProps extends BoxProps {
 
 export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     const router = useRouter();
+    const [supportsPWA, setSupportsPWA] = useState(false);
+    const [promptInstall, setPromptInstall] = useState(null);
+
+    useEffect(() => {
+        const handler = (e: any) => {
+            e.preventDefault();
+            console.log("we are being triggered :D");
+            setSupportsPWA(true);
+            setPromptInstall(e);
+        };
+        window.addEventListener("beforeinstallprompt", handler);
+
+        return () => window.removeEventListener("transitionend", handler);
+    }, []);
+
+    const onClick = (evt: any) => {
+        evt.preventDefault();
+        if (!promptInstall) {
+            return;
+        }
+        (promptInstall as any).prompt();
+    };
+
     return (
         <Box
             transition="3s ease"
@@ -83,6 +106,15 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                     {link.name}
                 </NavItem>
             ))}
+            {supportsPWA && (
+                <NavItem
+                    key={'Download'}
+                    icon={FaDownload}
+                    onClick={onClick}
+                >
+                    Download
+                </NavItem>
+            )}
         </Box>
     );
 };
