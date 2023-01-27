@@ -314,7 +314,7 @@ const EditProfile: NextPage = () => {
                         </InputGroup>
                         {!editCampsValidation.password && (
                             <FormErrorMessage>
-                                Insira uma senha valida.
+                                A senha precisa conter pelo menos 8 caracteres.
                             </FormErrorMessage>
                         )}
                     </FormControl>

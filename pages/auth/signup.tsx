@@ -367,7 +367,7 @@ const SignUp: NextPage = () => {
                             </InputGroup>
                             {!signupCampsValidation.password && (
                                 <FormErrorMessage>
-                                    Insira uma senha valida.
+                                    A senha precisa conter pelo menos 8 caracteres.
                                 </FormErrorMessage>
                             )}
                         </FormControl>
