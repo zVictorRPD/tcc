@@ -144,7 +144,7 @@ function Rating() {
                                         }}
                                         fontWeight="500"
                                     >
-                                        {subjectComplexity}
+                                        {subjectComplexity.toFixed(2)}
                                     </Text>
                                 )}
 
@@ -188,7 +188,7 @@ function Rating() {
                                         }}
                                         fontWeight="500"
                                     >
-                                        {subjectRelevance}
+                                        {subjectRelevance.toFixed(2)}
                                     </Text>
                                 )}
                             </Flex>

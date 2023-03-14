@@ -26,8 +26,12 @@ function SubjectModal(props: SubjectModalProps) {
 
     const getRating = async () => {
         if (selectedSubject.code === undefined) return;
-
+        setComplexity(0);
+        setRelevance(0);
+        setComment('');
+        setAddingRating(false);
         setOnLoad(true);
+
         try {
             const response = await api.get(`/subject/getRatings`, {
                 params: {
@@ -175,7 +179,7 @@ function SubjectModal(props: SubjectModalProps) {
                                                                 }}
                                                                 fontWeight="500"
                                                             >
-                                                                {subjectComplexity}
+                                                                {subjectComplexity.toFixed(2)}
                                                             </Text>
                                                         )}
 
@@ -219,7 +223,7 @@ function SubjectModal(props: SubjectModalProps) {
                                                                 }}
                                                                 fontWeight="500"
                                                             >
-                                                                {subjectRelevance}
+                                                                {subjectRelevance.toFixed(2)}
                                                             </Text>
                                                         )}
                                                     </Flex>
