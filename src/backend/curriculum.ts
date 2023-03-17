@@ -52,6 +52,19 @@ export async function getCurriculum(id: number) {
 }
 
 export async function createCurriculum(userId: number, courseCode: string) {
+    const hasCurriculum = await prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        select: {
+            hasCurriculum: true
+        }
+    }).catch((err) => {
+        return err;
+    });
+
+    if (hasCurriculum.hasCurriculum == true) return { error: "Usuário já possui grade" };
+
     const course = await prisma.course.findUnique({
         where: {
             code: courseCode
@@ -179,7 +192,10 @@ export async function createCurriculum(userId: number, courseCode: string) {
         return err;
     });
 
-    return 'Grade curricular criada com sucesso!';
+    return {
+        status: "success",
+        message: "Grade criada com sucesso"
+    };
 };
 
 export async function updatePeriod(periodId: number, name: string) {

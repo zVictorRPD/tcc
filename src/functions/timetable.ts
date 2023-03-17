@@ -195,11 +195,11 @@ export const getExcelData = (timetable: ITimeTable, subjects: ISubjects) => {
         obj['Horário'] = timeTableTranslation[`${time}-${index}`];
         Object.values(timetable).forEach((day: any, i) => {
             if (index < 5) {
-                obj[weekDays[i]] = typeof day.m[time] !== "object" ? "" : subjects[day.m[time].id].name;
+                obj[weekDays[i]] = typeof day.m[time] !== "object" ? "" : subjects[day.m[time].id]?.name;
             } else if (index < 10) {
-                obj[weekDays[i]] = typeof day.t[time] !== "object" ? "" : subjects[day.t[time].id].name;
+                obj[weekDays[i]] = typeof day.t[time] !== "object" ? "" : subjects[day.t[time].id]?.name;
             } else {
-                obj[weekDays[i]] = typeof day.n[time] !== "object" ? "" : subjects[day.n[time].id].name;
+                obj[weekDays[i]] = typeof day.n[time] !== "object" ? "" : subjects[day.n[time].id]?.name;
             }
         });
         excelData.push(obj);

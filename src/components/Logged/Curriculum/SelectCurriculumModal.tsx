@@ -26,7 +26,7 @@ function SelectCurriculumModal() {
             const response = await api.post('/curriculum/createCurriculum', {
                 courseCode: selectedCourse
             });
-            if (response.status === 201) {
+            if (response.data.status === 'success') {
                 toast({
                     title: 'Grade criada com sucesso.',
                     status: 'success',
