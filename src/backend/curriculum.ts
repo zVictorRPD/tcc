@@ -33,6 +33,7 @@ export async function getCurriculum(id: number) {
         }).catch((err) => {
             return err;
         });
+        
         return { curriculum, hasCurriculum: true };
     } else {
         const courses = await prisma.course.findMany({

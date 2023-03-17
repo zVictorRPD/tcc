@@ -14,6 +14,7 @@ export default async function handler(
         const { periodId, subjectCode, subjectType } = req.body;
         const userId = token.id as number;
         const type = JSON.parse(subjectType);
+        
         if (typeof subjectCode !== "string" || typeof periodId !== "string" || isNaN(parseInt(periodId as string)) || typeof type !== 'boolean') return res.status(400).json({ error: "Bad request" });
 
         const response = await createSubject(userId, parseInt(periodId), subjectCode, type);

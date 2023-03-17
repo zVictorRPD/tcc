@@ -43,7 +43,7 @@ function AddSubjectModal() {
                 periodId: selectedPeriod,
                 subjectType
             });
-            if (!response.data.id) throw new Error('Erro ao adicionar matéria.');
+            if (!response.data.id) throw new Error(response.data.error);
 
             const newSubjects = {
                 ...subjects,
@@ -69,9 +69,10 @@ function AddSubjectModal() {
                 isClosable: true,
                 position: 'top-right'
             });
-        } catch (error) {
+        } catch (error:any) {
+            const message = !error ? 'Erro' : error.toString();
             toast({
-                title: 'Erro ao adicionar matéria.',
+                title: error.toString(),
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
