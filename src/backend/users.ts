@@ -20,6 +20,8 @@ export async function createUser(name: string, email: string, password: string, 
             code: 500,
             message: "Houve um erro ao criar o usuário",
         };
+        console.log(err);
+        
     });
     if (newUser?.id === undefined) return { code: 409, message: "Esse email já está cadastrado" }
     return {
@@ -83,6 +85,7 @@ export async function loginUser(email: string, password: string) {
             },
         })
         .catch((err) => {
+            console.log(err);
             return err;
         });
 

@@ -1,6 +1,18 @@
 import { prisma } from "../config/prisma.config";
 
 export async function createSubject(userId: number, periodId: number, subjectCode: string, type: boolean) {
+    //check if subject exists
+    const subjectExists = await prisma.subject.findUnique({
+        where: {
+            code: subjectCode
+        },
+        select: {
+            code: true
+        }
+    }).catch((err) => {
+        return err;
+    });
+    if (!subjectExists) return { error: "Essa matéria não existe" };
     const subject = await prisma.userSubjects.create({
         data: {
             userId,

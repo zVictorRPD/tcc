@@ -36,7 +36,7 @@ function Class() {
             </Text>
             {!onLoad ? (
                 <>
-                    {nextClass !== null ? (
+                    {nextClass !== null && nextClass.subject !== undefined ? (
                         <>
                             <Text
                                 fontSize={{
