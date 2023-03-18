@@ -113,12 +113,12 @@ export default function LoggedContainer({
                             gap={'1rem'}
                             my={'1rem'}
                         >
-                            <a href="mailto:victor2007azevedo@hotmail.com">
+                            <a href="mailto:victor2007azevedo@hotmail.com" rel="noreferrer">
                                 <Button leftIcon={<FaEnvelope />} mr={3} variant="blue-800">
                                     E-mail
                                 </Button>
                             </a>
-                            <a href="https://www.instagram.com/zvictor_rpd/" target={'_blank'}>
+                            <a href="https://www.instagram.com/zvictor_rpd/" target={'_blank'} rel="noreferrer">
                                 <Button leftIcon={<FaInstagram />} mr={3} variant="blue-800">
                                     Instagram
                                 </Button>
