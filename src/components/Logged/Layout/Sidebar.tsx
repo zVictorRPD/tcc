@@ -9,13 +9,21 @@ import {
     BoxProps,
     FlexProps,
     Image,
+    useDisclosure,
 } from "@chakra-ui/react";
-import {
-    FiHome,
-} from "react-icons/fi";
+import { FiHome } from "react-icons/fi";
 
 import { IconType } from "react-icons";
-import { FaGraduationCap, FaClock, FaChalkboardTeacher, FaBook, FaCalendarAlt, FaMapMarkedAlt, FaDownload } from "react-icons/fa";
+import {
+    FaGraduationCap,
+    FaClock,
+    FaChalkboardTeacher,
+    FaBook,
+    FaCalendarAlt,
+    FaMapMarkedAlt,
+    FaDownload,
+    FaEnvelope,
+} from "react-icons/fa";
 
 import { useRouter } from "next/router";
 
@@ -26,19 +34,36 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
     { name: "Dashboard", icon: FiHome, href: "/ambiente-logado/dashboard" },
-    { name: "Grade curricular", icon: FaGraduationCap, href: "/ambiente-logado/grade-curricular" },
-    { name: "Grade horária", icon: FaClock, href: "/ambiente-logado/grade-horaria" },
+    {
+        name: "Grade curricular",
+        icon: FaGraduationCap,
+        href: "/ambiente-logado/grade-curricular",
+    },
+    {
+        name: "Grade horária",
+        icon: FaClock,
+        href: "/ambiente-logado/grade-horaria",
+    },
     { name: "Matérias", icon: FaBook, href: "/ambiente-logado/materias" },
-    { name: "Professores", icon: FaChalkboardTeacher, href: "/ambiente-logado/professores" },
-    { name: "Calendário", icon: FaCalendarAlt, href: "/ambiente-logado/calendario" },
+    {
+        name: "Professores",
+        icon: FaChalkboardTeacher,
+        href: "/ambiente-logado/professores",
+    },
+    {
+        name: "Calendário",
+        icon: FaCalendarAlt,
+        href: "/ambiente-logado/calendario",
+    },
     { name: "Mapa", icon: FaMapMarkedAlt, href: "/ambiente-logado/mapa" },
 ];
 
 interface SidebarProps extends BoxProps {
     onClose: () => void;
+    modalOnOpen: () => void;
 }
 
-export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+export const SidebarContent = ({ onClose, modalOnOpen, ...rest }: SidebarProps) => {
     const router = useRouter();
     const [supportsPWA, setSupportsPWA] = useState(false);
     const [promptInstall, setPromptInstall] = useState(null);
@@ -98,19 +123,19 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 <NavItem
                     key={link.name}
                     onClick={() => {
-                        router.push(link.href)
+                        router.push(link.href);
                         onClose();
                     }}
-                    icon={link.icon}>
+                    icon={link.icon}
+                >
                     {link.name}
                 </NavItem>
             ))}
+            <NavItem key={"contact"} onClick={modalOnOpen} icon={FaEnvelope}>
+                Contato
+            </NavItem>
             {supportsPWA && (
-                <NavItem
-                    key={'Download'}
-                    icon={FaDownload}
-                    onClick={onClick}
-                >
+                <NavItem key={"Download"} icon={FaDownload} onClick={onClick}>
                     Download
                 </NavItem>
             )}
