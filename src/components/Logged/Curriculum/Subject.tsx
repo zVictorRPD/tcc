@@ -76,7 +76,6 @@ function Subject(props: ISubjectProps) {
                 <Box
                     w={'260px'}
                     borderRadius={'1rem'}
-                    minH={'110px'}
                     bg={'white'}
                     mt={'1rem !important'}
                     display={'flex'}
@@ -110,7 +109,7 @@ function Subject(props: ISubjectProps) {
                         </Text>
                     </Box>
                     {/* body */}
-                    <Box minH={'53px'} px={'.5rem'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexGrow={1}>
+                    <Box minH={'53px'} my={'.125rem'} px={'.5rem'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexGrow={1}>
                         <Text fontSize={'1rem'} fontWeight={'500'} textAlign={'center'}>{toCapitalize(subjectData.name)}</Text>
                     </Box>
                     {/* Footer */}
