@@ -200,6 +200,10 @@ export async function createCurriculum(userId: number, courseCode: string) {
                     message: "Grade criada com sucesso",
                 };
             },
+            {
+                maxWait: 10000,
+                timeout: 10000,
+            }
         );
     } catch (error) {
         return error;
