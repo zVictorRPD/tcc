@@ -5,155 +5,163 @@
 //npx prisma db push (att o banco)
 //npx prisma studio (abre o studio do prisma)
 
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
-
 model User {
-  id                Int                 @id @default(autoincrement())
-  email             String              @unique
-  name              String
-  emailVerified     Boolean             @default(false)
-  password          String
-  avatar            String              @db.LongText
-  hasCurriculum     Boolean             @default(false)
-  timetable         String?             @db.LongText
-  recoverPassword   RecoverPassword[]
-  calendarEvents    CalendarEvents[]
-  curriculum        Curriculum[]
-  userSubjects      UserSubjects[]
-  userComplementary UserComplementary[]
-  Rating            Rating[]
+    id                Int                 @id @default(autoincrement())
+    email             String              @unique
+    name              String
+    emailVerified     Boolean             @default(false)
+    password          String
+    avatar            String              @db.LongText
+    hasCurriculum     Boolean             @default(false)
+    timetable         String?             @db.LongText
+    createdAt         DateTime?           @default(now())
+    recoverPassword   RecoverPassword[]
+    calendarEvents    CalendarEvents[]
+    curriculum        Curriculum[]
+    userSubjects      UserSubjects[]
+    userComplementary UserComplementary[]
+    Rating            Rating[]
 }
 
 model RecoverPassword {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  user      User     @relation(fields: [userEmail], references: [email])
-  userEmail String
-  createdAt DateTime @default(now())
+    id        Int      @id @default(autoincrement())
+    token     String   @unique
+    user      User     @relation(fields: [userEmail], references: [email])
+    userEmail String
+    createdAt DateTime @default(now())
 }
 
 model Teacher {
-  id               Int            @id
-  avatar           String
-  name             String
-  departament_code String
-  departament_name String
-  email            String
-  lattes           String         @db.LongText
-  userSubjects     UserSubjects[]
+    id               Int            @id
+    avatar           String
+    name             String
+    departament_code String
+    departament_name String
+    email            String
+    lattes           String         @db.LongText
+    userSubjects     UserSubjects[]
 }
 
 // default course structure
 model Course {
-  code                                    String       @id
-  name                                    String
-  period_emergence                        String
-  workload_total                          Int
-  workload_normal_lessons                 Int
-  workload_academic_professional_guidance Int
-  workload_optional_lessons               Int
-  workload_complementary                  Int
-  periods                                 Period[]
-  Curriculum                              Curriculum[]
+    code                                    String       @id
+    name                                    String
+    period_emergence                        String
+    workload_total                          Int
+    workload_normal_lessons                 Int
+    workload_academic_professional_guidance Int
+    workload_optional_lessons               Int
+    workload_complementary                  Int
+    periods                                 Period[]
+    Curriculum                              Curriculum[]
 }
 
 model Period {
-  id         Int                 @id @default(autoincrement())
-  name       String
-  course     Course              @relation(fields: [courseCode], references: [code])
-  courseCode String
-  subjects   SubjectsOnPeriods[]
+    id         Int                 @id @default(autoincrement())
+    name       String
+    course     Course              @relation(fields: [courseCode], references: [code])
+    courseCode String
+    subjects   SubjectsOnPeriods[]
 }
 
 model Subject {
-  code          String              @id
-  name          String
-  time          Int
-  periods       SubjectsOnPeriods[]
-  usersSubjects UserSubjects[]
-  Rating        Rating[]
+    code          String              @id
+    name          String
+    time          Int
+    periods       SubjectsOnPeriods[]
+    usersSubjects UserSubjects[]
+    Rating        Rating[]
 }
 
 model SubjectsOnPeriods {
-  subject     Subject @relation(fields: [subjectCode], references: [code])
-  subjectCode String
-  period      Period  @relation(fields: [periodId], references: [id])
-  periodId    Int
+    subject     Subject @relation(fields: [subjectCode], references: [code])
+    subjectCode String
+    period      Period  @relation(fields: [periodId], references: [id])
+    periodId    Int
 
-  @@id([subjectCode, periodId])
+    @@id([subjectCode, periodId])
 }
 
 model CalendarEvents {
-  id          Int      @id @default(autoincrement())
-  title       String
-  start       DateTime
-  end         DateTime
-  description String   @db.LongText
-  user        User     @relation(fields: [userId], references: [id])
-  userId      Int
+    id          Int       @id @default(autoincrement())
+    title       String
+    start       DateTime
+    end         DateTime
+    description String    @db.LongText
+    user        User      @relation(fields: [userId], references: [id])
+    userId      Int
+    createdAt   DateTime? @default(now())
 }
 
 //user course structure
 model Curriculum {
-  id                     Int                 @id @default(autoincrement())
-  user                   User                @relation(fields: [userId], references: [id])
-  userId                 Int                 @unique
-  course                 Course              @relation(fields: [courseCode], references: [code])
-  courseCode             String
-  curriculumPeriods      CurriculumPeriods[]
-  curriculumPeriodsOrder String?             @db.LongText
-  subjectsFilter         String?
+    id                     Int                 @id @default(autoincrement())
+    user                   User                @relation(fields: [userId], references: [id])
+    userId                 Int                 @unique
+    course                 Course              @relation(fields: [courseCode], references: [code])
+    courseCode             String
+    curriculumPeriods      CurriculumPeriods[]
+    curriculumPeriodsOrder String?             @db.LongText
+    subjectsFilter         String?
+    createdAt              DateTime?           @default(now())
 }
 
 model CurriculumPeriods {
-  id            Int            @id @default(autoincrement())
-  curriculum    Curriculum     @relation(fields: [curriculumId], references: [id])
-  curriculumId  Int
-  name          String
-  visible       Boolean        @default(true)
-  subjects      UserSubjects[]
-  subjectsOrder String?        @db.LongText
+    id            Int            @id @default(autoincrement())
+    curriculum    Curriculum     @relation(fields: [curriculumId], references: [id])
+    curriculumId  Int
+    name          String
+    visible       Boolean        @default(true)
+    subjects      UserSubjects[]
+    subjectsOrder String?        @db.LongText
+    createdAt     DateTime?      @default(now())
 }
 
 model UserSubjects {
-  id          Int               @id @default(autoincrement())
-  subject     Subject           @relation(fields: [subjectCode], references: [code])
-  subjectCode String
-  status      String            @default("todo")
-  isOptional  Boolean           @default(false)
-  note        String?           @db.LongText
-  links       String?           @db.LongText
-  grade       Float?
-  teacher     Teacher?          @relation(fields: [teacherId], references: [id])
-  teacherId   Int?
-  period      CurriculumPeriods @relation(fields: [periodId], references: [id])
-  periodId    Int
-  user        User              @relation(fields: [userId], references: [id])
-  userId      Int
+    id          Int               @id @default(autoincrement())
+    subject     Subject           @relation(fields: [subjectCode], references: [code])
+    subjectCode String
+    status      String            @default("todo")
+    isOptional  Boolean           @default(false)
+    note        String?           @db.LongText
+    links       String?           @db.LongText
+    grade       Float?
+    teacher     Teacher?          @relation(fields: [teacherId], references: [id])
+    teacherId   Int?
+    period      CurriculumPeriods @relation(fields: [periodId], references: [id])
+    periodId    Int
+    user        User              @relation(fields: [userId], references: [id])
+    userId      Int
+    createdAt   DateTime?         @default(now())
 }
 
 model UserComplementary {
-  id     Int    @id @default(autoincrement())
-  name   String
-  time   Int
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int
+    id        Int       @id @default(autoincrement())
+    name      String
+    time      Int
+    user      User      @relation(fields: [userId], references: [id])
+    userId    Int
+    createdAt DateTime? @default(now())
 }
 
 model Rating {
-  id          Int     @id @default(autoincrement())
-  complexity  Float
-  relevance   Float
-  comment     String? @db.LongText
-  user        User    @relation(fields: [userId], references: [id])
-  userId      Int
-  subject     Subject @relation(fields: [subjectCode], references: [code])
-  subjectCode String
+    id          Int       @id @default(autoincrement())
+    complexity  Float
+    relevance   Float
+    comment     String?   @db.LongText
+    user        User      @relation(fields: [userId], references: [id])
+    userId      Int
+    subject     Subject   @relation(fields: [subjectCode], references: [code])
+    subjectCode String
+    createdAt   DateTime? @default(now())
 }
