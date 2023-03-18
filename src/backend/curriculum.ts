@@ -74,17 +74,14 @@ export async function createCurriculum(userId: number, courseCode: string) {
     try {
         return await prisma.$transaction(
             async (tx) => {
-                //cronometrar o tempo de execução
-                const start = new Date().getTime();
-
                 const defaultPeriods = await tx.period.findMany({
                     where: {
                         courseCode,
                     },
                     include: {
                         subjects: {
-                            include: {
-                                subject: true,
+                            select: {
+                                subjectCode: true,
                             },
                         },
                     },
@@ -94,68 +91,66 @@ export async function createCurriculum(userId: number, courseCode: string) {
                     data: {
                         userId,
                         courseCode,
+                        curriculumPeriods: {
+                            createMany: {
+                                data: defaultPeriods.map((period: any) => {
+                                    return {
+                                        name: period.name,
+                                    };
+                                }),
+                            },
+                        },
+                    },
+                    include: {
+                        curriculumPeriods: {
+                            select: {
+                                id: true,
+                            },
+                        },
                     },
                 });
 
-                const curriculumPeriods = await tx.curriculumPeriods.createMany(
-                    {
-                        data: defaultPeriods.map((period: any) => {
-                            return {
-                                curriculumId: curriculum.id,
-                                name: period.name,
-                            };
-                        }),
-                    }
-                );
-
-                const createdPeriods = await tx.curriculumPeriods.findMany({
-                    where: {
-                        curriculumId: curriculum.id,
-                    },
-                });
-
-                const periodsOrderArray = createdPeriods.map((period: any) => {
-                    return period.id;
-                });
-
-                const curriculumPeriodsOrder = await tx.curriculum.update({
+                
+                await tx.curriculum.update({
                     where: {
                         id: curriculum.id,
                     },
                     data: {
-                        curriculumPeriodsOrder:
-                            JSON.stringify(periodsOrderArray),
+                        curriculumPeriodsOrder: JSON.stringify(
+                            curriculum.curriculumPeriods.map((period: any) => {
+                                return period.id;
+                            })
+                        ),
                     },
                 });
 
-                const subjectsToCreate = defaultPeriods
-                    .map((period: any, index: any) => {
+
+                const subjectsToCreate = defaultPeriods.flatMap(
+                    (period: any, index: any) => {
                         return period.subjects.map((subject: any) => {
                             return {
                                 subjectCode: subject.subjectCode,
                                 isOptional: period.name === "Optativas",
-                                periodId: createdPeriods[index].id,
+                                periodId: curriculum.curriculumPeriods[index].id,
                                 userId,
                             };
                         });
-                    })
-                    .flat();
-
-                const curriculumSubjects = await tx.userSubjects.createMany({
-                    data: subjectsToCreate,
+                    }
+                );
+                
+                await tx.userSubjects.createMany({
+                    data: subjectsToCreate
                 });
 
                 const createdSubjects = await tx.userSubjects.findMany({
                     where: {
                         userId,
                     },
+                    select: {
+                        id: true,
+                        periodId: true,
+                    },
                 });
-
-                interface IPeriodSubjectsOrder {
-                    id: number;
-                    subjectsOrder?: string[];
-                }
-
                 const periodSubjectsOrder: IPeriodSubjectsOrder[] = [];
 
                 createdSubjects.forEach((item: any) => {
@@ -171,7 +166,6 @@ export async function createCurriculum(userId: number, courseCode: string) {
                         periodSubjectsOrder[index].subjectsOrder?.push(item.id);
                     }
                 });
-
                 for (const item of periodSubjectsOrder) {
                     await tx.curriculumPeriods.update({
                         where: {
@@ -182,8 +176,7 @@ export async function createCurriculum(userId: number, courseCode: string) {
                         },
                     });
                 }
-
-                const updateHasCurriculum = await tx.user.update({
+                await tx.user.update({
                     where: {
                         id: userId,
                     },
@@ -191,10 +184,6 @@ export async function createCurriculum(userId: number, courseCode: string) {
                         hasCurriculum: true,
                     },
                 });
-
-                const end = new Date().getTime();
-                const time = end - start;
-                console.log("Tempo de execução: " + time + "ms");
                 return {
                     status: "success",
                     message: "Grade criada com sucesso",
