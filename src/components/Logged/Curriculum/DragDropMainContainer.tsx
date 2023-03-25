@@ -112,10 +112,8 @@ function DragDropMainContainer() {
                             h={'91.7vh'}
                             gap={2}
                             position={'relative'}
-                            // overflowX={'auto'}
                             alignItems={'flex-start'}
                             className={styles.main_container_scrollbar}
-                            
                         >
                             <DragDropContext  onDragEnd={onDragEnd}>
                                 {

@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure, Tooltip } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react'
 import { FaEdit, FaEllipsisV, FaSync, FaTrash } from 'react-icons/fa';
 import Subject from './Subject';
@@ -183,7 +183,6 @@ function PeriodColumn(props: IPeriodColumnProps) {
     return (
         <>
             <Stack
-                bg={'gray.300'}
                 borderWidth='1px'
                 borderColor='gray.400'
                 maxH={'83.2vh'}
@@ -197,7 +196,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                     w={'100%'}
                     py={2}
                     px={4}
-                    bg={'white'}
+                    bg={useColorModeValue("white", "gray.900")}
                     borderRadius={'1rem 1rem 0 0'}
                     display={'flex'}
                     justifyContent={'space-between'}
@@ -206,10 +205,8 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 >
                     {!editingPeriod ? (
                         <>
-
                             <Text
                                 fontWeight={600}
-                                color='gray.800'
                                 fontSize={'2xl'}
                                 textAlign={'center'}
                                 wordBreak={'break-all'}
@@ -323,7 +320,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             overflowY={'auto'}
                             style={{ margin: 0 }}
                             ref={provided.innerRef}
-                            bg={snapshot.isDraggingOver ? 'gray.400' : 'gray.300'}
+                            bg={snapshot.isDraggingOver ? useColorModeValue("gray.400", "gray.600") : useColorModeValue("gray.300", "gray.700")}
                             transition={'background-color .3s ease'}
                             className={styles.period_scrollbar}
 

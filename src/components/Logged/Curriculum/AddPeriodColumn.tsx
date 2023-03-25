@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Input, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Input, Stack, Text, useColorModeValue } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
@@ -86,7 +86,7 @@ function AddPeriodColumn() {
                     w={'100%'}
                     py={2}
                     px={4}
-                    bg={'white'}
+                    bg={useColorModeValue("white", "gray.900")}
                     borderRadius={'1rem'}
                     cursor={'pointer'}
                     display={'flex'}
@@ -102,7 +102,6 @@ function AddPeriodColumn() {
                     />
                     <Text
                         fontWeight={400}
-                        color='gray.800'
                         fontSize={'2xl'}
                         textAlign={'center'}
                     >
@@ -115,7 +114,7 @@ function AddPeriodColumn() {
                         w={'100%'}
                         py={2}
                         px={4}
-                        bg={'white'}
+                        bg={useColorModeValue("white", "gray.900")}
                         borderRadius={'1rem'}
                         cursor={'pointer'}
                         display={'flex'}

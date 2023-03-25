@@ -11,6 +11,7 @@ import {
     Input,
     Stack,
     Text,
+    useColorModeValue,
 } from "@chakra-ui/react";
 
 import { AiOutlineLogin } from "react-icons/ai";
@@ -52,7 +53,6 @@ export default function SignupShortcut() {
                     <Stack h={"100%"} justifyContent={"center"}>
                         <Box>
                             <Heading
-                                color={"gray.800"}
                                 as="h2"
                                 size={["lg", "lg", "xl"]}
                                 mb={".5rem"}
@@ -74,7 +74,7 @@ export default function SignupShortcut() {
                                 >
                                     <Input
                                         w={["100%", "100%", "60%"]}
-                                        bg={"white"}
+                                        bg={useColorModeValue("white", "gray.900")}
                                         placeholder="examplemail@example.com"
                                         size="md"
                                         mr={["0", "0", ".5em"]}
@@ -87,7 +87,8 @@ export default function SignupShortcut() {
                                     <Button
                                         size={"md"}
                                         rightIcon={<AiOutlineLogin />}
-                                        variant={"yellow-400"}
+                                        variant={useColorModeValue("yellow-400", "solid")}
+                                        colorScheme={useColorModeValue("yellow", "yellow")}
                                         type="submit"
                                     >
                                         Criar conta

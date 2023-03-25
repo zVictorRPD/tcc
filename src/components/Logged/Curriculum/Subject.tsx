@@ -1,4 +1,4 @@
-import { Box, Button, Text, Tooltip } from '@chakra-ui/react'
+import { Box, Button, Text, Tooltip, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd';
 import { toCapitalize } from '../../../functions/toCapitalize';
@@ -76,7 +76,7 @@ function Subject(props: ISubjectProps) {
                 <Box
                     w={'260px'}
                     borderRadius={'1rem'}
-                    bg={'white'}
+                    bg={useColorModeValue("white", "gray.900")}
                     mt={'1rem !important'}
                     display={'flex'}
                     alignItems={'center'}

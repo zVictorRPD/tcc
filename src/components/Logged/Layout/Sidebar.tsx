@@ -25,6 +25,8 @@ import {
     FaEnvelope,
 } from "react-icons/fa";
 
+import { MdSpaceDashboard } from "react-icons/md";
+
 import { useRouter } from "next/router";
 
 interface LinkItemProps {
@@ -33,7 +35,7 @@ interface LinkItemProps {
     href: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-    { name: "Dashboard", icon: FiHome, href: "/ambiente-logado/dashboard" },
+    { name: "Dashboard", icon: MdSpaceDashboard, href: "/ambiente-logado/dashboard" },
     {
         name: "Grade curricular",
         icon: FaGraduationCap,
@@ -109,7 +111,7 @@ export const SidebarContent = ({ onClose, modalOnOpen, ...rest }: SidebarProps) 
                     style={{ cursor: "pointer" }}
                 >
                     <Image
-                        src="/assets/images/homepage/logo.png"
+                        src={useColorModeValue("/assets/images/homepage/logo.png", "/assets/images/homepage/white_logo.png")}
                         height={"34px"}
                         alt="Logo"
                     />

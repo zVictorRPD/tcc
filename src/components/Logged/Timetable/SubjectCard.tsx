@@ -1,4 +1,4 @@
-import { Box, GridItem, Text, Tooltip } from '@chakra-ui/react'
+import { Box, GridItem, Text, Tooltip, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { toCapitalize } from '../../../functions/toCapitalize';
 import { TimetableContext } from './TimetableContext';
@@ -22,8 +22,8 @@ function SubjectCard(props: SubjectCardProps) {
             >
                 <Box
                     p={{ base: '.5rem' }}
-                    bg={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? subject.bgColor : 'white'}
-                    color={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? 'white' : 'gray.800'}
+                    bg={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? subject.bgColor : useColorModeValue('white', 'gray.700')}
+                    color={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? 'white' :  useColorModeValue('gray.800', 'white')}
                     borderRadius={'12px'}
                     borderWidth="1px"
                     borderColor={'gray.300'}

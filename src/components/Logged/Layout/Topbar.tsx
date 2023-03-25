@@ -22,8 +22,9 @@ import {
     PopoverArrow,
     PopoverBody,
     Stack,
+    useColorMode,
 } from "@chakra-ui/react";
-import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
+import { FiMenu, FiBell, FiChevronDown, FiSun, FiMoon } from "react-icons/fi";
 import Head from "next/head";
 import { FaInbox } from "react-icons/fa";
 import { signOut } from "next-auth/react";
@@ -40,6 +41,7 @@ interface TopBarProps extends FlexProps {
 
 export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
     const { onOpen, pageName } = topBarProps;
+    const { colorMode, toggleColorMode } = useColorMode();
     const [notifications, setNotifications] = useState([]);
     const [name, setName] = useState("");
     const [avatar, setAvatar] = useState("");
@@ -48,12 +50,11 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
         const { name, avatar } = await getUserData();
         setName(name);
         setAvatar(avatar);
-    }
+    };
 
     useEffect(() => {
         getData();
     }, []);
-
 
     return (
         <>
@@ -61,10 +62,10 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                 <title>{pageNameObject[pageName]}</title>
             </Head>
             <Flex
-                position="fixed" 
+                position="fixed"
                 width={{
                     base: "calc(100vw)",
-                    md: "calc(100vw - 240px)"
+                    md: "calc(100vw - 240px)",
                 }}
                 zIndex={2}
                 ml={{ base: 0, md: 60 }}
@@ -78,7 +79,7 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                 {...rest}
             >
                 {/* Mobile */}
-                <Box w={'80px'} display={{ base: "flex", md: "none" }}>
+                <Box w={"80px"} display={{ base: "flex", md: "none" }}>
                     <IconButton
                         onClick={onOpen}
                         variant="outline"
@@ -88,45 +89,54 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                 </Box>
 
                 <Box display={{ base: "flex", md: "none" }}>
-                    <Text
-                        fontSize={'xl'}
-                    >
-                        {pageNameObject[pageName]}
-                    </Text>
+                    <Text fontSize={"xl"}>{pageNameObject[pageName]}</Text>
                 </Box>
 
                 {/* Desktop */}
-                <Box ml={'1rem'} display={{ base: "none", md: "block" }}>
-                    <Text
-                        fontSize={'3xl'}
-                    >
-                        {pageNameObject[pageName]}
-                    </Text>
+                <Box ml={"1rem"} display={{ base: "none", md: "block" }}>
+                    <Text fontSize={"3xl"}>{pageNameObject[pageName]}</Text>
                 </Box>
-                <HStack spacing={{ base: "0", md: "6" }}>
-                    <Popover placement='bottom-start'>
+                <HStack spacing={{ base: "0", md: "4" }}>
+                    <IconButton
+                        size="lg"
+                        variant="ghost"
+                        aria-label="open menu"
+                        icon={colorMode == 'light' ? <FiSun /> : <FiMoon />}
+                        onClick={toggleColorMode}
+                    />
+                    <Popover placement="bottom-start">
                         <PopoverTrigger>
                             <IconButton
+                                ms="0 !important"
                                 size="lg"
                                 variant="ghost"
                                 aria-label="open menu"
                                 icon={<FiBell />}
                             />
                         </PopoverTrigger>
-                        <PopoverContent>
-                            <PopoverHeader fontWeight='semibold'>Notificações</PopoverHeader>
-                            <PopoverArrow />
+                        <PopoverContent  bg={useColorModeValue("white", "gray.800")}>
+                            <PopoverHeader fontWeight="semibold">
+                                Notificações
+                            </PopoverHeader>
+                            <PopoverArrow  bg={useColorModeValue("white", "gray.800")}/>
                             <PopoverCloseButton />
                             <PopoverBody>
-                                {
-                                    notifications.length > 0 ? notifications.map((notification, index) => (
+                                {notifications.length > 0 ? (
+                                    notifications.map((notification, index) => (
                                         <Text key={index}>{notification}</Text>
-                                    )) :
-                                        <Stack p={4} justifyContent={'center'} alignItems={'center'}>
-                                            <FaInbox size={48} opacity={'.5'} />
-                                            <Text color={'gray.800'}>Nenhuma notificação encontrada</Text>
-                                        </Stack>
-                                }
+                                    ))
+                                ) : (
+                                    <Stack
+                                        p={4}
+                                        justifyContent={"center"}
+                                        alignItems={"center"}
+                                    >
+                                        <FaInbox size={48} opacity={".5"} />
+                                        <Text>
+                                            Nenhuma notificação encontrada
+                                        </Text>
+                                    </Stack>
+                                )}
                             </PopoverBody>
                         </PopoverContent>
                     </Popover>
@@ -149,7 +159,6 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                                         <Text
                                             fontSize="md"
                                             fontWeight={600}
-                                            color="gray.800"
                                         >
                                             {name.split(" ")[0]}
                                         </Text>
@@ -166,7 +175,15 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                                     "gray.700"
                                 )}
                             >
-                                <MenuItem onClick={() => router.push("/ambiente-logado/editar-perfil")}>Editar perfil</MenuItem>
+                                <MenuItem
+                                    onClick={() =>
+                                        router.push(
+                                            "/ambiente-logado/editar-perfil"
+                                        )
+                                    }
+                                >
+                                    Editar perfil
+                                </MenuItem>
                                 <MenuDivider />
                                 <MenuItem onClick={() => signOut()}>
                                     <Text color="red.500">Sair</Text>
@@ -177,6 +194,5 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                 </HStack>
             </Flex>
         </>
-
     );
 };

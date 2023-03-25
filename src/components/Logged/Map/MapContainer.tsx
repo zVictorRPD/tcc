@@ -3,7 +3,7 @@ import { GoogleMap, LoadScriptNext } from '@react-google-maps/api';
 import process from 'process';
 import GoogleMapMarkers from './GoogleMapMarkers';
 import { locais } from './locais'
-import { Box, Grid, GridItem, Input, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Input, Text, useColorModeValue } from '@chakra-ui/react';
 import styles from './style.module.scss';
 import { FaChevronLeft } from 'react-icons/fa';
 
@@ -92,7 +92,7 @@ function MapContainer() {
         >
             <GridItem
                 colSpan={1}
-                bg={'white'}
+                bg={useColorModeValue("white", "gray.900")}
                 h={{
                     base: listHeight,
                     lg: 'calc(85vh - 2px)'
@@ -145,16 +145,16 @@ function MapContainer() {
                                 borderColor: 'blue.800'
                             }}
                             _placeholder={{
-                                color: 'blue.800'
+                                color: useColorModeValue("blue.800", "white")
                             }}
-                            color={'blue.800'}
+                            color={useColorModeValue("blue.800", "white")}
                             value={search}
                             onChange={(e) => handleSearch(e)}
 
                         />
                     </li>
                     {locales.map(locale => (
-                        <li key={locale.id} onClick={() => handleListClick(locale)}>{locale.name}</li>
+                        <li key={locale.id} data-theme={useColorModeValue('light', 'dark')} onClick={() => handleListClick(locale)}>{locale.name}</li>
                     ))}
                 </ul>
             </GridItem>

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, GridItem, Progress, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Tooltip, Tr, VisuallyHidden } from '@chakra-ui/react'
+import { Box, Button, Flex, GridItem, Progress, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Tooltip, Tr, useColorModeValue, VisuallyHidden } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { RiArrowLeftRightLine } from 'react-icons/ri'
@@ -40,7 +40,7 @@ function Status() {
 
     return (
         <GridItem
-            bg={'white'}
+            bg={useColorModeValue("white", "gray.900")}
             p={{
                 base: '.75rem',
                 md: '1rem',

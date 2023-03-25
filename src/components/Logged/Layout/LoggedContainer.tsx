@@ -50,7 +50,7 @@ export default function LoggedContainer({
         <>
             <Box
                 minH="calc(100vh)"
-                bg={useColorModeValue("gray.100", "gray.900")}
+                bg={useColorModeValue("gray.100", "gray.700")}
             >
                 <SidebarContent
                     onClose={() => onClose}
@@ -80,7 +80,7 @@ export default function LoggedContainer({
                     ml={{ base: 0, md: 60 }}
                     pt={"80px"}
                     minH={"calc(100vh - 80px)"}
-                    bg={useColorModeValue("gray.100", "gray.900")}
+                    bg={useColorModeValue("gray.100", "gray.700")}
                     width={"min-content"}
                     minW={{
                         base: "calc(100vw)",

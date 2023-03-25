@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Badge, Box, Button, Flex, GridItem, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, SkeletonText, Text } from '@chakra-ui/react'
+import { Badge, Box, Button, Flex, GridItem, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, SkeletonText, Text, useColorModeValue } from '@chakra-ui/react'
 import { DashboardContext } from './DashboardContext';
 
 export default function Subjects() {
@@ -10,7 +10,7 @@ export default function Subjects() {
     }, [subjects]);
     return (
         <GridItem
-            bg={'white'}
+            bg={useColorModeValue("white", "gray.900")}
             p={{
                 base: '.75rem',
                 md: '1rem',
@@ -61,7 +61,7 @@ export default function Subjects() {
                                     subjectModalOnOpen();
                                 }}
                                 _hover={{
-                                    bg: '#F7FAFC',
+                                    bg: useColorModeValue("gray.50", "gray.700"),
                                 }}
                             >
                                 <Text

@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem, SkeletonText, Text } from '@chakra-ui/react'
+import { Box, Flex, GridItem, SkeletonText, Text, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { DashboardContext } from './DashboardContext';
 
@@ -7,7 +7,7 @@ function Events() {
 
     return (
         <GridItem
-            bg={'white'}
+            bg={useColorModeValue("white", "gray.900")}
             p={{
                 base: '.75rem',
                 md: '1rem',
@@ -39,7 +39,7 @@ function Events() {
                                     borderBottom={'1px solid #E2E8F0'}
                                     cursor={'pointer'}
                                     _hover={{
-                                        bg: '#F7FAFC',
+                                        bg: useColorModeValue("gray.50", "gray.700"),
                                     }}
                                     onClick={() => {
                                         setEventData(event);

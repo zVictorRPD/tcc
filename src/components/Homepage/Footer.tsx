@@ -8,11 +8,11 @@ export default function Footer() {
                 justifyContent={"center"}
                 flexDirection={["column", "column", "row"]}
             >
-                <Text fontSize={"md"} textAlign={"center"} color={"gray.800"}>
+                <Text fontSize={"md"} textAlign={"center"}>
                     {new Date().getFullYear()} © Victor de Oliveira Martins Azevedo
                     <Hide below="md"> - </Hide>
                 </Text>
-                <Text fontSize={"md"} textAlign={"center"} color={"gray.800"}>
+                <Text fontSize={"md"} textAlign={"center"}>
                     Todos os direitos reservados.
                 </Text>
             </HStack>

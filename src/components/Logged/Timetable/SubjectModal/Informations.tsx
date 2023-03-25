@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormControl, FormLabel, HStack, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Tooltip, useToast } from '@chakra-ui/react'
+import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormControl, FormLabel, HStack, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Tooltip, useColorModeValue, useToast } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FaBuilding, FaEdit, FaEnvelope, FaPlus, FaRegQuestionCircle } from 'react-icons/fa';
 import { updateSubjectColor } from '../../../../functions/timetable';
@@ -306,7 +306,7 @@ function Informations(props: IInformationsProps) {
 										variant={'outline'}
 										size={'sm'}
 										leftIcon={
-											<Image src="/assets/images/logged/svgs/lattes.svg"
+											<Image src={useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg")}
 												alt="Lattes"
 												w={'15px'}
 												h={'18px'}
