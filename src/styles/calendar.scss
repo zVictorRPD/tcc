@@ -3,7 +3,8 @@ html[data-theme="dark"] {
         color: #fff;
         &:active,
         &.rbc-active,
-        &:hover {
+        &:hover,
+        &:focus {
             background: #fff;
             color: #171923;
         }
