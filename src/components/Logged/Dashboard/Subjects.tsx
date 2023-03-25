@@ -5,6 +5,7 @@ import { DashboardContext } from './DashboardContext';
 export default function Subjects() {
     const { onLoad, subjects, setSelectedSubject, subjectModalOnOpen } = useContext(DashboardContext);
     const [doingSubjects, setDoingSubjects] = useState<ISubject[]>([]);
+    const hoverBg =  useColorModeValue("gray.50", "gray.700");
     useEffect(() => {
         setDoingSubjects(Object.values(subjects).filter(subject => subject.status === 'doing'));
     }, [subjects]);
@@ -61,7 +62,7 @@ export default function Subjects() {
                                     subjectModalOnOpen();
                                 }}
                                 _hover={{
-                                    bg: useColorModeValue("gray.50", "gray.700"),
+                                    bg: hoverBg,
                                 }}
                             >
                                 <Text

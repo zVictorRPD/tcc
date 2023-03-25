@@ -27,7 +27,9 @@ function PeriodColumn(props: IPeriodColumnProps) {
         onOpen: alertOnOpen,
         onClose: alertOnClose
     } = useDisclosure()
-
+    const draggingBg = useColorModeValue("gray.400", "gray.600");
+    const normalBg = useColorModeValue("gray.300", "gray.700");
+    
     const handleEditPeriod = async (e: any) => {
         e.preventDefault();
         if (periodName === '') {
@@ -180,6 +182,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
         }
     }, [editingPeriod]);
 
+
     return (
         <>
             <Stack
@@ -320,7 +323,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             overflowY={'auto'}
                             style={{ margin: 0 }}
                             ref={provided.innerRef}
-                            bg={snapshot.isDraggingOver ? useColorModeValue("gray.400", "gray.600") : useColorModeValue("gray.300", "gray.700")}
+                            bg={snapshot.isDraggingOver ? draggingBg : normalBg}
                             transition={'background-color .3s ease'}
                             className={styles.period_scrollbar}
 

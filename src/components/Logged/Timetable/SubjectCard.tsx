@@ -13,6 +13,8 @@ interface SubjectCardProps {
 function SubjectCard(props: SubjectCardProps) {
     const { subject } = props;
     const { addSubjectModalOnOpen, setSelectedSubject, setSelectedColor, subjects, subjectModalOnOpen } = useContext(TimetableContext);
+    const bgColor = useColorModeValue('white', 'gray.700');
+    const color = useColorModeValue('gray.800', 'white');
     return (
         <GridItem w='100%'>
             <Tooltip
@@ -22,8 +24,8 @@ function SubjectCard(props: SubjectCardProps) {
             >
                 <Box
                     p={{ base: '.5rem' }}
-                    bg={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? subject.bgColor : useColorModeValue('white', 'gray.700')}
-                    color={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? 'white' :  useColorModeValue('gray.800', 'white')}
+                    bg={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? subject.bgColor : bgColor}
+                    color={typeof subject !== 'string' && subjects[subject.id]?.name !== undefined ? 'white' :  color}
                     borderRadius={'12px'}
                     borderWidth="1px"
                     borderColor={'gray.300'}

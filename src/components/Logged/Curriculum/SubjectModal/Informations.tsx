@@ -27,6 +27,7 @@ function Informations(props: IInformationsProps) {
 	});
 	const [grade, setGrade] = useState<number>(selectedSubject.grade || 0);
 	const [editingGrade, setEditingGrade] = useState(false);
+    const lattesSrc = useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg");
 	const firstField = React.useRef() as React.MutableRefObject<HTMLInputElement>;
 
 	const getDepartaments = async () => {
@@ -280,7 +281,7 @@ function Informations(props: IInformationsProps) {
 										variant={'outline'}
 										size={'sm'}
 										leftIcon={
-											<Image src={useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg")}
+											<Image src={lattesSrc}
 												alt="Lattes"
 												w={'15px'}
 												h={'18px'}

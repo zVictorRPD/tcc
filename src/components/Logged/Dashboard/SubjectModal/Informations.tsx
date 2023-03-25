@@ -13,7 +13,7 @@ interface IInformationsProps {
 
 function Informations(props: IInformationsProps) {
 	const { selectedSubject } = useContext(DashboardContext);
-	console.log(selectedSubject);
+	const lattesSrc = useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg");
 	
 	return (
 		<>
@@ -68,7 +68,7 @@ function Informations(props: IInformationsProps) {
 										variant={'outline'}
 										size={'sm'}
 										leftIcon={
-											<Image src={useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg")}
+											<Image src={lattesSrc}
 												alt="Lattes"
 												w={'15px'}
 												h={'18px'}

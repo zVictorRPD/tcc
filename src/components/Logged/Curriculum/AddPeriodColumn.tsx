@@ -11,6 +11,7 @@ function AddPeriodColumn() {
     const [onLoad, setOnLoad] = useState(false);
     const toast = useToast();
     const { setPeriods, periods, periodOrder, setPeriodOrder } = useContext(CurriculumContext);
+    const bgColor = useColorModeValue("white", "gray.900");
 
     const handleAddPeriod = async (e: any) => {
         e.preventDefault();
@@ -86,7 +87,7 @@ function AddPeriodColumn() {
                     w={'100%'}
                     py={2}
                     px={4}
-                    bg={useColorModeValue("white", "gray.900")}
+                    bg={bgColor}
                     borderRadius={'1rem'}
                     cursor={'pointer'}
                     display={'flex'}
@@ -114,7 +115,7 @@ function AddPeriodColumn() {
                         w={'100%'}
                         py={2}
                         px={4}
-                        bg={useColorModeValue("white", "gray.900")}
+                        bg={bgColor}
                         borderRadius={'1rem'}
                         cursor={'pointer'}
                         display={'flex'}

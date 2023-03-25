@@ -43,6 +43,7 @@ const Teachers: NextPage = () => {
         name: "",
         departament: "",
     });
+    const lattesSrc = useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg");
     const getDepartaments = async () => {
         try {
             const response = await api.get("/departament/getDepartament");
@@ -286,7 +287,7 @@ const Teachers: NextPage = () => {
                                                                 }
                                                                 leftIcon={
                                                                     <Image
-                                                                        src={useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg")}
+                                                                        src={lattesSrc}
                                                                         alt="Lattes"
                                                                         w={
                                                                             "15px"

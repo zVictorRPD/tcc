@@ -4,7 +4,7 @@ import { DashboardContext } from './DashboardContext';
 
 function Events() {
     const { events, setEventData, eventModalOnOpen, onLoad } = useContext(DashboardContext);
-
+    const hoverBg = useColorModeValue("white", "gray.900");
     return (
         <GridItem
             bg={useColorModeValue("white", "gray.900")}
@@ -39,7 +39,7 @@ function Events() {
                                     borderBottom={'1px solid #E2E8F0'}
                                     cursor={'pointer'}
                                     _hover={{
-                                        bg: useColorModeValue("gray.50", "gray.700"),
+                                        bg: hoverBg,
                                     }}
                                     onClick={() => {
                                         setEventData(event);

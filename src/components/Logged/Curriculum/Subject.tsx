@@ -33,7 +33,7 @@ function Subject(props: ISubjectProps) {
     const { subjects, setSubjects, setSelectedSubject, subjectModalOnOpen } = useContext(CurriculumContext);
     const { subjectData, index, periodId } = props;
     const [clockTimer, setClockTimer] = useState<NodeJS.Timer>();
-
+    const subjectBg = useColorModeValue("white", "gray.900");
     const changeStatus = () => {
         const status = subjectData.status;
         if (!status || status === '') return;
@@ -76,7 +76,7 @@ function Subject(props: ISubjectProps) {
                 <Box
                     w={'260px'}
                     borderRadius={'1rem'}
-                    bg={useColorModeValue("white", "gray.900")}
+                    bg={subjectBg}
                     mt={'1rem !important'}
                     display={'flex'}
                     alignItems={'center'}

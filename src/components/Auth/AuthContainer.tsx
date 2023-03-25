@@ -20,6 +20,9 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
     const router = useRouter();
     const { colorMode, toggleColorMode } = useColorMode();
     const { status, data } = useSession();
+    const bg = useColorModeValue("white", "gray.900");
+    const bgLight = useColorModeValue("white", "gray.800");
+    const logoSrc = useColorModeValue("/assets/images/homepage/logo.png","/assets/images/homepage/white_logo.png")
     useEffect(() => {
         if (status === "authenticated") {
             router.push("/ambiente-logado/dashboard");
@@ -37,7 +40,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                 <VStack 
                     h={"100%"} 
                     w={"100%"}
-                    bg={useColorModeValue("white", "gray.900")}
+                    bg={bg}
                 >
                     <Box
                         px={["1rem", "1rem", "1.625rem"]}
@@ -52,10 +55,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                             style={{ cursor: "pointer" }}
                         >
                             <Image
-                                src={useColorModeValue(
-                                    "/assets/images/homepage/logo.png",
-                                    "/assets/images/homepage/white_logo.png"
-                                )}
+                                src={logoSrc}
                                 height={"34px"}
                                 alt="Logo"
                             />
@@ -88,7 +88,7 @@ export default function AuthContainer({ children }: { children: ReactNode }) {
                         w={"100%"}
                         justifyContent={"start"}
                         alignItems={"center"}
-                        bg={useColorModeValue("white", "gray.800")}
+                        bg={bgLight}
                         px={["1rem", "1rem", "1.625rem"]}
                         py={["1.188rem", "1.688rem", "1.938rem"]}
                     >

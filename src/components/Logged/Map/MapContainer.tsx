@@ -59,6 +59,7 @@ function MapContainer() {
     });
     const [listHeight, setListHeight] = useState('calc(85vh - 2px)');
     const [zoom, setZoom] = useState(15);
+    const listTheme = useColorModeValue('light', 'dark');
     const handleListClick = (locale: ILocal) => {
         setCenter({
             lat: locale.lat,
@@ -154,7 +155,7 @@ function MapContainer() {
                         />
                     </li>
                     {locales.map(locale => (
-                        <li key={locale.id} data-theme={useColorModeValue('light', 'dark')} onClick={() => handleListClick(locale)}>{locale.name}</li>
+                        <li key={locale.id} data-theme={listTheme} onClick={() => handleListClick(locale)}>{locale.name}</li>
                     ))}
                 </ul>
             </GridItem>
