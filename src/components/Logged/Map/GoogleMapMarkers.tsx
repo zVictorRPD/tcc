@@ -5,6 +5,7 @@ import styles from './style.module.scss';
 
 interface IGoogleMapMarkersProps {
     locales: ILocal[];
+    theme: string;
 }
 
 const handleMarkerClick = (locale: ILocal) => {
@@ -20,11 +21,10 @@ function GoogleMapMarkers(props: IGoogleMapMarkersProps) {
                     key={locale.id}
                     label={{
                         text: locale.label,
-                        color: '#000',
+                        color: props.theme === 'dark' ? '#fff' : '#000',
                         fontSize: '1rem',
-                        fontWeight: '600',
-                        className: styles.markerLabel
-
+                        fontWeight: props.theme === 'dark' ? '400' : '600',
+                        className: props.theme === 'dark' ? '' : styles.markerLabel
                     }}
                     position={{
                         lat: locale.lat,

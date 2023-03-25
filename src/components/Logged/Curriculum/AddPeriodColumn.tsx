@@ -74,9 +74,8 @@ function AddPeriodColumn() {
 
     return (
         <Stack
-            bg={'gray.300'}
             borderWidth='1px'
-            borderColor='gray.400'
+            borderColor={useColorModeValue("gray.400", "gray.600")}
             maxH={'85vh'}
             minW={'300px'}
             borderRadius={'1rem'}

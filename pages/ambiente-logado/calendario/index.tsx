@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { NextPage } from "next";
 import { Calendar as ReactCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import { Box, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, useColorModeValue, useDisclosure, useToast } from "@chakra-ui/react";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/pt-br';
 import EventModal from "../../../src/components/Logged/Calendar/EventModal";
 import { api } from "../../../src/services/api";
-import styles from './style.module.scss'
+import styles from './style.module.scss';
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
 const lang = {
@@ -32,6 +32,7 @@ const lang = {
 
 const Calendar: NextPage = () => {
     const toast = useToast();
+    const bg = useColorModeValue('white', 'gray.900');
     const [events, setEvents] = useState<IEvent[]>([]);
     const [onLoad, setOnLoad] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -118,7 +119,7 @@ const Calendar: NextPage = () => {
                 <Box
                     p={{ base: '.5rem', md: '1rem' }}
                     h={'85vh'}
-                    bg="white"
+                    bg={bg}
                     borderRadius={'12px'}
                     borderWidth="1px"
                     borderColor={'gray.300'}

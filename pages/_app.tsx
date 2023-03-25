@@ -6,6 +6,7 @@ import LoggedContainer from "../src/components/Logged/Layout/LoggedContainer";
 import Head from "next/head";
 import VLibras from 'vlibras-nextjs';
 import Script from 'next/script';
+import '../src/styles/calendar.scss'
 
 function MyApp({ Component, pageProps, router }: AppProps) {
     const url = router.pathname;

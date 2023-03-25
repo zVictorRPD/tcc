@@ -141,12 +141,26 @@ function PeriodColumn(props: IPeriodColumnProps) {
 
     const changeAllStatus = async (type: string) => {
         setOnLoading(true);
+        const verified = period.subjectIds.every(subjectId => {
+            return subjects[subjectId].status === type;
+        });
+        if (verified) {
+            toast({
+                title: "Suas matérias já estão com esse estado.",
+                status: "info",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            });
+            setOnLoading(false);
+            return;
+        };
         try {
             const response = await api.post('/curriculum/subject/changeAllStatus', {
                 periodId: period.id,
                 type
             });
-            if (!response.data.changed) throw new Error('Erro ao alterar status das matérias');
+            if (!response.data.changed) throw new Error('Erro ao alterar o estado das matérias');
 
             const newSubjects = {
                 ...subjects
@@ -165,7 +179,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
         } catch (error) {
             toast({
                 title: "Erro ao alterar status das matérias",
-                description: "Não foi possível alterar o status das matérias",
+                description: "Não foi possível alterar o estado das matérias",
                 status: "error",
                 duration: 3000,
                 isClosable: true,
@@ -187,7 +201,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
         <>
             <Stack
                 borderWidth='1px'
-                borderColor='gray.400'
+                borderColor={useColorModeValue("gray.400", "gray.600")}
                 maxH={'83.2vh'}
                 minW={'300px'}
                 borderRadius={'1rem 1rem 0 0'}
