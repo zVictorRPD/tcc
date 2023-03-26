@@ -1,4 +1,4 @@
-import { Box, Button, Flex, GridItem, HStack, IconButton, Image, Skeleton, SkeletonCircle, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, GridItem, HStack, IconButton, Image, Skeleton, SkeletonCircle, Text, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FaEnvelope } from 'react-icons/fa'
 import { toCapitalize } from '../../../functions/toCapitalize'
@@ -21,7 +21,7 @@ function Teachers() {
 
     return (
         <GridItem
-            bg={'white'}
+            bg={useColorModeValue("white", "gray.900")}
             p={{
                 base: '.75rem',
                 md: '1rem',

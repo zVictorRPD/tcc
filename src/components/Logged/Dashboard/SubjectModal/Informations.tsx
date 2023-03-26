@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, FormControl, FormLabel, HStack, Image, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Tooltip, useToast } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, FormControl, FormLabel, HStack, Image, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Stack, Text, Tooltip, useColorModeValue, useToast } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FaBuilding, FaEnvelope, FaRegQuestionCircle } from 'react-icons/fa';
 import { toCapitalize } from '../../../../functions/toCapitalize';
@@ -13,7 +13,7 @@ interface IInformationsProps {
 
 function Informations(props: IInformationsProps) {
 	const { selectedSubject } = useContext(DashboardContext);
-	console.log(selectedSubject);
+	const lattesSrc = useColorModeValue("/assets/images/logged/svgs/lattes.svg", "/assets/images/logged/svgs/lattes_white.svg");
 	
 	return (
 		<>
@@ -68,7 +68,7 @@ function Informations(props: IInformationsProps) {
 										variant={'outline'}
 										size={'sm'}
 										leftIcon={
-											<Image src="/assets/images/logged/svgs/lattes.svg"
+											<Image src={lattesSrc}
 												alt="Lattes"
 												w={'15px'}
 												h={'18px'}

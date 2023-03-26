@@ -38,7 +38,6 @@ export default function Apresentation() {
                     <Stack h={"100%"} justifyContent={"center"}>
                         <Box>
                             <Heading
-                                color={"gray.800"}
                                 as="h2"
                                 size={["xl", "xl", "3xl"]}
                                 mb={".5rem"}

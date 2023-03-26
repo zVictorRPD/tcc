@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure, Tooltip } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, useToast, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useDisclosure, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react'
 import { FaEdit, FaEllipsisV, FaSync, FaTrash } from 'react-icons/fa';
 import Subject from './Subject';
@@ -27,7 +27,9 @@ function PeriodColumn(props: IPeriodColumnProps) {
         onOpen: alertOnOpen,
         onClose: alertOnClose
     } = useDisclosure()
-
+    const draggingBg = useColorModeValue("gray.400", "gray.600");
+    const normalBg = useColorModeValue("gray.300", "gray.700");
+    
     const handleEditPeriod = async (e: any) => {
         e.preventDefault();
         if (periodName === '') {
@@ -139,12 +141,26 @@ function PeriodColumn(props: IPeriodColumnProps) {
 
     const changeAllStatus = async (type: string) => {
         setOnLoading(true);
+        const verified = period.subjectIds.every(subjectId => {
+            return subjects[subjectId].status === type;
+        });
+        if (verified) {
+            toast({
+                title: "Suas matérias já estão com esse estado.",
+                status: "info",
+                duration: 3000,
+                isClosable: true,
+                position: "top-right"
+            });
+            setOnLoading(false);
+            return;
+        };
         try {
             const response = await api.post('/curriculum/subject/changeAllStatus', {
                 periodId: period.id,
                 type
             });
-            if (!response.data.changed) throw new Error('Erro ao alterar status das matérias');
+            if (!response.data.changed) throw new Error('Erro ao alterar o estado das matérias');
 
             const newSubjects = {
                 ...subjects
@@ -163,7 +179,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
         } catch (error) {
             toast({
                 title: "Erro ao alterar status das matérias",
-                description: "Não foi possível alterar o status das matérias",
+                description: "Não foi possível alterar o estado das matérias",
                 status: "error",
                 duration: 3000,
                 isClosable: true,
@@ -180,12 +196,12 @@ function PeriodColumn(props: IPeriodColumnProps) {
         }
     }, [editingPeriod]);
 
+
     return (
         <>
             <Stack
-                bg={'gray.300'}
                 borderWidth='1px'
-                borderColor='gray.400'
+                borderColor={useColorModeValue("gray.400", "gray.600")}
                 maxH={'83.2vh'}
                 minW={'300px'}
                 borderRadius={'1rem 1rem 0 0'}
@@ -197,7 +213,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                     w={'100%'}
                     py={2}
                     px={4}
-                    bg={'white'}
+                    bg={useColorModeValue("white", "gray.900")}
                     borderRadius={'1rem 1rem 0 0'}
                     display={'flex'}
                     justifyContent={'space-between'}
@@ -206,10 +222,8 @@ function PeriodColumn(props: IPeriodColumnProps) {
                 >
                     {!editingPeriod ? (
                         <>
-
                             <Text
                                 fontWeight={600}
-                                color='gray.800'
                                 fontSize={'2xl'}
                                 textAlign={'center'}
                                 wordBreak={'break-all'}
@@ -323,7 +337,7 @@ function PeriodColumn(props: IPeriodColumnProps) {
                             overflowY={'auto'}
                             style={{ margin: 0 }}
                             ref={provided.innerRef}
-                            bg={snapshot.isDraggingOver ? 'gray.400' : 'gray.300'}
+                            bg={snapshot.isDraggingOver ? draggingBg : normalBg}
                             transition={'background-color .3s ease'}
                             className={styles.period_scrollbar}
 

@@ -1,4 +1,4 @@
-import { Box, Button, Text, Tooltip } from '@chakra-ui/react'
+import { Box, Button, Text, Tooltip, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd';
 import { toCapitalize } from '../../../functions/toCapitalize';
@@ -33,7 +33,7 @@ function Subject(props: ISubjectProps) {
     const { subjects, setSubjects, setSelectedSubject, subjectModalOnOpen } = useContext(CurriculumContext);
     const { subjectData, index, periodId } = props;
     const [clockTimer, setClockTimer] = useState<NodeJS.Timer>();
-
+    const subjectBg = useColorModeValue("white", "gray.900");
     const changeStatus = () => {
         const status = subjectData.status;
         if (!status || status === '') return;
@@ -76,7 +76,7 @@ function Subject(props: ISubjectProps) {
                 <Box
                     w={'260px'}
                     borderRadius={'1rem'}
-                    bg={'white'}
+                    bg={subjectBg}
                     mt={'1rem !important'}
                     display={'flex'}
                     alignItems={'center'}

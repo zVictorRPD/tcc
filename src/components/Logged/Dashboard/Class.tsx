@@ -1,4 +1,4 @@
-import { Flex, GridItem, Skeleton, SkeletonText, Text } from '@chakra-ui/react'
+import { Flex, GridItem, Skeleton, SkeletonText, Text, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { getNextClass } from '../../../functions/dashboard';
 import { getDashbordData } from '../../../functions/timetable';
@@ -8,6 +8,7 @@ import { DashboardContext } from './DashboardContext';
 function Class() {
     const { onLoad, timetable, subjects } = useContext(DashboardContext);
     const [nextClass, setNextClass] = useState<INextClass | null>(null);
+    const bg = useColorModeValue('white', 'gray.900');
     useEffect(() => {
         if (subjects !== undefined && timetable !== undefined) {
             setNextClass(getNextClass(getDashbordData(timetable, subjects)));
@@ -16,7 +17,7 @@ function Class() {
 
     return (
         <GridItem
-            bg={'white'}
+            bg={bg}
             p={{
                 base: '.75rem',
                 md: '1rem',
@@ -67,7 +68,7 @@ function Class() {
                                 mb={'.5rem'}
                                 borderBottom={'1px solid #e2e8f0'}
                             >
-                                <Text display={'inline'} fontWeight={'600'}>Suas anotações: </Text>
+                                <Text display={'inline'} fontWeight={'600'} as="span">Suas anotações: </Text>
                                 {nextClass.subject.note || 'Você não tem anotações para essa matéria.'}
                             </Text>
                             <Flex>

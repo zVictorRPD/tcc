@@ -53,21 +53,21 @@ export default function ConfirmationModal(props: ConfirmationModalProps) {
                             src="/assets/images/auth/email-icon.svg"
                             alt="email"
                         />
-                        <Heading fontSize={"2xl"} color={"gray.800"}>
+                        <Heading fontSize={"2xl"}>
                             Confirmação de Email
                         </Heading>
                         <Box>
                             <Text
                                 fontSize={"sm"}
                                 textAlign={"center"}
-                                color={"gray.800"}
+                                
                             >
                                 Email enviado para: <strong>{email}</strong>
                             </Text>
                             <Text
                                 fontSize={"sm"}
                                 textAlign={"center"}
-                                color={"gray.800"}
+                                
                             >
                                 Clique no link contido no email e termine seu cadastro
                             </Text>

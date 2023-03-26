@@ -1,4 +1,4 @@
-import { Flex, Button, Box, Text, Image } from '@chakra-ui/react';
+import { Flex, Button, Box, Text, Image, useColorModeValue } from '@chakra-ui/react';
 import React, { useContext } from 'react'
 import { CurriculumContext } from './curriculumContext';
 
@@ -20,10 +20,9 @@ function NoCurriculum() {
                 background={'white'}
                 w={'100%'}
                 h={'auto'}
-                bg="white"
+                bg={useColorModeValue("white", "gray.900")}
                 borderRadius={'12px'}
                 borderWidth="1px"
-                borderColor={'gray.300'}
                 p={{ base: '1.5rem', md: '2rem' }}
             >
                 <Text

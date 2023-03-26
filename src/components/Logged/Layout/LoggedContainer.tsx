@@ -7,23 +7,9 @@ import {
     Drawer,
     DrawerContent,
     useDisclosure,
-    Button,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Text,
-    Heading,
-    Flex,
 } from "@chakra-ui/react";
 
-import {
-    FaEnvelope,
-    FaInstagram
-} from "react-icons/fa";
+import ContactModal from "./Modals/ContactModal";
 
 export default function LoggedContainer({
     pageName,
@@ -34,9 +20,9 @@ export default function LoggedContainer({
 }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
-        isOpen: modalIsOpen,
-        onOpen: modalOnOpen,
-        onClose: modalOnClose,
+        isOpen: contactModalIsOpen,
+        onOpen: contactModalOnOpen,
+        onClose: contactModalOnClose,
     } = useDisclosure();
 
     const getMinWidth = () => {
@@ -50,11 +36,11 @@ export default function LoggedContainer({
         <>
             <Box
                 minH="calc(100vh)"
-                bg={useColorModeValue("gray.100", "gray.900")}
+                bg={useColorModeValue("gray.100", "gray.700")}
             >
                 <SidebarContent
                     onClose={() => onClose}
-                    modalOnOpen={modalOnOpen}
+                    modalOnOpen={contactModalOnOpen}
                     display={{ base: "none", md: "block" }}
                     zIndex={2}
                 />
@@ -70,7 +56,7 @@ export default function LoggedContainer({
                     <DrawerContent>
                         <SidebarContent
                             onClose={onClose}
-                            modalOnOpen={modalOnOpen}
+                            modalOnOpen={contactModalOnOpen}
                         />
                     </DrawerContent>
                 </Drawer>
@@ -80,7 +66,7 @@ export default function LoggedContainer({
                     ml={{ base: 0, md: 60 }}
                     pt={"80px"}
                     minH={"calc(100vh - 80px)"}
-                    bg={useColorModeValue("gray.100", "gray.900")}
+                    bg={useColorModeValue("gray.100", "gray.700")}
                     width={"min-content"}
                     minW={{
                         base: "calc(100vw)",
@@ -97,43 +83,7 @@ export default function LoggedContainer({
                     </Box>
                 </Box>
             </Box>
-            <Modal isOpen={modalIsOpen} onClose={modalOnClose} size={"xl"}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Entre em contato</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody
-                        px={6}
-                    >
-                        <Heading size={'md'} mb={'.5rem'}>Olá,</Heading>
-                        <Text textAlign={'justify'}>Obrigado por visitar meu projeto. Eu adoraria ouvir de você! Se você tiver alguma dúvida, sugestão ou comentário, por favor, entre em contato comigo através do meu e-mail ou Instagram.</Text>
-                        <Flex 
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            gap={'1rem'}
-                            my={'1rem'}
-                        >
-                            <a href="mailto:victor2007azevedo@hotmail.com" rel="noreferrer">
-                                <Button leftIcon={<FaEnvelope />} mr={3} variant="blue-800">
-                                    E-mail
-                                </Button>
-                            </a>
-                            <a href="https://www.instagram.com/zvictor_rpd/" target={'_blank'} rel="noreferrer">
-                                <Button leftIcon={<FaInstagram />} mr={3} variant="blue-800">
-                                    Instagram
-                                </Button>
-                            </a>
-                        </Flex>
-                        <Text mb=".5rem" textAlign={'justify'}>Além disso, gostaria de agradecer a vocês, pelo incrível marco de 500 usuários! Este projeto não seria possível sem o seu apoio e feedback. Obrigado por fazer parte disso. Se você gostou do que viu, por favor, compartilhe com seus amigos e colegas para que possamos alcançar ainda mais pessoas.</Text>
-                        <Text mb=".5rem" textAlign={'justify'}>Estou ansioso para ouvir de você e continuar a melhorar este projeto.</Text>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button variant="outline" mr={3} onClick={modalOnClose}>
-                            Fechar
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+            <ContactModal isOpen={contactModalIsOpen} onClose={contactModalOnClose} />
         </>
     );
 }

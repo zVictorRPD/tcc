@@ -22,6 +22,7 @@ function EventModal() {
                         <FormLabel>Título</FormLabel>
                         <Input
                             value={eventData.title}
+                            cursor={'default'}
                             readOnly
                         />
                     </FormControl>
@@ -30,6 +31,7 @@ function EventModal() {
                         <Input
                             type="datetime-local"
                             value={moment(eventData.start).format('YYYY-MM-DDTHH:mm:ss')}
+                            cursor={'default'}
                             readOnly
                         />
                     </FormControl>
@@ -38,6 +40,7 @@ function EventModal() {
                         <Input
                             type="datetime-local"
                             value={moment(eventData.end).format('YYYY-MM-DDTHH:mm:ss')}
+                            cursor={'default'}
                             readOnly
                         />
                     </FormControl>
@@ -46,6 +49,7 @@ function EventModal() {
                         <Textarea
                             placeholder='Descrição'
                             value={eventData.description}
+                            cursor={'default'}
                             resize={'none'}
                             readOnly
                         />

@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Badge, Box, Button, Flex, GridItem, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, SkeletonText, Text } from '@chakra-ui/react'
+import { Badge, Box, Button, Flex, GridItem, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, SkeletonText, Text, useColorModeValue } from '@chakra-ui/react'
 import { DashboardContext } from './DashboardContext';
 
 export default function Subjects() {
     const { onLoad, subjects, setSelectedSubject, subjectModalOnOpen } = useContext(DashboardContext);
     const [doingSubjects, setDoingSubjects] = useState<ISubject[]>([]);
+    const hoverBg =  useColorModeValue("gray.50", "gray.700");
     useEffect(() => {
         setDoingSubjects(Object.values(subjects).filter(subject => subject.status === 'doing'));
     }, [subjects]);
     return (
         <GridItem
-            bg={'white'}
+            bg={useColorModeValue("white", "gray.900")}
             p={{
                 base: '.75rem',
                 md: '1rem',
@@ -61,7 +62,7 @@ export default function Subjects() {
                                     subjectModalOnOpen();
                                 }}
                                 _hover={{
-                                    bg: '#F7FAFC',
+                                    bg: hoverBg,
                                 }}
                             >
                                 <Text

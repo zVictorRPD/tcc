@@ -1,0 +1,31 @@
+html[data-theme="dark"] {
+    .rbc-toolbar button {
+        color: #fff;
+        &:active,
+        &.rbc-active,
+        &:hover,
+        &:focus {
+            background: #fff;
+            color: #171923;
+        }
+    }
+    .rbc-today {
+        background: #2d3748;
+    }
+    .rbc-day-bg {
+        &.rbc-off-range-bg {
+            background: #2d3748;
+        }
+        &.rbc-today {
+            background: rgba(0, 0, 0);
+        }
+    }
+    .rbc-event, .rbc-day-slot .rbc-background-event {
+        background: #265985;
+    } 
+}
+html[data-theme="light"] {
+    .rbc-event, .rbc-day-slot .rbc-background-event {
+        background: #2a4365;
+    } 
+}

@@ -1,3 +1,10 @@
+interface INotifications {
+    id: string;
+    title: string;
+    description: string;
+    date: string;
+}
+
 interface IDashboardContext {
     onLoad: boolean;
     setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;

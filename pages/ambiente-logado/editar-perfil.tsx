@@ -1,6 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { NextPage } from "next";
-import { Avatar, Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react";
+import {
+    Avatar,
+    Box,
+    Button,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
+    HStack,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Stack,
+    Text,
+    useColorModeValue,
+    useToast,
+} from "@chakra-ui/react";
 import { FiEdit2 } from "react-icons/fi";
 import {
     validateFile,
@@ -102,7 +117,10 @@ const EditProfile: NextPage = () => {
         }
         if (formCamps.password !== "") {
             const isValidPassword = validatePassword(formCamps.password);
-            const isValidConfirmationPassword = validateConfirmationPassword(formCamps.password, formCamps.confirmationPassword);
+            const isValidConfirmationPassword = validateConfirmationPassword(
+                formCamps.password,
+                formCamps.confirmationPassword
+            );
             setEditCampsValidation({
                 ...editCampsValidation,
                 password: isValidPassword,
@@ -113,7 +131,11 @@ const EditProfile: NextPage = () => {
                 return;
             }
         }
-        if (formCamps.name === data?.user?.name && formCamps.password === "" && changeImage === false) {
+        if (
+            formCamps.name === data?.user?.name &&
+            formCamps.password === "" &&
+            changeImage === false
+        ) {
             toast({
                 position: "top-right",
                 title: "Nenhum campo foi alterado!",
@@ -128,7 +150,6 @@ const EditProfile: NextPage = () => {
             ...formCamps,
             avatar: userImage,
         });
-
 
         if (response.data.code == "200") {
             toast({
@@ -155,14 +176,11 @@ const EditProfile: NextPage = () => {
         setFormCamps({
             ...formCamps,
             name: name,
-        })
-    }
+        });
+    };
 
     useEffect(() => {
-        if (
-            data?.user?.name !== undefined &&
-            data?.user?.name
-        ) {
+        if (data?.user?.name !== undefined && data?.user?.name) {
             setFormCamps({
                 ...formCamps,
                 name: data.user.name,
@@ -174,19 +192,19 @@ const EditProfile: NextPage = () => {
     return (
         <>
             <Stack
-                h={'100%'}
-                w={'100%'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                flexDirection={'column'}
+                h={"100%"}
+                w={"100%"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                flexDirection={"column"}
             >
                 <Box
-                    mt={'2rem'}
-                    bg={'#fff'}
-                    w={'100%'}
-                    maxW={'500px'}
+                    mt={"2rem"}
+                    bg={useColorModeValue("white", "gray.900")}
+                    w={"100%"}
+                    maxW={"500px"}
                     p={["1rem", "1rem", "1.5rem"]}
-                    borderRadius={'lg'}
+                    borderRadius={"lg"}
                 >
                     <Text
                         textAlign={"center"}
@@ -274,7 +292,7 @@ const EditProfile: NextPage = () => {
                         <Input
                             type="email"
                             placeholder="examplemail@example.com"
-                            value={data?.user?.email || ''}
+                            value={data?.user?.email || ""}
                             disabled
                         />
                     </FormControl>

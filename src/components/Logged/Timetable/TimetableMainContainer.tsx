@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Image, Stack } from '@chakra-ui/react'
+import { Box, Button, Flex, Image, Stack, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { getExcelData } from '../../../functions/timetable'
 import SubjectGrid from './SubjectGrid'
@@ -11,6 +11,7 @@ function TimetableMainContainer() {
     const { onLoad, timetableSubjects, subjects } = useContext(TimetableContext);
     const [excelData, setExcelData] = useState({});
     const { ExcelDownloder, Type } = useExcelDownloder();
+    const imgSrc = useColorModeValue('/assets/images/loading-spinner.svg', '/assets/images/white-loading-spinner.svg');
     useEffect(() => {
         if (subjects !== undefined && timetableSubjects !== undefined) {
             setExcelData(getExcelData(timetableSubjects, subjects));        
@@ -54,7 +55,7 @@ function TimetableMainContainer() {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <Image src="/assets/images/loading-spinner.svg" w={'200px'} h={'200px'} alt="Carregando..." margin={'0 auto'} />
+                    <Image src={imgSrc} w={'200px'} h={'200px'} alt="Carregando..." margin={'0 auto'} />
                 </Flex>
             )
             }
