@@ -41,6 +41,7 @@ import { validateSubjectCode } from "../../../src/functions/validation";
 import SubjectModal from "../../../src/components/Logged/Subject/SubjectModal/SubjectModal";
 
 const Subjects: NextPage = () => {
+    const theme = useColorModeValue("light", "dark");
     const [subjects, setSubjects] = useState<ISubjectList[]>([]);
     const [selectedSubject, setSelectedSubject] = useState<ISubjectList>(
         {} as ISubjectList
@@ -242,8 +243,9 @@ const Subjects: NextPage = () => {
                         {...(subjects.length === 0 && {
                             style: { minWidth: "0 !important" },
                         })}
+                        data-theme={theme}
                     >
-                        <thead data-theme={useColorModeValue("light", "dark")}>
+                        <thead data-theme={theme}>
                             <tr>
                                 <th>Código</th>
                                 <th>Nome</th>

@@ -1,4 +1,4 @@
-import { TableContainer, Table, Tbody, Tr, Th, Td, Text, Box, Thead, Button, Flex, useToast, HStack, Input, NumberInput, NumberInputField, NumberDecrementStepper, NumberIncrementStepper, NumberInputStepper } from '@chakra-ui/react'
+import { TableContainer, Table, Tbody, Tr, Th, Td, Text, Box, Thead, Button, Flex, useToast, HStack, Input, NumberInput, NumberInputField, NumberDecrementStepper, NumberIncrementStepper, NumberInputStepper, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import { api } from '../../../../services/api';
@@ -6,6 +6,7 @@ import { CurriculumContext } from '../curriculumContext';
 import style from '../style.module.scss';
 
 function PeriodTab() {
+    const theme = useColorModeValue("light", "dark");
     const { complementary, setComplementary } = useContext(CurriculumContext);
     const [onLoad, setOnLoad] = useState(false);
     const toast = useToast();
@@ -90,6 +91,7 @@ function PeriodTab() {
                 borderRadius={'lg'}
                 padding={2}
                 className={`${style.drawer_table_scrollbar} ${onLoad ? style.on_load : ''}`}
+                data-theme={theme}
             >
                 <TableContainer mb={'3rem'}>
                     <Table size='sm'>

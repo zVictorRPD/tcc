@@ -33,6 +33,7 @@ const lang = {
 const Calendar: NextPage = () => {
     const toast = useToast();
     const bg = useColorModeValue('white', 'gray.900');
+    const theme = useColorModeValue('light', 'dark');
     const [events, setEvents] = useState<IEvent[]>([]);
     const [onLoad, setOnLoad] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -125,8 +126,10 @@ const Calendar: NextPage = () => {
                     borderColor={'gray.300'}
                     position="relative"
                     className={onLoad ? styles.on_load : ''}
+                    data-theme={theme}
                 >
                     <ReactCalendar
+                        style={onLoad ? { opacity: '.5' } : {}}
                         localizer={localizer}
                         culture={'pt-br'}
                         events={events}

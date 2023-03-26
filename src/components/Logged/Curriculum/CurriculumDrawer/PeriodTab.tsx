@@ -1,4 +1,4 @@
-import { TableContainer, Table, Tbody, Tr, Th, Td, Text, Box, Thead, Switch, Button, Flex, useToast } from '@chakra-ui/react'
+import { TableContainer, Table, Tbody, Tr, Th, Td, Text, Box, Thead, Switch, Button, Flex, useToast, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { RiArrowLeftRightLine } from 'react-icons/ri';
 import { periodTotalTime } from '../../../../functions/curriculum';
@@ -7,6 +7,7 @@ import { CurriculumContext } from '../curriculumContext';
 import style from '../style.module.scss';
 
 function PeriodTab() {
+    const theme = useColorModeValue("light", "dark");
 	const { setPeriods, periods, subjects } = useContext(CurriculumContext);
 	const [viewType, setViewType] = useState<"todo" | "doing" | "done" | "total">('todo');
 	const [onLoad, setOnLoad] = useState(false);
@@ -64,6 +65,7 @@ function PeriodTab() {
 				borderRadius={'lg'}
 				padding={2}
 				className={`${style.drawer_table_scrollbar} ${onLoad ? style.on_load : ''}`}
+                data-theme={theme}
 			>
 				<Flex
 					justifyContent={'end'}

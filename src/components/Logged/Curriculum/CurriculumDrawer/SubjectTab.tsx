@@ -1,4 +1,4 @@
-import { TableContainer, Table, Tbody, Tr, Th, Td, Tooltip, Box, Text, Switch, useToast } from '@chakra-ui/react'
+import { TableContainer, Table, Tbody, Tr, Th, Td, Tooltip, Box, Text, Switch, useToast, useColorModeValue } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import style from '../style.module.scss';
@@ -7,10 +7,10 @@ import { handleMainTeacher, handleNumberLinks, handleNumberNotes, handleSubjectC
 import { api } from '../../../../services/api';
 
 function SubjectTab() {
+    const theme = useColorModeValue("light", "dark");
 	const { subjects, subjectsFilter, setSubjectsFilter } = useContext(CurriculumContext);
 	const toast = useToast();
 	const [onLoad, setOnLoad] = useState(false);
-
 	
 	const handleFilter = async (filter: string) => {
 		const newFilter = {
@@ -138,6 +138,7 @@ function SubjectTab() {
 				borderRadius={'lg'}
 				padding={3}
 				className={`${style.drawer_table_scrollbar} ${onLoad ? style.on_load : ''}`}
+                data-theme={theme}
 			>
 				<TableContainer
 					className={style.drawer_table_scrollbar}

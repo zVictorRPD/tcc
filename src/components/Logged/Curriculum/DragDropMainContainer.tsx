@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Image, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Image, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useContext } from 'react'
 import { CurriculumContext } from './curriculumContext';
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd';
@@ -12,8 +12,9 @@ function DragDropMainContainer() {
     resetServerContext();
     const { periods, subjects, periodOrder, setPeriods, addSubjectModalOnOpen, onLoad, hasCurriculum, curriculumDrawerOnOpen } = useContext(CurriculumContext);
     const toast = useToast();
-    const onDragEnd = async (result: any) => {
+    const imgSrc = useColorModeValue('/assets/images/loading-spinner.svg', '/assets/images/white-loading-spinner.svg');
 
+    const onDragEnd = async (result: any) => {
         const { destination, source, draggableId } = result;
 
         if (!destination) return;
@@ -154,7 +155,7 @@ function DragDropMainContainer() {
                     alignItems={'center'}
                     justifyContent={'center'}
                 >
-                    <Image src="/assets/images/loading-spinner.svg" w={'200px'} h={'200px'} alt="Carregando..." margin={'0 auto'} />
+                    <Image src={imgSrc} w={'200px'} h={'200px'} alt="Carregando..." margin={'0 auto'} />
                 </Flex>
             )}
         </>
