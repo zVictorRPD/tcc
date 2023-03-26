@@ -68,7 +68,7 @@ function Class() {
                                 mb={'.5rem'}
                                 borderBottom={'1px solid #e2e8f0'}
                             >
-                                <Text display={'inline'} fontWeight={'600'}>Suas anotações: </Text>
+                                <Text display={'inline'} fontWeight={'600'} as="span">Suas anotações: </Text>
                                 {nextClass.subject.note || 'Você não tem anotações para essa matéria.'}
                             </Text>
                             <Flex>
