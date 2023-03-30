@@ -275,7 +275,7 @@ export const generateConfirmationEmail = (link: string) => {
           <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 20px;font-family:arial,helvetica,sans-serif;" align="left">
             
       <div class="v-text-align v-line-height" style="line-height: 140%; text-align: left; word-wrap: break-word;">
-        <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 16px; line-height: 22.4px; font-family: Montserrat, sans-serif;">Atenciosamente</span></p>
+        <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 16px; line-height: 22.4px; font-family: Montserrat, sans-serif;">Atenciosamente,</span></p>
     <p style="font-size: 14px; line-height: 140%; text-align: center;"><strong><span style="font-size: 16px; line-height: 22.4px; font-family: Montserrat, sans-serif;">Facilita Rural</span></strong></p>
       </div>
     
