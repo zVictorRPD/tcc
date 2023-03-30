@@ -23,8 +23,8 @@ const AcademicCalendar: NextPage = () => {
                     xl: "1.5rem",
                 }}
             >
-                {dates.map((date) => {
-                    return (<DateCard date={date} />)
+                {dates.map((date, index) => {
+                    return (<DateCard key={index} date={date} />)
                 })}
             </Grid>
         </>
