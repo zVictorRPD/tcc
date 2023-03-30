@@ -130,7 +130,7 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                         onClose={() => {
                             notifications.length > 0 &&
                                 sawNotifications(
-                                    notifications[notifications.length - 1].id
+                                    notifications[0].id
                                 );
                             setNewNotifications(0);
                         }}
