@@ -200,7 +200,12 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                             >
                                 {notifications.length > 0 ? (
                                     notifications
-                                        .reverse()
+                                        .sort((a, b) => {
+                                            return (
+                                                new Date(b.date).getTime() -
+                                                new Date(a.date).getTime()
+                                            );
+                                        })
                                         .map((notification, index) => (
                                             <Box
                                                 key={index}
