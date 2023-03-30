@@ -213,6 +213,13 @@ interface IToastStatus {
     type: 'success' | 'error' | 'info' | 'warning' | undefined;
 }
 
+interface ICalendarAcademicDate {
+    name: string;
+    date: Date;
+    daysLeft: number;
+    hoursLeft: number;
+}
+
 
 /* EDITAR PERFIL */
 interface IEditProfile {

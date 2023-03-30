@@ -11,6 +11,12 @@ const notifications:INotifications[] = [
         description: "Agora você pode ativar o modo noturno no menu superior",
         date: "2023-03-26"
     },
+    {
+        id: "3",
+        title: "Calendário acadêmico",
+        description: "Foi inserido o calendário acadêmico, nele é possível visualizar as datas de início e fim de cada período letivo, além dos dias restantes para a chegada de cada data",
+        date: "2023-03-26"
+    },
 ]
 
 

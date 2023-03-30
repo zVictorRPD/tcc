@@ -20,6 +20,7 @@ import {
     FaChalkboardTeacher,
     FaBook,
     FaCalendarAlt,
+    FaCalendarDay,
     FaMapMarkedAlt,
     FaDownload,
     FaEnvelope,
@@ -54,8 +55,13 @@ const LinkItems: Array<LinkItemProps> = [
     },
     {
         name: "Calendário",
-        icon: FaCalendarAlt,
+        icon: FaCalendarDay,
         href: "/ambiente-logado/calendario",
+    },
+    {
+        name: "Calendário Acadêmico",
+        icon: FaCalendarAlt,
+        href: "/ambiente-logado/calendario-academico",
     },
     { name: "Mapa", icon: FaMapMarkedAlt, href: "/ambiente-logado/mapa" },
 ];
