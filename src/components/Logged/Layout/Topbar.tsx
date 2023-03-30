@@ -36,6 +36,7 @@ import {
     getNotifications,
     sawNotifications,
 } from "../../../functions/notifications";
+import styles from "./style.module.scss";
 
 interface TopBarProps extends FlexProps {
     topBarProps: {
@@ -192,10 +193,19 @@ export const TopBar = ({ topBarProps, ...rest }: TopBarProps) => {
                                 bg={useColorModeValue("white", "gray.800")}
                             />
                             <PopoverCloseButton />
-                            <PopoverBody maxH={"280px"} overflowY={"auto"}>
+                            <PopoverBody
+                                maxH={"280px"}
+                                overflowY={"auto"}
+                                className={styles.scrollbar}
+                            >
                                 {notifications.length > 0 ? (
                                     notifications
-                                        .reverse()
+                                        .sort((a, b) => {
+                                            return (
+                                                new Date(b.date).getTime() -
+                                                new Date(a.date).getTime()
+                                            );
+                                        })
                                         .map((notification, index) => (
                                             <Box
                                                 key={index}

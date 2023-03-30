@@ -277,7 +277,7 @@ export const resetPasswordEmail = (token: string) => {
                               <div class="v-text-align v-line-height"
                                 style="line-height: 140%; text-align: left; word-wrap: break-word;">
                                 <p style="font-size: 14px; line-height: 140%; text-align: center;"><span
-                                    style="font-size: 16px; line-height: 22.4px; font-family: Montserrat, sans-serif;">Atenciosamente</span>
+                                    style="font-size: 16px; line-height: 22.4px; font-family: Montserrat, sans-serif;">Atenciosamente,</span>
                                 </p>
                                 <p style="font-size: 14px; line-height: 140%; text-align: center;"><strong><span
                                       style="font-size: 16px; line-height: 22.4px; font-family: Montserrat, sans-serif;">Facilita
