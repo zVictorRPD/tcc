@@ -5,6 +5,7 @@ import AddSubjectModal from "../../src/components/Logged/Curriculum/AddSubjectMo
 import SubjectModal from "../../src/components/Logged/Curriculum/SubjectModal/SubjectModal";
 import SelectCurriculumModal from "../../src/components/Logged/Curriculum/SelectCurriculumModal";
 import CurriculumDrawer from "../../src/components/Logged/Curriculum/CurriculumDrawer/CurriculumDrawer";
+import DisclaimerAlert from "../../src/components/Logged/Curriculum/DisclaimerAlert";
 
 const Curriculum: NextPage = () => {
     return (
@@ -14,6 +15,7 @@ const Curriculum: NextPage = () => {
             <SubjectModal />
             <SelectCurriculumModal />
             <CurriculumDrawer />
+            <DisclaimerAlert />
         </CurriculumProvider>
     );
 };

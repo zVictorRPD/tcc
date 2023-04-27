@@ -1,5 +1,5 @@
 import { Box, Button, Flex, HStack, Image, useColorModeValue, useToast } from '@chakra-ui/react';
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { CurriculumContext } from './curriculumContext';
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd';
 import PeriodColumn from './PeriodColumn';
@@ -7,10 +7,11 @@ import AddPeriodColumn from './AddPeriodColumn';
 import styles from './style.module.scss';
 import { api } from '../../../services/api';
 import NoCurriculum from './NoCurriculum';
+import { showDisclaimer } from '../../../functions/notifications';
 
 function DragDropMainContainer() {
     resetServerContext();
-    const { periods, subjects, periodOrder, setPeriods, addSubjectModalOnOpen, onLoad, hasCurriculum, curriculumDrawerOnOpen } = useContext(CurriculumContext);
+    const { periods, subjects, periodOrder, setPeriods, onLoad, hasCurriculum, curriculumDrawerOnOpen, disclaimerOnOpen } = useContext(CurriculumContext);
     const toast = useToast();
     const imgSrc = useColorModeValue('/assets/images/loading-spinner.svg', '/assets/images/white-loading-spinner.svg');
 
@@ -103,6 +104,10 @@ function DragDropMainContainer() {
         }
 
     }
+
+    useEffect(()=> {
+        if (hasCurriculum && showDisclaimer()) disclaimerOnOpen();
+    }, [hasCurriculum])
 
     return (
         <>

@@ -35,7 +35,13 @@ export const getNotifications = () => {
 }
 
 export const sawNotifications = (id:string) => {
-    console.log(id);
-    
     localStorage.setItem("lastNotificationRead", id);
+}
+
+export const showDisclaimer = () => {
+    const show_disclaimer = localStorage.getItem("show_disclaimer");
+    if(!show_disclaimer) {
+        localStorage.setItem("show_disclaimer", "false");
+    }
+    return show_disclaimer !== "false";
 }

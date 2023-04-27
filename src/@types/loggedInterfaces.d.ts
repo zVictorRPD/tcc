@@ -167,6 +167,10 @@ interface ICurriculumContext {
     curriculumDrawerIsOpen: boolean;
     curriculumDrawerOnOpen: () => void;
     curriculumDrawerOnClose: () => void;
+    disclaimerIsOpen: boolean;
+    disclaimerOnOpen: () => void;
+    disclaimerOnClose: () => void;
+    cancelRef: React.MutableRefObject<null>;
     onLoad: boolean;
     setOnLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }
