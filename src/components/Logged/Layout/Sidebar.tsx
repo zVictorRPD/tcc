@@ -9,9 +9,7 @@ import {
     BoxProps,
     FlexProps,
     Image,
-    useDisclosure,
 } from "@chakra-ui/react";
-import { FiHome } from "react-icons/fi";
 
 import { IconType } from "react-icons";
 import {
@@ -25,6 +23,7 @@ import {
     FaDownload,
     FaEnvelope,
 } from "react-icons/fa";
+import { GiPodium } from "react-icons/gi";
 
 import { MdSpaceDashboard } from "react-icons/md";
 
@@ -36,7 +35,11 @@ interface LinkItemProps {
     href: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-    { name: "Dashboard", icon: MdSpaceDashboard, href: "/ambiente-logado/dashboard" },
+    {
+        name: "Dashboard",
+        icon: MdSpaceDashboard,
+        href: "/ambiente-logado/dashboard",
+    },
     {
         name: "Grade curricular",
         icon: FaGraduationCap,
@@ -47,7 +50,11 @@ const LinkItems: Array<LinkItemProps> = [
         icon: FaClock,
         href: "/ambiente-logado/grade-horaria",
     },
-    { name: "Matérias", icon: FaBook, href: "/ambiente-logado/materias" },
+    {
+        name: "Ranking",
+        icon: GiPodium,
+        href: "/ambiente-logado/ranking",
+    },
     {
         name: "Professores",
         icon: FaChalkboardTeacher,
@@ -64,6 +71,7 @@ const LinkItems: Array<LinkItemProps> = [
         href: "/ambiente-logado/calendario-academico",
     },
     { name: "Mapa", icon: FaMapMarkedAlt, href: "/ambiente-logado/mapa" },
+    { name: "Matérias", icon: FaBook, href: "/ambiente-logado/materias" },
 ];
 
 interface SidebarProps extends BoxProps {
@@ -71,7 +79,11 @@ interface SidebarProps extends BoxProps {
     modalOnOpen: () => void;
 }
 
-export const SidebarContent = ({ onClose, modalOnOpen, ...rest }: SidebarProps) => {
+export const SidebarContent = ({
+    onClose,
+    modalOnOpen,
+    ...rest
+}: SidebarProps) => {
     const router = useRouter();
     const [supportsPWA, setSupportsPWA] = useState(false);
     const [promptInstall, setPromptInstall] = useState(null);
@@ -117,7 +129,10 @@ export const SidebarContent = ({ onClose, modalOnOpen, ...rest }: SidebarProps) 
                     style={{ cursor: "pointer" }}
                 >
                     <Image
-                        src={useColorModeValue("/assets/images/homepage/logo.png", "/assets/images/homepage/white_logo.png")}
+                        src={useColorModeValue(
+                            "/assets/images/homepage/logo.png",
+                            "/assets/images/homepage/white_logo.png"
+                        )}
                         height={"34px"}
                         alt="Logo"
                     />
