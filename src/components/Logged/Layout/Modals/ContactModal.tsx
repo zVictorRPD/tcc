@@ -1,4 +1,16 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Heading, Flex, Button, ModalFooter, Text } from "@chakra-ui/react";
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    Heading,
+    Flex,
+    Button,
+    ModalFooter,
+    Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { FaEnvelope, FaInstagram } from "react-icons/fa";
 
@@ -56,7 +68,7 @@ function ContactModal(props: ContactModalProps) {
                     </Flex>
                     <Text mb=".5rem" textAlign={"justify"}>
                         Além disso, gostaria de agradecer a vocês, pelo incrível
-                        marco de 500 usuários! Este projeto não seria possível
+                        marco de 1000 usuários! Este projeto não seria possível
                         sem o seu apoio e feedback. Obrigado por fazer parte
                         disso. Se você gostou do que viu, por favor, compartilhe
                         com seus amigos e colegas para que possamos alcançar
