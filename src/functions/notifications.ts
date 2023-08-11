@@ -26,6 +26,12 @@ const notifications: INotifications[] = [
             "Foi inserido o ranking dos cursos, no qual é possível visualizar a posição de cada curso em relação ao número de alunos matriculados",
         date: "2023-06-12",
     },
+    {
+        id: "5",
+        title: "Calendário acadêmico",
+        description: "O calendário acadêmico foi atualizado",
+        date: "2023-08-11",
+    },
 ];
 
 export const getNotifications = () => {
