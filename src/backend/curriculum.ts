@@ -47,6 +47,7 @@ export async function getCurriculum(id: number) {
                 select: {
                     code: true,
                     name: true,
+                    period_emergence: true,
                 },
                 orderBy: {
                     name: "asc",
