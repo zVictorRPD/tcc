@@ -47,6 +47,7 @@ export async function getCurriculum(id: number) {
                 select: {
                     code: true,
                     name: true,
+                    period_emergence: true,
                 },
                 orderBy: {
                     name: "asc",
@@ -110,7 +111,6 @@ export async function createCurriculum(userId: number, courseCode: string) {
                     },
                 });
 
-                
                 await tx.curriculum.update({
                     where: {
                         id: curriculum.id,
@@ -124,22 +124,22 @@ export async function createCurriculum(userId: number, courseCode: string) {
                     },
                 });
 
-
                 const subjectsToCreate = defaultPeriods.flatMap(
                     (period: any, index: any) => {
                         return period.subjects.map((subject: any) => {
                             return {
                                 subjectCode: subject.subjectCode,
                                 isOptional: period.name === "Optativas",
-                                periodId: curriculum.curriculumPeriods[index].id,
+                                periodId:
+                                    curriculum.curriculumPeriods[index].id,
                                 userId,
                             };
                         });
                     }
                 );
-                
+
                 await tx.userSubjects.createMany({
-                    data: subjectsToCreate
+                    data: subjectsToCreate,
                 });
 
                 const createdSubjects = await tx.userSubjects.findMany({
