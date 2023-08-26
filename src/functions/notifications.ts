@@ -32,6 +32,13 @@ const notifications: INotifications[] = [
         description: "O calendário acadêmico foi atualizado",
         date: "2023-08-11",
     },
+    {
+        id: "6",
+        title: "Grade curricular",
+        description:
+            "Agora é possível selecionar o período vigente da grade do seu cruso na hora de criar a grade curricular. Além disso, também é possível excluir a sua grade, para caso você queira começar do zero ou tenha trocado de curso. (Basta acessar no menu superior direito a funciondalidade 'Editar perfil')",
+        date: "2023-08-26",
+    },
 ];
 
 export const getNotifications = () => {

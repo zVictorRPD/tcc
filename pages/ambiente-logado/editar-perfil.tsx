@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { NextPage } from "next";
 import {
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogOverlay,
     Avatar,
     Box,
     Button,
@@ -14,6 +20,7 @@ import {
     Stack,
     Text,
     useColorModeValue,
+    useDisclosure,
     useToast,
 } from "@chakra-ui/react";
 import { FiEdit2 } from "react-icons/fi";
@@ -30,11 +37,15 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { signIn, useSession } from "next-auth/react";
 import { getUserData } from "../../src/functions/userData";
 
+
 const EditProfile: NextPage = () => {
     const { status, data } = useSession();
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = React.useRef<any>();
     const toast = useToast();
     const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
     const [onLoading, setOnLoading] = useState(false);
+    const [onLoadingDelete, setOnLoadingDelete] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmationPassword, setShowConfirmationPassword] =
         useState(false);
@@ -178,6 +189,41 @@ const EditProfile: NextPage = () => {
             name: name,
         });
     };
+
+    function handleDeleteUserCurriculum() {
+        setOnLoadingDelete(true);
+        try {
+            api.post("/user/deleteUserCurriculum").then((response) => {
+                if (response.data.code == "200") {
+                    toast({
+                        position: "top-right",
+                        title: response.data.message,
+                        status: "success",
+                        isClosable: true,
+                    });
+                    signIn();
+                } else {
+                    toast({
+                        position: "top-right",
+                        title: response.data.message,
+                        status: "error",
+                        isClosable: true,
+                    });
+                }
+                setOnLoadingDelete(false);
+                onClose();
+            });
+        } catch (error) {
+            toast({
+                position: "top-right",
+                title: "Erro ao deletar grade curricular!",
+                status: "error",
+                isClosable: true,
+            });
+            setOnLoadingDelete(false);
+            onClose();
+        }
+    }
 
     useEffect(() => {
         if (data?.user?.name !== undefined && data?.user?.name) {
@@ -390,11 +436,52 @@ const EditProfile: NextPage = () => {
                         onClick={handleSubmit}
                         isLoading={onLoading}
                         loadingText={"Editando conta..."}
+                        mb={"1rem"}
                     >
                         Editar conta
                     </Button>
+                    <Button
+                        w={"100%"}
+                        variant={"red-500"}
+                        onClick={onOpen}
+                    >
+                        Excluir grade curricular
+                    </Button>
+
                 </Box>
             </Stack>
+            <AlertDialog
+                isOpen={isOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Deletar grade curricular
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            Você tem certeza que deseja deletar sua grade curricular? Essa ação não pode ser desfeita.
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>
+                                Cancelar
+                            </Button>
+                            <Button
+                                colorScheme='red'
+                                onClick={handleDeleteUserCurriculum}
+                                ml={3}
+                                isLoading={onLoadingDelete}
+                                loadingText={"Excluindo grade..."}
+                            >
+                                Deletar
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </>
     );
 };
