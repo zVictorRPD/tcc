@@ -47,6 +47,7 @@ export async function getCurriculum(id: number) {
                 select: {
                     code: true,
                     name: true,
+                    period_emergence: true,
                 },
                 orderBy: {
                     name: "asc",
@@ -110,7 +111,6 @@ export async function createCurriculum(userId: number, courseCode: string) {
                     },
                 });
 
-                
                 await tx.curriculum.update({
                     where: {
                         id: curriculum.id,
@@ -124,22 +124,22 @@ export async function createCurriculum(userId: number, courseCode: string) {
                     },
                 });
 
-
                 const subjectsToCreate = defaultPeriods.flatMap(
                     (period: any, index: any) => {
                         return period.subjects.map((subject: any) => {
                             return {
                                 subjectCode: subject.subjectCode,
                                 isOptional: period.name === "Optativas",
-                                periodId: curriculum.curriculumPeriods[index].id,
+                                periodId:
+                                    curriculum.curriculumPeriods[index].id,
                                 userId,
                             };
                         });
                     }
                 );
-                
+
                 await tx.userSubjects.createMany({
-                    data: subjectsToCreate
+                    data: subjectsToCreate,
                 });
 
                 const createdSubjects = await tx.userSubjects.findMany({
@@ -229,4 +229,69 @@ export async function updateFilter(userId: number, filter: ISubjectsFilter) {
             return err;
         });
     return curriculum;
+}
+
+export async function deleteUserCurriculum(userId: number) {
+    try {
+        return await prisma.$transaction(
+            async (tx) => {
+                const curriculumId = await tx.curriculum.findUnique({
+                    where: {
+                        userId,
+                    },
+                    select: {
+                        id: true,
+                    },
+                });
+
+                if (!curriculumId) {
+                    return {
+                        status: "error",
+                        message: "Usuário não possui grade",
+                    };
+                }
+
+                await tx.userSubjects.deleteMany({
+                    where: {
+                        userId: userId,
+                    },
+                });
+
+                await tx.curriculumPeriods.deleteMany({
+                    where: {
+                        curriculumId: curriculumId.id,
+                    },
+                });
+
+                await tx.curriculum.delete({
+                    where: {
+                        userId,
+                    },
+                    select: {
+                        id: true,
+                    },
+                });
+
+                await tx.user.update({
+                    where: {
+                        id: userId,
+                    },
+                    data: {
+                        hasCurriculum: false,
+                        timetable: null,
+                    },
+                });
+                return {
+                    status: "success",
+                    message: "Grade excluída com sucesso",
+                };
+            },
+            {
+                maxWait: 10000,
+                timeout: 10000,
+            }
+        );
+    } catch (err) {
+        return err;
+    }
 }
