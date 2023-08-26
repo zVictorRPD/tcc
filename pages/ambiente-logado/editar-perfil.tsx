@@ -36,10 +36,12 @@ import { IoMdClose } from "react-icons/io";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { signIn, useSession } from "next-auth/react";
 import { getUserData } from "../../src/functions/userData";
+import { useRouter } from "next/router";
 
 
 const EditProfile: NextPage = () => {
     const { status, data } = useSession();
+    const router = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef<any>();
     const toast = useToast();
@@ -194,14 +196,14 @@ const EditProfile: NextPage = () => {
         setOnLoadingDelete(true);
         try {
             api.post("/user/deleteUserCurriculum").then((response) => {
-                if (response.data.code == "200") {
+                if (response.data.status == "success") {
                     toast({
                         position: "top-right",
                         title: response.data.message,
                         status: "success",
                         isClosable: true,
                     });
-                    signIn();
+                    router.push('/ambiente-logado/grade-curricular');
                 } else {
                     toast({
                         position: "top-right",
@@ -462,7 +464,8 @@ const EditProfile: NextPage = () => {
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
-                            Você tem certeza que deseja deletar sua grade curricular? Essa ação não pode ser desfeita.
+                            Você tem certeza que deseja deletar sua grade curricular? Além dela, seu progresso e grade horária também serão deletados.
+                            Essa ação não pode ser desfeita.
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
