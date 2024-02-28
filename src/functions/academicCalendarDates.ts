@@ -13,22 +13,6 @@ const dayTransform = hourTransform * 24;
 
 export const academicCalendarDates: ICalendarAcademicDate[] = [
     {
-        name: "Início de 2023.2",
-        date: dates._1,
-        daysLeft: Math.floor((dates._1.getTime() - today) / dayTransform),
-        hoursLeft: Math.floor(
-            ((dates._1.getTime() - today) % dayTransform) / hourTransform
-        ),
-    },
-    {
-        name: "Fim de 2023.2",
-        date: dates._2,
-        daysLeft: Math.floor((dates._2.getTime() - today) / dayTransform),
-        hoursLeft: Math.floor(
-            ((dates._2.getTime() - today) % dayTransform) / hourTransform
-        ),
-    },
-    {
         name: "Início de 2024.1",
         date: dates._3,
         daysLeft: Math.floor((dates._3.getTime() - today) / dayTransform),
