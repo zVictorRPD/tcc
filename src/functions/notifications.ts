@@ -39,6 +39,12 @@ const notifications: INotifications[] = [
             "Agora é possível selecionar o período vigente da grade do seu cruso na hora de criar a grade curricular. Além disso, também é possível excluir a sua grade, para caso você queira começar do zero ou tenha trocado de curso. (Basta acessar no menu superior direito a funciondalidade 'Editar perfil')",
         date: "2023-08-26",
     },
+    {
+        id: "7",
+        title: "Atualização do sistema",
+        description: "Foi necessário realocar o banco de dados para outra plataforma, devido isso, pode ser que haja alguns bugs no sistema, caso encontre algum, por favor, entre em contato com o desenvolvedor",
+        date: "2024-04-05",
+    }
 ];
 
 export const getNotifications = () => {

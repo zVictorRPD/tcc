@@ -16,7 +16,9 @@
     "@djpfs/react-vlibras": "^2.0.2",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@prisma/client": "4.11",
+    "@libsql/client": "^0.6.0",
+    "@prisma/adapter-libsql": "^5.12.1",
+    "@prisma/client": "^5.12.1",
     "@react-google-maps/api": "^2.13.1",
     "@vercel/og": "^0.0.20",
     "axios": "^0.27.2",
@@ -51,7 +53,7 @@
     "@types/react-dom": "18.0.6",
     "eslint": "8.23.0",
     "eslint-config-next": "12.2.5",
-    "prisma": "4.11",
+    "prisma": "^5.12.1",
     "typescript": "4.8.2"
   }
 }

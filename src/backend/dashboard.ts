@@ -65,6 +65,7 @@ export async function getDashboardData(id: number) {
         });
     }
 
+    
     return {
         course: userData.curriculum[0].course,
         subjects: userSubjects,
