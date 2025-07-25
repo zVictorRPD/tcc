@@ -44,6 +44,12 @@ const notifications: INotifications[] = [
         title: "Atualização do sistema",
         description: "Foi necessário realocar o banco de dados para outra plataforma, devido isso, pode ser que haja alguns bugs no sistema, caso encontre algum, por favor, entre em contato com o desenvolvedor",
         date: "2024-04-05",
+    },
+    {
+        id: "8",
+        title: "Calendário acadêmico",
+        description: "O calendário acadêmico foi atualizado",
+        date: "2024-07-24",
     }
 ];
 
